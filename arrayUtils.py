@@ -24,11 +24,17 @@ def fillArrayPosition(rowIndex:int, columnIndex:int, Array:list, symbol):
         return Array
     printErrorMsg(f"Invalid row %d or column %d index", (rowIndex,columnIndex))
 
-# Prints an array to the console. Array is broken up into individual rows for display purposes.
+def changeSymbol(row:int, col:int, Array:list, symbol):
+    if(row < len(Array) and col < len(Array[row])):
+        Array[row][col] = symbol
+        return
+    printErrorMsg(f"Invalid row %d or column %d index", (row,col))    
+
+# Prints an array to the console.
 def printArrayToConsole(Array:list):
     rowIndex = 0
     for row in Array:
         print(f"Row {rowIndex + 1} :")
-        print(f"{Array[rowIndex][0]} {Array[rowIndex][1]} {Array[rowIndex][2]} {Array[rowIndex][3]} {Array[rowIndex][4]} {Array[rowIndex][5]}")
+        printListAsRow(row) 
         rowIndex += 1
     return

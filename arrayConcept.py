@@ -6,7 +6,7 @@ All code within this concept should be considered work in progress. Extreme chan
 @author: Lukas Eckert
 '''
 
-import arrayUtils
+from arrayUtils import *
 
 '''
 The datastructure is required to store 2D positional data for board game pieces placed on a static 6x6 game board. The datastructure needs to provide the following infos in a concise manner:
@@ -38,20 +38,25 @@ for row in GameArray:
 The content of each position within the array can be directly accessed using it's row and column index. The content itself can represent a specific type of data.
 '''
 
-Field = arrayUtils.createEmptyArray(6,6)
+Field = createEmptyArray(6,6)
 
-arrayUtils.printArrayToConsole(Field)
+printArrayToConsole(Field)
 
-Field = arrayUtils.fillArrayPosition(0,0,Field,'A')
-Field = arrayUtils.fillArrayPosition(1,1,Field,'R')
-Field = arrayUtils.fillArrayPosition(2,2,Field,'R')
-Field = arrayUtils.fillArrayPosition(3,3,Field,'A')
-Field = arrayUtils.fillArrayPosition(4,4,Field,'Y')
-Field = arrayUtils.fillArrayPosition(5,5,Field,'S')
+Field = fillArrayPosition(0,0,Field,'A')
+Field = fillArrayPosition(1,1,Field,'R')
+Field = fillArrayPosition(2,2,Field,'R')
+Field = fillArrayPosition(3,3,Field,'A')
+Field = fillArrayPosition(4,4,Field,'Y')
+Field = fillArrayPosition(5,5,Field,'S')
 
-arrayUtils.printArrayToConsole(Field)
+printArrayToConsole(Field)
 
 '''
 Users are encouraged to only use provided global variables as array contents. This will prevent accidental typos.
 '''
+
+GlobalArrayTest = createEmptyArray(4,4)
+printArrayToConsole(GlobalArrayTest)
+changeSymbol(2,2,GlobalArrayTest,'CHANKE')
+printArrayToConsole(GlobalArrayTest)
 

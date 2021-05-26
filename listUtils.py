@@ -8,3 +8,6 @@ def getUniformList(size:int, symbol):
     for x in range(size):
         uniList.append(symbol)
     return uniList
+
+def printListAsRow(List:list):
+    print(List)
