@@ -32,8 +32,6 @@ for row in GameArray:
     for column in row:
         print(column)
 
-
-
 '''
 The content of each position within the array can be directly accessed using it's row and column index. The content itself can represent a specific type of data.
 '''
