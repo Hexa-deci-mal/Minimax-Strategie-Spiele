@@ -5,9 +5,8 @@ different sub-components of the software.
 All code within this concept should be considered work in progress. Extreme changes may occur at any time without prior notice.
 @author: Lukas Eckert
 '''
-from utilities.arrayUtils import createEmptyArray
 
-
+import arrayUtils
 
 '''
 The datastructure is required to store 2D positional data for board game pieces placed on a static 6x6 game board. The datastructure needs to provide the following infos in a concise manner:
@@ -39,18 +38,18 @@ for row in GameArray:
 The content of each position within the array can be directly accessed using it's row and column index. The content itself can represent a specific type of data.
 '''
 
-Field = createEmptyArray(6,6)
+Field = arrayUtils.createEmptyArray(6,6)
 
-printArrayToConsole(Field)
+arrayUtils.printArrayToConsole(Field)
 
-Field = fillArrayPosition(0,0,Field,'A')
-Field = fillArrayPosition(1,1,Field,'R')
-Field = fillArrayPosition(2,2,Field,'R')
-Field = fillArrayPosition(3,3,Field,'A')
-Field = fillArrayPosition(4,4,Field,'Y')
-Field = fillArrayPosition(5,5,Field,'S')
+Field = arrayUtils.fillArrayPosition(0,0,Field,'A')
+Field = arrayUtils.fillArrayPosition(1,1,Field,'R')
+Field = arrayUtils.fillArrayPosition(2,2,Field,'R')
+Field = arrayUtils.fillArrayPosition(3,3,Field,'A')
+Field = arrayUtils.fillArrayPosition(4,4,Field,'Y')
+Field = arrayUtils.fillArrayPosition(5,5,Field,'S')
 
-printArrayToConsole(Field)
+arrayUtils.printArrayToConsole(Field)
 
 '''
 Users are encouraged to only use provided global variables as array contents. This will prevent accidental typos.

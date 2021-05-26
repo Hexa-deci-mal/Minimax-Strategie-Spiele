@@ -2,8 +2,8 @@
 Implementation of various utility functions for handling 2D arrays used within the project.
 @author Lukas Eckert
 '''
-from utilities.listUtils import *
-from utilities.printUtils import *
+from listUtils import *
+from printUtils import *
 
 # Global variables used to define array contents. 
 TILE_EMPTY = 'TILE_EMPTY'
