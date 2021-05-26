@@ -19,16 +19,17 @@ def createEmptyArray(rows, columns):
 
 # Changes a symbol at a specific position within the array.
 def fillArrayPosition(rowIndex:int, columnIndex:int, Array:list, symbol):
-    if(rowIndex < len(Array) and columnIndex < len(Array[rowIndex])):
+    if(checkArrayIndexValidity(rowIndex,columnIndex,Array)):
         Array[rowIndex][columnIndex] = symbol
         return Array
     printErrorMsg(f"Invalid row %d or column %d index", (rowIndex,columnIndex))
 
+# Sets a new symbol at the desired position
 def changeSymbol(row:int, col:int, Array:list, symbol):
-    if(row < len(Array) and col < len(Array[row])):
+    if(checkArrayIndexValidity(row,col,Array)):
         Array[row][col] = symbol
         return
-    printErrorMsg(f"Invalid row %d or column %d index", (row,col))    
+    errorInvalidIndex(row,col,Array)
 
 # Prints an array to the console.
 def printArrayToConsole(Array:list):
@@ -38,3 +39,14 @@ def printArrayToConsole(Array:list):
         printListAsRow(row) 
         rowIndex += 1
     return
+
+# Returns the symbol stored in the array at the specified position
+def getSymbolFromPosition(row:int, column:int, Array:list):
+    if(checkArrayIndexValidity(row,column,Array)):
+        return Array[row][column]
+    errorInvalidIndex(row,column)
+
+
+# Checks if index is within valid index bounds
+def checkArrayIndexValidity(row:int, column:int, Array:list):
+    return row < len(Array) and column < len(Array[row])

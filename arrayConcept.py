@@ -53,10 +53,19 @@ printArrayToConsole(Field)
 
 '''
 Users are encouraged to only use provided global variables as array contents. This will prevent accidental typos.
+Index out of Bounds errors are avoided using provided utility functions. Errors will be printed to console and no changes will be made to the array
 '''
 
 GlobalArrayTest = createEmptyArray(4,4)
 printArrayToConsole(GlobalArrayTest)
-changeSymbol(2,2,GlobalArrayTest,'CHANKE')
+changeSymbol(5,2,GlobalArrayTest,'CHANKE')
 printArrayToConsole(GlobalArrayTest)
+
+'''
+The content of a specific row and column coordinate can be retrieved using a getter function
+'''
+
+changeSymbol(2,2,GlobalArrayTest,TILE_PLAYER_RED)
+printArrayToConsole(GlobalArrayTest)
+print(getSymbolFromPosition(2,2,GlobalArrayTest))
 
