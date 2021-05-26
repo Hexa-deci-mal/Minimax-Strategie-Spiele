@@ -5,9 +5,10 @@ Implementation of various utility functions for handling 2D arrays used within t
 
 from listUtils import *
 
+# Global variables used to define array contents. 
 TILE_EMPTY = 'TILE_EMPTY'
-TILE_CHECKERS_WHITE = 'TILE_WHITE_CHECKERS'
-TILE_CHECKERS_RED = 'TILE_RED_CHECKERS'
+TILE_PLAYER_WHITE = 'TILE_PLAYER_WHITE'
+TILE_PLAYER_RED = 'TILE_PLAYER_RED'
 
 # Creates a new empty array containing only empty tile values.
 def createEmptyArray(rows, columns):
@@ -23,8 +24,7 @@ def fillArrayPosition(rowIndex:int, columnIndex:int, Array:list, symbol):
         return Array
     print("Invalid row or column index")
 
-
-# Prints an array to the console. Array is broken up into individual rows.
+# Prints an array to the console. Array is broken up into individual rows for display purposes.
 def printArrayToConsole(Array:list):
     rowIndex = 0
     for row in Array:
