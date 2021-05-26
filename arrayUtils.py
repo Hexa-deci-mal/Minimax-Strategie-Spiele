@@ -38,7 +38,6 @@ def printArrayToConsole(Array:list):
         print(f"Row {rowIndex + 1} :")
         printListAsRow(row) 
         rowIndex += 1
-    return
 
 # Returns the symbol stored in the array at the specified position
 def getSymbolFromPosition(row:int, column:int, Array:list):
