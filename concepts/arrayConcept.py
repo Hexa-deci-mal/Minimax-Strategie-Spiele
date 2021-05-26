@@ -19,7 +19,7 @@ The datastructure is required to store 2D positional data for board game pieces 
 An 2 dimensional array can be used to easily define the position of it's contents via it's index. The array can also be iterated through easily to perform any data manipulation tasks.
 '''
 
-'''
+
 GameArray = [[0,1,2,3,4,5],[0,1,2,3,4,5],[0,1,2,3,4,5],[0,1,2,3,4,5],[0,1,2,3,4,5],[0,1,2,3,4,5]]
 
 print(GameArray[0])
@@ -33,7 +33,7 @@ for row in GameArray:
     for column in row:
         print(column)
 
-'''
+
 
 '''
 The content of each position within the array can be directly accessed using it's row and column index. The content itself can represent a specific type of data.
@@ -51,3 +51,8 @@ Field = fillArrayPosition(4,4,Field,'Y')
 Field = fillArrayPosition(5,5,Field,'S')
 
 printArrayToConsole(Field)
+
+'''
+Users are encouraged to only use provided global variables as array contents. This will prevent accidental typos.
+'''
+
