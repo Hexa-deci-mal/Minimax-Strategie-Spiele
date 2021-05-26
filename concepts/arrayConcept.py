@@ -5,7 +5,7 @@ different sub-components of the software.
 All code within this concept should be considered work in progress. Extreme changes may occur at any time without prior notice.
 @author: Lukas Eckert
 '''
-from arrayUtils import *
+from utilities.arrayUtils import *
 
 
 
