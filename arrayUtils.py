@@ -7,8 +7,14 @@ from printUtils import *
 
 # Global variables used to define array contents. 
 TILE_EMPTY = 'TILE_EMPTY'
+
 TILE_PLAYER_WHITE = 'TILE_PLAYER_WHITE'
+TILE_PLAYER_WHITE_SELECTION = 'TILE_PLAYER_WHITE_SELECTION'
+TILE_PLAYER_WHITE_MOVE = 'TILE_PLAYER_WHITE_MOVE'
+
 TILE_PLAYER_RED = 'TILE_PLAYER_RED'
+TILE_PLAYER_WHITE_SELECTION = 'TILE_PLAYER_RED_SELECTION'
+TILE_PLAYER_WHITE_MOVE = 'TILE_PLAYER_RED_MOVE'
 
 # Creates a new empty array containing only empty tile values.
 def createEmptyArray(rows, columns):
