@@ -22,7 +22,7 @@ def fillArrayPosition(rowIndex:int, columnIndex:int, Array:list, symbol):
     if(checkArrayIndexValidity(rowIndex,columnIndex,Array)):
         Array[rowIndex][columnIndex] = symbol
         return Array
-    printErrorMsg(f"Invalid row %d or column %d index", (rowIndex,columnIndex))
+    errorInvalidIndex(rowIndex,columnIndex,Array)
 
 # Sets a new symbol at the desired position
 def changeSymbol(row:int, col:int, Array:list, symbol):
