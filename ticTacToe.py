@@ -13,7 +13,7 @@ def doTurn():
     print(Turn)
     Turn = Turn % 2
     print(Turn)
-    print(Board)
+    printArrayColors(Board)
     promptAction()
 
 # prompts user for input
@@ -73,7 +73,6 @@ def checkIfWinRows():
         if countSame == 4:
             return True
     return False
-
 
 # checks for win conditions in columns
 def checkIfWinColumns():

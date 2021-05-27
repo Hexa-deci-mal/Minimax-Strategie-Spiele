@@ -26,7 +26,7 @@ def printArrayColors(Array:ndarray):
 
 # Formats String Color to match player color
 def formatForColor(msg:int):
-    msgStr = f'%d' % msg
+    msgStr = f'%s' % msg
     if msg == TILE_PLAYER_RED:
         return f'\033[91m{msg}\033[0m'
     if msg == TILE_PLAYER_WHITE:
