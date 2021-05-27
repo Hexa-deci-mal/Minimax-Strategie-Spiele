@@ -8,7 +8,7 @@ from numpy import ndarray
 from numpy.core.fromnumeric import shape
 
 
-# Print red text
+# Print red error msg
 def printErrorMsg(msg):
     print(f'\033[91m{msg}\033[0m')
 
