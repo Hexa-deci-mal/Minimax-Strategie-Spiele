@@ -84,13 +84,13 @@ def checkIfWinColumns():
         for y in range(Board.shape[0] - 1):
             current = Board[y][x]
             next = Board[y + 1][x]
-            print(f"Current Tile: %d, Next Tile: %d" % (current,next))
+            #print(f"Current Tile: %d, Next Tile: %d" % (current,next))
             if next == current and next != 0:
                 newCount += 1
-                print(f"Incrementing newCount to %d" % newCount)
+                #print(f"Incrementing newCount to %d" % newCount)
             if newCount > countSame:
                 countSame = newCount
-            print(f"Count is %d" % countSame)
+            #print(f"Count is %d" % countSame)
         if countSame == 4:
             return True
     return False
