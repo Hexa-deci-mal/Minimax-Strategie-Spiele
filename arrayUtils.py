@@ -2,56 +2,33 @@
 Implementation of various utility functions for handling 2D arrays used within the project.
 @author Lukas Eckert
 '''
-from listUtils import *
-from printUtils import *
+import numpy
+from numpy import *
 
-# Global variables used to define array contents. 
-TILE_EMPTY = 'TILE_EMPTY'
+# Empty Tile
+TILE_EMPTY = 0
 
-TILE_PLAYER_WHITE = 'TILE_PLAYER_WHITE'
-TILE_PLAYER_WHITE_SELECTION = 'TILE_PLAYER_WHITE_SELECTION'
-TILE_PLAYER_WHITE_MOVE = 'TILE_PLAYER_WHITE_MOVE'
+# White Player Tile
+TILE_PLAYER_WHITE = 1
 
-TILE_PLAYER_RED = 'TILE_PLAYER_RED'
-TILE_PLAYER_WHITE_SELECTION = 'TILE_PLAYER_RED_SELECTION'
-TILE_PLAYER_WHITE_MOVE = 'TILE_PLAYER_RED_MOVE'
+# Red Player Tile
+TILE_PLAYER_RED = 2
 
-# Creates a new empty array containing only empty tile values.
-def createEmptyArray(rows, columns):
-    EmptyArray = []
-    for x in range(rows):
-        EmptyArray.append(getUniformList(columns,TILE_EMPTY))
-    return EmptyArray
+# Creates a new numpy array containing only 0 values.
+def createEmptyBoard(rows:int, columns:int):
+    Board = numpy.zeros((rows, columns))
+    return Board
 
-# Changes a symbol at a specific position within the array.
-def fillArrayPosition(rowIndex:int, columnIndex:int, Array:list, symbol):
-    if(checkArrayIndexValidity(rowIndex,columnIndex,Array)):
-        Array[rowIndex][columnIndex] = symbol
-        return Array
-    errorInvalidIndex(rowIndex,columnIndex,Array)
+# Places a tile at a specific coordinate set within the numpy array.
+def setIfEmpty(rowIndex:int, columnIndex:int, Board:ndarray, symbol:int):
+    if(checkBoardBounds(rowIndex,columnIndex,Board)):
+        Board[rowIndex,columnIndex] = symbol
 
-# Sets a new symbol at the desired position
-def changeSymbol(row:int, col:int, Array:list, symbol):
-    if(checkArrayIndexValidity(row,col,Array)):
-        Array[row][col] = symbol
-        return
-    errorInvalidIndex(row,col,Array)
-
-# Prints an array to the console.
-def printArrayToConsole(Array:list):
-    rowIndex = 0
-    for row in Array:
-        print(f"Row {rowIndex + 1} :")
-        printListAsRow(row) 
-        rowIndex += 1
-
-# Returns the symbol stored in the array at the specified position
-def getSymbolFromPosition(row:int, column:int, Array:list):
-    if(checkArrayIndexValidity(row,column,Array)):
-        return Array[row][column]
-    errorInvalidIndex(row,column)
-
+# Returns the tile stored in the numpy array at the specified position
+def getTileFromPosition(rowIndex:int, columnIndex:int, Board:ndarray):
+    if(checkBoardBounds(rowIndex,columnIndex,Board)):
+        return Board[rowIndex][columnIndex]
 
 # Checks if index is within valid index bounds
-def checkArrayIndexValidity(row:int, column:int, Array:list):
-    return row < len(Array) and column < len(Array[row])
+def checkBoardBounds(row:int, column:int, Board:ndarray):
+    return row < Board.shape[0] and column < Board.shape[1]
