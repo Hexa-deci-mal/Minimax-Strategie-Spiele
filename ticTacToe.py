@@ -6,6 +6,7 @@ Test implementation of TicTacToe played on a 6x6 numpy array
 from arrayUtils import *
 from printUtils import *
 
+# runs a singular turn
 def doTurn():
     global Turn
     Turn = Turn + 1
@@ -15,7 +16,7 @@ def doTurn():
     print(Board)
     promptAction()
 
-
+# prompts user for input
 def promptAction():
     global Turn
 
@@ -28,7 +29,7 @@ def promptAction():
         setIfEmpty(y,x,Board,TILE_PLAYER_WHITE)
     return
 
-
+# Checks if a win state has been reached
 def checkIfWin():
     AnyWins = []
     AnyWins.append(checkIfWinRows())
@@ -41,6 +42,7 @@ def checkIfWin():
         if entry == True:
             doWin()
 
+# ends the program if win has been achieved
 def doWin():
     global Running
     global Turn
@@ -52,6 +54,7 @@ def doWin():
         printYellowMsg("Player White (1) Won")
     printArrayColors(Board)
 
+# checks for win conditions in rows
 def checkIfWinRows():
     global Board
     countSame = 0
@@ -72,6 +75,7 @@ def checkIfWinRows():
     return False
 
 
+# checks for win conditions in columns
 def checkIfWinColumns():
     global Board
     countSame = 0
@@ -91,14 +95,16 @@ def checkIfWinColumns():
             return True
     return False
 
+# checks for win conditions in diagonals
 def checkIfWinDiags():
     return False
 
-
+# global vars
 Running = True
 Board = createEmptyBoard(6,6)
 Turn:int = 0
 
+# main loop
 while (Running):
     doTurn()
     checkIfWin()
