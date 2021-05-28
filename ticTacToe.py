@@ -263,6 +263,7 @@ def isBoardTooSmall(Board:ndarray):
     return False
 
 
+'''
 
 # global vars
 Running = True
@@ -284,3 +285,4 @@ def doStatisticsForTurn(winnerIndex):
     WinningPlayer = winnerIndex
 
 
+'''

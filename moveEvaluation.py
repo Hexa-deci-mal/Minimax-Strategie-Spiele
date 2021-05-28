@@ -1,3 +1,4 @@
+from arrayUtils import getNonEmptyPositions
 from typing import List
 from numpy import *
 
@@ -58,3 +59,34 @@ def filterPositions(raw:List, filterPool:List):
         FilteredList.append(entry)
     return FilteredList
 
+# Filters Positions not contained in filterPool from original List
+def filterPositionsNon(raw:List, filterPool:List):
+    FilteredList = []
+    for entry in raw:
+        if(entry in filterPool):
+            FilteredList.append(entry)
+    return FilteredList
+
+# Returns number of friendly Neighbors for any coordinate pair
+def getFriendlyNeighborCount(Board:ndarray, friendlyTile, yPos, xPos):
+    friendlyNeighbors = 0
+    # Determine valid neighboring positions and all blocked positions on board
+    ValidPos = getValidPositionsAroundPiece(xPos,yPos,Board)
+    print("Valids:")
+    print(ValidPos)
+    NonEmpty = getNonEmptyPositions(Board)
+    print("Blocked")
+    print(NonEmpty)
+    # Determine blocked neighboring positions
+    BlockedPos = filterPositionsNon(NonEmpty, ValidPos)
+    print("Blocked Valid")
+    print(BlockedPos)
+    # Check if Blocked Neighbors contain friendly tile
+    for entry in BlockedPos:
+        tile = Board[entry[0]][entry[1]]
+        print(f"Tile:{tile} at x:{entry[0]} y:{entry[1]}")
+        if tile == friendlyTile:
+            friendlyNeighbors += 1
+    # Return count of friendly neighbors
+    return friendlyNeighbors
+    

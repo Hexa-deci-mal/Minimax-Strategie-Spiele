@@ -35,6 +35,8 @@ for pos in PositionArray:
    PosList.append([pos[0],pos[1]])
 #print(PosList)
 
+print(getFriendlyNeighborCount(testBoard,1,2,1))
+
 #print(getValidPositionsAroundPiece(1,1,testBoard))
 #print(getValidPositionsAroundPiece(0,0,testBoard))
 #print(getValidPositionsAroundPiece(3,3,testBoard))
@@ -42,7 +44,7 @@ for pos in PositionArray:
 #print(getValidPositionsAroundPiece(1,3,testBoard))
 #print(filterPositions(getValidPositionsAroundPiece(1,3,testBoard),PosList))
 
-print(getDiagonalCount(testBoard))
+#print(getDiagonalCount(testBoard))
 
 #BB = createEmptyBoard(3,3)
 #setIfEmpty(1,0,BB,2)

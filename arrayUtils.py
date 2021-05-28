@@ -65,8 +65,6 @@ def getNonEmptyPositions(Board:ndarray):
         positions.append([xCoords[cc],yCoords[cc]])
     return positions
 
-    
-
 BB = createEmptyBoard(3,3)
 setIfEmpty(1,0,BB,2)
 setIfEmpty(1,1,BB,3)
