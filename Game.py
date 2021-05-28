@@ -16,7 +16,6 @@ def current_Player_Pos_List(player):
 #Getting all possible moves for the current state of the board, from the human perspective.
 def get_Possible_Moves(player, board, game_name):
     
-    winning_move = False
     possible_moves = []
     for row in range(len(board)):
         for cell in range(len(board[row])):  
@@ -63,7 +62,7 @@ def get_Possible_Moves(player, board, game_name):
                     if board[row][cell] == player:
                         #Moving possible?
                         if board[row+1][cell] != 1 and board[row+1][cell] == 0:
-                            #[row, cell, beat enemy piece?, Winning Move?]
+                            #[cur_row, cur_cell, new_row, new_cell, beat enemy piece?, Winning Move?]
                             if row+1 == 5:
                                 possible_moves.append([row, cell, row+1, cell, False, True])
                             else:
@@ -85,6 +84,9 @@ def get_Possible_Moves(player, board, game_name):
                         elif game_name == 'tictactoe':
                             pass
                     Global_Vars.player = 2
+
+                elif game_name == 'tictactoe':
+                    pass
                
     return possible_moves
 
