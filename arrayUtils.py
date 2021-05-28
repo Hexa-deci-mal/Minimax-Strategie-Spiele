@@ -2,6 +2,7 @@
 Implementation of various utility functions for handling 2D arrays used within the project.
 @author Lukas Eckert
 '''
+
 import numpy
 from numpy import *
 
@@ -23,6 +24,15 @@ def createEmptyBoard(rows:int, columns:int):
 def setIfEmpty(rowIndex:int, columnIndex:int, Board:ndarray, symbol:int):
     if(checkBoardBounds(rowIndex,columnIndex,Board) and Board[rowIndex,columnIndex] == TILE_EMPTY):
         Board[rowIndex,columnIndex] = symbol
+
+# Tries setting a tile at a specific coordinate set within the numpy array.
+# Returns Boolean value indicating success
+def couldSetTile(rowIndex:int, columnIndex:int, Board:ndarray, symbol:int):
+    if(checkBoardBounds(rowIndex,columnIndex,Board) and Board[rowIndex,columnIndex] == TILE_EMPTY):
+        Board[rowIndex,columnIndex] = symbol
+        return True
+    return False
+    
 
 # Returns the tile stored in the numpy array at the specified position
 def getTileFromPosition(rowIndex:int, columnIndex:int, Board:ndarray):
@@ -58,5 +68,6 @@ def getNonEmptyPositions(Board:ndarray):
 BB = createEmptyBoard(3,3)
 setIfEmpty(1,0,BB,2)
 setIfEmpty(1,1,BB,3)
+#printArrayColors(BB)
 for entry in getNonEmptyPositions(BB):
     print(entry)
