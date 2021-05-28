@@ -255,56 +255,6 @@ def getCountMaxRightDiag(brd:ndarray):
     # end function, return max count found
     return rightMaxCount
 
-'''
-
-# Evaluates the Highest Nummber of identical non zero entries
-def getDiagHighest(yStart,xStart,brd:ndarray):
-    Count = 0
-    if yStart >= 0:
-        Count = getDiagHighestPreZero(yStart,xStart,brd)
-    else:
-        Count = getDiagHighestPostZero(yStart,xStart,brd)
-    
-    return Count
-
-# Evaluates the Highest Nummber of identical non zero entries within a diagonal line for range yMax to y=0
-def getDiagHighestPreZero(yStart,xStart,brd:ndarray):
-    stepper  = 0
-    count = 1
-    highestCountCycle = 0
-    for c in range(yStart,brd.shape[0] - 2):
-        #print(f"Running eval on current:{c},{xStart + stepper} and next:{c + 1},{xStart + stepper + 1}")
-        current = brd[c][xStart + stepper]
-        next = brd[c + 1][xStart + stepper + 1]
-        if next == current and next != TILE_EMPTY:
-            print("Increment Count")
-            count + 1
-        else:
-            if count > highestCountCycle:
-                print("Increment Max")
-                highestCountCycle = count
-            count = 1
-        stepper + 1
-    return highestCountCycle
-
-# Evaluates the Highest Nummber of identical non zero entries within a diagonal line for range y = 0 to xMax
-def getDiagHighestPostZero(xStart,yStart,brd:ndarray):
-    stepper  = 0
-    count = 1
-    highestCountCycle = 0
-    for c in range(xStart,brd.shape[1] - 2):
-        current = brd[yStart + stepper][c]
-        next = brd[yStart + stepper][c + 1]
-        if next == current and next != TILE_EMPTY:
-            count + 1
-        else:
-            if count > highestCountCycle:
-                highestCountCycle = count
-            count = 1
-        stepper + 1
-    return highestCountCycle
-
-'''
 
 # Checks if the Board is too Small for diagonal win 
 def isBoardTooSmall(Board:ndarray):
