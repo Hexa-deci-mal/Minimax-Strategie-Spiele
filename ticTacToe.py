@@ -8,67 +8,66 @@ from arrayUtils import *
 from printUtils import *
 
 # runs a singular turn
-def doTurn():
+def doTurn(brd:ndarray):
     global Turn
     Turn = Turn + 1
     print(Turn)
     Turn = Turn % 2
     print(Turn)
-    printArrayColors(Board)
-    promptAction()
+    printArrayColors(brd)
+    promptAction(Turn,brd)
 
 # prompts user for input
-def promptAction():
-    global Turn
+def promptAction(turnNr, brd:ndarray):
 
     x = int(input("Choose X-Coord"))
     y = int(input("Choose Y-Coord"))
 
-    if(Turn == 0):
-        doPlacementAction(y,x,Board, TILE_PLAYER_RED)
+    if(turnNr == 0):
+        doPlacementAction(y,x,brd,turnNr, TILE_PLAYER_RED)
     else:
-        doPlacementAction(y,x,Board,TILE_PLAYER_WHITE)
+        doPlacementAction(y,x,brd,turnNr,TILE_PLAYER_WHITE)
     return
 
-def doPlacementAction(y,x,Board,Tile):
-    if couldSetTile(y,x,Board,Tile):
+# Repeats turn until successful placement of tile
+def doPlacementAction(y,x,brd:ndarray,trn,Tile):
+    if couldSetTile(y,x,brd,Tile):
         return
-    promptAction()
+    promptAction(trn,brd)
 
 # Checks if a win state has been reached
-def checkIfWin():
+def checkIfWin(brd:ndarray):
     AnyWins = []
-    AnyWins.append(checkIfWinRows())
-    AnyWins.append(checkIfWinColumns())
-    AnyWins.append(checkIfWinDiags())
+    AnyWins.append(checkIfWinRows(brd))
+    AnyWins.append(checkIfWinColumns(brd))
+    AnyWins.append(checkIfWinDiags(brd))
 
     print(AnyWins)
 
     for entry in AnyWins:
         if entry == True:
-            doWin()
+            doWin(brd)
 
 # ends the program if win has been achieved
-def doWin():
+def doWin(brd:ndarray):
     global Running
     global Turn
-    global Board
     Running = False
     if Turn == 0:
         printYellowMsg("Player Red (2) Won")
     else:
         printYellowMsg("Player White (1) Won")
-    printArrayColors(Board)
+    printArrayColors(brd)
 
 # checks for win conditions in rows
-def checkIfWinRows():
-    global Board
+def checkIfWinRows(brd:ndarray):
+    #global Board
     countSame = 0
-    for y in range(Board.shape[0] - 1):
+    for y in range(brd.shape[0] - 1):
         newCount = 1
-        for x in range(Board.shape[1] - 1):
-            current = Board[y][x]
-            next = Board[y][x + 1]
+        for x in range(brd.shape[1] - 1):
+            current = brd[y][x]
+            next = brd[y][x + 1]
             #print(f"Current Tile: %d, Next Tile: %d" % (current,next))
             if next == current and next != TILE_EMPTY:
                 newCount += 1
@@ -81,14 +80,14 @@ def checkIfWinRows():
     return False
 
 # checks for win conditions in columns
-def checkIfWinColumns():
-    global Board
+def checkIfWinColumns(brd:ndarray):
+    #global Board
     countSame = 0
-    for x in range(Board.shape[1] - 1):
+    for x in range(brd.shape[1] - 1):
         newCount = 1
-        for y in range(Board.shape[0] - 1):
-            current = Board[y][x]
-            next = Board[y + 1][x]
+        for y in range(brd.shape[0] - 1):
+            current = brd[y][x]
+            next = brd[y + 1][x]
             #print(f"Current Tile: %d, Next Tile: %d" % (current,next))
             if next == current and next != TILE_EMPTY:
                 newCount += 1
@@ -101,25 +100,10 @@ def checkIfWinColumns():
     return False
 
 # checks for win conditions in diagonals
-def checkIfWinDiags():
-    global Board
-    if isBoardTooSmall(Board):
+def checkIfWinDiags(brd:ndarray):
+    if isBoardTooSmall(brd):
         return
-        '''
-    # Diag Evaluation Start Index and Cutoffs
-    DiagStart = 3
-    xDiagEnd = (Board.shape[1] - 1) - 3
-    yDiagEnd = (Board.shape[0] - 1) - 3
-    # EvaluationCounter
-    countSame = 0
-    # Evaluation Top Left to Bottom Right
-    for yCrawler in range(yDiagEnd,0,-1):
-        DiagHighest = getDiagHighest(yCrawler, 0, Board)
-        continue
-
-    # Evaluation Top Right to Bottom Left
-    '''
-    if(getDiagonalCount(Board) >= 4):
+    if(getDiagonalCount(brd) >= 4):
         return True
     return False
 
@@ -339,8 +323,8 @@ WinningPlayer = 0
 
 # main loop
 while (Running):
-    doTurn()
-    checkIfWin()
+    doTurn(Board)
+    checkIfWin(Board)
 
 # does some stats
 def doStatisticsForTurn(winnerIndex):
