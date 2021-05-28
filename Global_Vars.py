@@ -4,6 +4,8 @@ from numpy import array
 game_name = '' 
 board = []
 pos_list_player = []
-player = 2
+player = 1
+possible_moves = []
+
 
 
