@@ -35,7 +35,7 @@ for pos in PositionArray:
    PosList.append([pos[0],pos[1]])
 #print(PosList)
 
-print(getFriendlyNeighborCount(testBoard,1,2,1))
+print(getFriendlyNeighborCount(testBoard,2,2,1))
 
 #print(getValidPositionsAroundPiece(1,1,testBoard))
 #print(getValidPositionsAroundPiece(0,0,testBoard))

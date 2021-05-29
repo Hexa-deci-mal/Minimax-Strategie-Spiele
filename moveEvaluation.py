@@ -1,3 +1,5 @@
+from printUtils import printErrorMsg, printYellowMsg
+import numpy
 from arrayUtils import getNonEmptyPositions
 from typing import List
 from numpy import *
@@ -54,17 +56,34 @@ def getPositionsWithinBounds(positions:List, xFieldMaxIndex, yFieldMaxIndex):
 def filterPositions(raw:List, filterPool:List):
     FilteredList = []
     for entry in raw:
-        if(entry in filterPool):
-            continue
-        FilteredList.append(entry)
+        printYellowMsg(f"Testing {entry}")
+        for filter in filterPool:
+            print(f"filtering {filter}")
+            if(coordinatesAreEqual(entry,filter)):
+                print("continue")
+                continue
+            print("append")
+            FilteredList.append(entry)
+    printErrorMsg("Results of Print")
+    printErrorMsg(FilteredList)
     return FilteredList
+
+#Returns Boolean Comparison of two sets of coordinates
+def coordinatesAreEqual(PositionOne:List, PositionTwo:List):
+    return numpy.all(numpy.logical_and(PositionOne[0] == PositionTwo[0], PositionOne[1] == PositionTwo[1]))
 
 # Filters Positions not contained in filterPool from original List
 def filterPositionsNon(raw:List, filterPool:List):
     FilteredList = []
     for entry in raw:
-        if(entry in filterPool):
-            FilteredList.append(entry)
+        printYellowMsg(f"Testing {entry}")
+        for filter in filterPool:
+            print(f"filtering {filter}")
+            if(coordinatesAreEqual(entry,filter)):
+                print("append")
+                FilteredList.append(entry)
+    printErrorMsg("Results of Print")
+    printErrorMsg(FilteredList)
     return FilteredList
 
 # Returns number of friendly Neighbors for any coordinate pair
@@ -79,6 +98,7 @@ def getFriendlyNeighborCount(Board:ndarray, friendlyTile, yPos, xPos):
     print(NonEmpty)
     # Determine blocked neighboring positions
     BlockedPos = filterPositionsNon(NonEmpty, ValidPos)
+    BlockedPos = filterPositions(BlockedPos,[[yPos,xPos]])
     print("Blocked Valid")
     print(BlockedPos)
     # Check if Blocked Neighbors contain friendly tile
@@ -87,6 +107,7 @@ def getFriendlyNeighborCount(Board:ndarray, friendlyTile, yPos, xPos):
         print(f"Tile:{tile} at x:{entry[0]} y:{entry[1]}")
         if tile == friendlyTile:
             friendlyNeighbors += 1
+            print(f"Hit {friendlyNeighbors}")
     # Return count of friendly neighbors
     return friendlyNeighbors
     
