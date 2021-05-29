@@ -10,12 +10,15 @@ from printUtils import *
 
 # runs a singular turn
 def doTurn(brd:ndarray, turn, running):
-    turn = turn + 1
-    print(turn)
-    turn = turn % 2
-    print(turn)
+    runningCache = running
+    brdCache = brd
+    turnCache = turn + 1
+    #print(turnCache)
+    turnCache = turnCache % 2
+    #print(turnCache)
     printArrayColors(brd)
-    promptAction(turn,brd, running)
+    runningCache = promptAction(turnCache,brdCache,runningCache)
+    return [brdCache,turnCache,runningCache]
 
 # prompts user for input
 def promptAction(turnNr, brd:ndarray, running):
@@ -27,8 +30,8 @@ def promptAction(turnNr, brd:ndarray, running):
         doPlacementAction(row,column,brd,turnNr, TILE_PLAYER_RED)
     else:
         doPlacementAction(row,column,brd,turnNr,TILE_PLAYER_WHITE)
-    checkIfWin(brd,turnNr, running)
-    return
+    return not checkIfWin(brd,turnNr,running)
+
 
 # Repeats turn until successful placement of tile
 def doPlacementAction(rowIndex,columnIndex,brd:ndarray,trn,Tile):
@@ -43,15 +46,14 @@ def checkIfWin(brd:ndarray, trn, running):
     AnyWins.append(checkIfWinColumns(brd))
     AnyWins.append(checkIfWinDiags(brd))
 
-    print(AnyWins)
-
     for entry in AnyWins:
         if entry == True:
-            doWin(brd, trn, running)
+            doWin(brd, trn)
+            return True
+    return False
 
 # ends the program if win has been achieved
-def doWin(brd:ndarray, trn, running):
-    running = False
+def doWin(brd:ndarray, trn):
     if trn == 0:
         printYellowMsg("Player Red (2) Won")
     else:
@@ -110,7 +112,7 @@ def checkIfWinDiags(brd:ndarray):
 def getDiagonalCount(brd:ndarray):
     maxLeft = getCountMaxLeftDiag(brd)
     maxRight = getCountMaxRightDiag(brd)
-    print(f"maxRight{maxRight} maxLeft{maxLeft}")
+    #print(f"maxRight{maxRight} maxLeft{maxLeft}")
     if maxLeft >= maxRight:
         return maxLeft
     return maxRight
@@ -262,19 +264,19 @@ def isBoardTooSmall(Board:ndarray):
     return False
 
 
-'''
-
 # global vars
-Running = True
-Board = createEmptyBoard(6,6)
-Turn:int = 0
+MainRunning = True
+MainBoard  = createEmptyBoard(6,6)
+MainTurn = 0
 TurnCount:int = 0
 WinningPlayer = 0
 
 # main loop
-while (Running):
-    doTurn(Board, Turn, Running)
-'''
+while (MainRunning):
+    TurnResult = doTurn(MainBoard, MainTurn, MainRunning)
+    MainBoard = TurnResult[0]
+    MainTurn = TurnResult[1]
+    MainRunning = TurnResult[2]
 
 # does some stats
 def doStatisticsForTurn(winnerIndex, turn):
