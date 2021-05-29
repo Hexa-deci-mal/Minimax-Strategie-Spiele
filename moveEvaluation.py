@@ -82,6 +82,7 @@ def filterPositionsNon(raw:List, filterPool:List):
 
 # Returns number of friendly Neighbors for any coordinate pair
 def getFriendlyNeighborCount(Board:ndarray, friendlyTile, rowPos, columnPos):
+
     friendlyNeighbors = 0
     # Determine valid neighboring positions and all blocked positions on board
     ValidPos = getValidPositionsAroundPiece(rowPos,columnPos,Board)
@@ -89,8 +90,7 @@ def getFriendlyNeighborCount(Board:ndarray, friendlyTile, rowPos, columnPos):
     NonEmpty = getNonEmptyPositions(Board)
     # Determine blocked neighboring positions
     BlockedPos = filterPositionsNon(NonEmpty, ValidPos)
-    # Filter own position from all blocked positions
-    BlockedPos = filterPositions(BlockedPos,[[rowPos,columnPos]])
+
     # Check if Blocked Neighbors contain friendly tile
     for entry in BlockedPos:
         tile = Board[entry[0]][entry[1]]
