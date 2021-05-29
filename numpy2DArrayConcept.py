@@ -1,3 +1,8 @@
+'''
+Test Concept for testing new code snippets
+@author Lukas Eckert
+'''
+
 from ticTacToe import getDiagonalCount
 from arrayUtils import *
 from numpy import *

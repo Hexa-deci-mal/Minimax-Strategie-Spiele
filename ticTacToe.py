@@ -1,5 +1,6 @@
 '''
 Test implementation of TicTacToe played on a 6x6 numpy array
+@author Lukas Eckert
 '''
 
 

@@ -1,3 +1,8 @@
+'''
+Functions for movement evaluation (currently only for checkers)
+@author Lukas Eckert
+'''
+
 from printUtils import printErrorMsg, printYellowMsg
 import numpy
 from arrayUtils import getNonEmptyPositions

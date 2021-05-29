@@ -1,5 +1,6 @@
 '''
-Functions providing MinMaxAi with data
+Functions providing MinMaxAi with score data for checkers
+@author Lukas Eckert
 '''
 
 # Returns a list of all possible moves

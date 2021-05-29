@@ -1,5 +1,6 @@
 '''
 Utilities that provide easy console output options. Intended use is for creating test outputs and for providing easy to use error messages.
+@author Lukas Eckert
 '''
 
 # Prints a message to console using red color.
