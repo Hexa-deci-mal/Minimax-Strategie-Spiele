@@ -9,16 +9,16 @@ from arrayUtils import *
 from printUtils import *
 
 # runs a singular turn
-def doTurn(brd:ndarray, turn):
+def doTurn(brd:ndarray, turn, running):
     turn = turn + 1
     print(turn)
     turn = turn % 2
     print(turn)
     printArrayColors(brd)
-    promptAction(turn,brd)
+    promptAction(turn,brd, running)
 
 # prompts user for input
-def promptAction(turnNr, brd:ndarray):
+def promptAction(turnNr, brd:ndarray, running):
 
     column = int(input("Choose Column-Coord"))
     row = int(input("Choose Row-Coord"))
@@ -27,6 +27,7 @@ def promptAction(turnNr, brd:ndarray):
         doPlacementAction(row,column,brd,turnNr, TILE_PLAYER_RED)
     else:
         doPlacementAction(row,column,brd,turnNr,TILE_PLAYER_WHITE)
+    checkIfWin(brd,turnNr, running)
     return
 
 # Repeats turn until successful placement of tile
@@ -36,7 +37,7 @@ def doPlacementAction(rowIndex,columnIndex,brd:ndarray,trn,Tile):
     promptAction(trn,brd)
 
 # Checks if a win state has been reached
-def checkIfWin(brd:ndarray):
+def checkIfWin(brd:ndarray, trn, running):
     AnyWins = []
     AnyWins.append(checkIfWinRows(brd))
     AnyWins.append(checkIfWinColumns(brd))
@@ -46,14 +47,12 @@ def checkIfWin(brd:ndarray):
 
     for entry in AnyWins:
         if entry == True:
-            doWin(brd)
+            doWin(brd, trn, running)
 
 # ends the program if win has been achieved
-def doWin(brd:ndarray):
-    global Running
-    global Turn
-    Running = False
-    if Turn == 0:
+def doWin(brd:ndarray, trn, running):
+    running = False
+    if trn == 0:
         printYellowMsg("Player Red (2) Won")
     else:
         printYellowMsg("Player White (1) Won")
@@ -274,9 +273,7 @@ WinningPlayer = 0
 
 # main loop
 while (Running):
-    doTurn(Board)
-    checkIfWin(Board)
-
+    doTurn(Board, Turn, Running)
 '''
 
 # does some stats
