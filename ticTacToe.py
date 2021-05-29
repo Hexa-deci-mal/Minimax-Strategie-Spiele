@@ -8,14 +8,13 @@ from arrayUtils import *
 from printUtils import *
 
 # runs a singular turn
-def doTurn(brd:ndarray):
-    global Turn
-    Turn = Turn + 1
-    print(Turn)
-    Turn = Turn % 2
-    print(Turn)
+def doTurn(brd:ndarray, turn):
+    turn = turn + 1
+    print(turn)
+    turn = turn % 2
+    print(turn)
     printArrayColors(brd)
-    promptAction(Turn,brd)
+    promptAction(turn,brd)
 
 # prompts user for input
 def promptAction(turnNr, brd:ndarray):
@@ -277,12 +276,10 @@ while (Running):
     doTurn(Board)
     checkIfWin(Board)
 
+'''
+
 # does some stats
-def doStatisticsForTurn(winnerIndex):
-    global TurnCount
-    global WinningPlayer
-    TurnCount + 1
+def doStatisticsForTurn(winnerIndex, turn):
+    turn + 1
     WinningPlayer = winnerIndex
 
-
-'''
