@@ -8,6 +8,25 @@ from typing import Counter
 from arrayUtils import *
 from printUtils import *
 
+# Executes Turn with input given
+def doAutoTurn(brd:ndarray, turn, running, rowIn, colIn):
+    if not running:
+        return [brd,turn,running]
+    print("AutoTurn")
+    runningCache = running
+    brdCache = brd
+    turnCache = turn + 1
+    #print(turnCache)
+    turnCache = turnCache % 2
+    #print(turnCache)
+    printArrayColors(brd)
+    autoRes = doAutoAction(turnCache,brdCache,runningCache, rowIn,colIn)
+    print(f"AutoRes {autoRes}")
+    if(not autoRes[1]):
+        print("Reset Turn")
+        turnCache = turn
+    return [brdCache,turnCache,autoRes[0]]
+
 # runs a singular turn
 def doTurn(brd:ndarray, turn, running):
     runningCache = running
@@ -32,12 +51,29 @@ def promptAction(turnNr, brd:ndarray, running):
         doPlacementAction(row,column,brd,turnNr,TILE_PLAYER_WHITE)
     return not checkIfWin(brd,turnNr,running)
 
+# Executes given TurnAction
+def doAutoAction(turnNr, brd:ndarray, running, rowCall, columnCall):
+    print("Auto-Action")
+    executed = False
+    if(turnNr == 0):
+        executed = doAutoPlacementAction(rowCall,columnCall,brd,turnNr, TILE_PLAYER_RED)
+    else:
+        executed = doAutoPlacementAction(rowCall,columnCall,brd,turnNr,TILE_PLAYER_WHITE)
+
+    return [not checkIfWin(brd,turnNr,running),executed]
+
+
+# Tries to execute turn automatically
+def doAutoPlacementAction(rowIndex,columnIndex,brd:ndarray,trn,Tile):
+    if couldSetTile(rowIndex,columnIndex,brd,Tile):
+        return True
+    return False
 
 # Repeats turn until successful placement of tile
 def doPlacementAction(rowIndex,columnIndex,brd:ndarray,trn,Tile):
     if couldSetTile(rowIndex,columnIndex,brd,Tile):
         return
-    promptAction(trn,brd)
+    promptAction(trn,brd,True)
 
 # Checks if a win state has been reached
 def checkIfWin(brd:ndarray, trn, running):
@@ -45,7 +81,7 @@ def checkIfWin(brd:ndarray, trn, running):
     AnyWins.append(checkIfWinRows(brd))
     AnyWins.append(checkIfWinColumns(brd))
     AnyWins.append(checkIfWinDiags(brd))
-
+    print(AnyWins)
     for entry in AnyWins:
         if entry == True:
             doWin(brd, trn)
@@ -69,13 +105,15 @@ def checkIfWinRows(brd:ndarray):
         for columnIndex in range(brd.shape[1] - 1):
             current = brd[rowIndex][columnIndex]
             next = brd[rowIndex][columnIndex + 1]
-            #print(f"Current Tile: %d, Next Tile: %d" % (current,next))
+            print(f"Current Tile: %d, Next Tile: %d" % (current,next))
             if next == current and next != TILE_EMPTY:
                 newCount += 1
-                #print(f"Incrementing newCount to %d" % newCount)
+                print(f"Incrementing newCount to %d" % newCount)
+            else:
+                newCount = 1
             if newCount > countSame:
                 countSame = newCount
-            #print(f"Count is %d" % countSame)
+            print(f"Count is %d" % countSame)
         if countSame == 4:
             return True
     return False
@@ -93,6 +131,8 @@ def checkIfWinColumns(brd:ndarray):
             if next == current and next != TILE_EMPTY:
                 newCount += 1
                 #print(f"Incrementing newCount to %d" % newCount)
+            else:
+                newCount = 1
             if newCount > countSame:
                 countSame = newCount
             #print(f"Count is %d" % countSame)
@@ -264,6 +304,7 @@ def isBoardTooSmall(Board:ndarray):
     return False
 
 
+'''
 # global vars
 MainRunning = True
 MainBoard  = createEmptyBoard(6,6)
@@ -277,6 +318,8 @@ while (MainRunning):
     MainBoard = TurnResult[0]
     MainTurn = TurnResult[1]
     MainRunning = TurnResult[2]
+
+'''
 
 # does some stats
 def doStatisticsForTurn(winnerIndex, turn):
