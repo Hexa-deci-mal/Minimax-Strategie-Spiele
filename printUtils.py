@@ -18,10 +18,10 @@ def printYellowMsg(msg):
 
 # Print Array in nice
 def printArrayColors(Array:ndarray):
-    for y in range(Array.shape[0]):
+    for rowIndex in range(Array.shape[0]):
         String = ""
-        for x in range(Array.shape[1]):
-            String += (f"[%s]" % formatForColor(Array[y][x]))
+        for columnIndex in range(Array.shape[1]):
+            String += (f"[%s]" % formatForColor(Array[rowIndex][columnIndex]))
         print(String)
 
 # Formats String Color to match player color

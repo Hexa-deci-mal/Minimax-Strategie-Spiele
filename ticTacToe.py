@@ -20,18 +20,18 @@ def doTurn(brd:ndarray):
 # prompts user for input
 def promptAction(turnNr, brd:ndarray):
 
-    x = int(input("Choose X-Coord"))
-    y = int(input("Choose Y-Coord"))
+    column = int(input("Choose Column-Coord"))
+    row = int(input("Choose Row-Coord"))
 
     if(turnNr == 0):
-        doPlacementAction(y,x,brd,turnNr, TILE_PLAYER_RED)
+        doPlacementAction(row,column,brd,turnNr, TILE_PLAYER_RED)
     else:
-        doPlacementAction(y,x,brd,turnNr,TILE_PLAYER_WHITE)
+        doPlacementAction(row,column,brd,turnNr,TILE_PLAYER_WHITE)
     return
 
 # Repeats turn until successful placement of tile
-def doPlacementAction(y,x,brd:ndarray,trn,Tile):
-    if couldSetTile(y,x,brd,Tile):
+def doPlacementAction(rowIndex,columnIndex,brd:ndarray,trn,Tile):
+    if couldSetTile(rowIndex,columnIndex,brd,Tile):
         return
     promptAction(trn,brd)
 
@@ -63,11 +63,11 @@ def doWin(brd:ndarray):
 def checkIfWinRows(brd:ndarray):
     #global Board
     countSame = 0
-    for y in range(brd.shape[0] - 1):
+    for rowIndex in range(brd.shape[0] - 1):
         newCount = 1
-        for x in range(brd.shape[1] - 1):
-            current = brd[y][x]
-            next = brd[y][x + 1]
+        for columnIndex in range(brd.shape[1] - 1):
+            current = brd[rowIndex][columnIndex]
+            next = brd[rowIndex][columnIndex + 1]
             #print(f"Current Tile: %d, Next Tile: %d" % (current,next))
             if next == current and next != TILE_EMPTY:
                 newCount += 1
@@ -83,11 +83,11 @@ def checkIfWinRows(brd:ndarray):
 def checkIfWinColumns(brd:ndarray):
     #global Board
     countSame = 0
-    for x in range(brd.shape[1] - 1):
+    for columnIndex in range(brd.shape[1] - 1):
         newCount = 1
-        for y in range(brd.shape[0] - 1):
-            current = brd[y][x]
-            next = brd[y + 1][x]
+        for rowIndex in range(brd.shape[0] - 1):
+            current = brd[rowIndex][columnIndex]
+            next = brd[rowIndex + 1][columnIndex]
             #print(f"Current Tile: %d, Next Tile: %d" % (current,next))
             if next == current and next != TILE_EMPTY:
                 newCount += 1
@@ -121,28 +121,28 @@ def getCountMaxLeftDiag(brd:ndarray):
     # Max count found
     leftMaxCount = 1
     # Min Values
-    minX = 0
-    minY = 0
+    minColumnIndex = 0
+    minRowIndex = 0
     # Max Values
-    maxX = brd.shape[1] - 1
-    maxY = brd.shape[0] - 1
+    maxColumnIndex = brd.shape[1] - 1
+    maxRowIndex = brd.shape[0] - 1
 
     # loop over diagonal lines starting on y axis
-    for stepper in range(minY,maxY):
+    for rowStepper in range(minRowIndex,maxRowIndex):
         #print(f"y axis stepper:{stepper}")
         diagCount = 1
         diagCountMax = 0
         # Loop through diagonal line
-        for diagStepper in range(maxX - stepper):
+        for diagStepper in range(maxColumnIndex - rowStepper):
             #print(f"diagStepper {diagStepper}")
             # Eval if coords of tiles in board
-            currentX = stepper + diagStepper
-            currentY = minX + diagStepper
-            if (currentY + 1) > maxY or (currentX + 1) > maxX:
+            currentColumn = rowStepper + diagStepper
+            currentRow = minColumnIndex + diagStepper
+            if (currentRow + 1) > maxRowIndex or (currentColumn + 1) > maxColumnIndex:
                 break
             # Eval if tiles are in sequence
-            current = brd[currentY][currentX]
-            next = brd[currentY + 1][currentX + 1]
+            current = brd[currentRow][currentColumn]
+            next = brd[currentRow + 1][currentColumn + 1]
             #print(f"C:{current}x{currentX}y{currentY},N:{next}x{currentX + 1}y{currentY + 1}")
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
@@ -157,20 +157,20 @@ def getCountMaxLeftDiag(brd:ndarray):
     #printErrorMsg("Starting on Y= 0")
 
     # loop over remaining diagonal lines starting on x axis
-    for xStepper in range(minX + 1,maxX):
+    for columnStepper in range(minColumnIndex + 1,maxColumnIndex):
         #print(f"x Axis xStepper {xStepper}")
         diagCount = 1
         diagCountMax = 0
         # Loop through diagonal line
-        for diagStepper in range(maxX):
+        for diagStepper in range(maxColumnIndex):
             #print(f"diagStepper {diagStepper}")
-            currentX = xStepper + diagStepper
-            currentY = minY + diagStepper
-            if (currentX + 1) > maxX or (currentY + 1) > maxY:
+            currentColumn = columnStepper + diagStepper
+            currentRow = maxRowIndex + diagStepper
+            if (currentColumn + 1) > maxColumnIndex or (currentRow + 1) > maxRowIndex:
                 break
             # Eval if tiles are in sequence
-            current = brd[currentY][currentX]
-            next = brd[currentY + 1][currentX + 1]
+            current = brd[currentRow][currentColumn]
+            next = brd[currentRow + 1][currentColumn + 1]
             #print(f"C:{current}x{currentX}y{currentY},N:{next}x{currentX + 1}y{currentY + 1}")
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
@@ -191,28 +191,28 @@ def getCountMaxRightDiag(brd:ndarray):
     # Max count found
     rightMaxCount = 1
     # Min Values
-    minX = 0
-    minY = 0
+    minColumnIndex = 0
+    minRowIndex = 0
     # Max Values
-    maxX = brd.shape[1] - 1
-    maxY = brd.shape[0] - 1
+    maxColumnIndex = brd.shape[1] - 1
+    maxRowIndex = brd.shape[0] - 1
 
     # loop over diagonal lines starting on y axis
-    for stepper in range(maxY,minY,-1):
+    for rowStepper in range(maxRowIndex,minRowIndex,-1):
         #print(f"y axis stepper:{stepper}")
         diagCount = 1
         diagCountMax = 0
         # Loop through diagonal line
-        for diagStepper in range(maxX):
+        for diagStepper in range(maxColumnIndex):
             #print(f"diagStepper {diagStepper}")
             # Eval if coords of tiles in board
-            currentX = minX + diagStepper
-            currentY = stepper - diagStepper
-            if (currentY - 1) < minY or (currentX + 1) > maxX:
+            currentColumn = minColumnIndex + diagStepper
+            currentRow = rowStepper - diagStepper
+            if (currentRow - 1) < minRowIndex or (currentColumn + 1) > maxColumnIndex:
                 break
             # Eval if tiles are in sequence
-            current = brd[currentY][currentX]
-            next = brd[currentY - 1][currentX + 1]
+            current = brd[currentRow][currentColumn]
+            next = brd[currentRow - 1][currentColumn + 1]
             #print(f"C:{current}x{currentX}y{currentY},N:{next}x{currentX + 1}y{currentY - 1}")
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
@@ -227,20 +227,20 @@ def getCountMaxRightDiag(brd:ndarray):
     #printErrorMsg("Starting on Y= 0")
 
     # loop over remaining diagonal lines starting on x axis
-    for xStepper in range(minX + 1,maxX):
+    for columnStepper in range(minColumnIndex + 1,maxColumnIndex):
         #print(f"x Axis xStepper {xStepper}")
         diagCount = 1
         diagCountMax = 0
         # Loop through diagonal line
-        for diagStepper in range(maxX):
+        for diagStepper in range(maxColumnIndex):
             #print(f"diagStepper {diagStepper}")
-            currentX = xStepper + diagStepper
-            currentY = maxY - diagStepper
-            if (currentX + 1) > maxX or (currentY - 1) < minY:
+            currentColumn = columnStepper + diagStepper
+            currentRow = maxRowIndex - diagStepper
+            if (currentColumn + 1) > maxColumnIndex or (currentRow - 1) < minRowIndex:
                 break
             # Eval if tiles are in sequence
-            current = brd[currentY][currentX]
-            next = brd[currentY - 1][currentX + 1]
+            current = brd[currentRow][currentColumn]
+            next = brd[currentRow - 1][currentColumn + 1]
             #print(f"C:{current}x{currentX}y{currentY},N:{next}x{currentX + 1}y{currentY + 1}")
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence

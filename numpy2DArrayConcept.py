@@ -18,7 +18,7 @@ print(getTileFromPosition(2,2,GameBoard))
 '''
 
 
-testBoard = createEmptyBoard(4,4)
+testBoard = createEmptyBoard(8,16)
 setIfEmpty(1,1,testBoard,2)
 setIfEmpty(0,1,testBoard,1)
 setIfEmpty(2,1,testBoard,2)
@@ -27,15 +27,19 @@ setIfEmpty(3,3,testBoard,1)
 setIfEmpty(3,0,testBoard,2)
 setIfEmpty(1,2,testBoard,1)
 setIfEmpty(0,3,testBoard,2)
+
+
+setIfEmpty(7,7,testBoard,1)
+setIfEmpty(7,6,testBoard,1)
 printArrayColors(testBoard)
 #print(getPositionsOfPieces(testBoard, 2))
-PositionArray = getNonEmptyPositions(testBoard)
-PosList = []
-for pos in PositionArray:
-   PosList.append([pos[0],pos[1]])
+#PositionArray = getNonEmptyPositions(testBoard)
+#PosList = []
+#for pos in PositionArray:
+#   PosList.append([pos[0],pos[1]])
 #print(PosList)
 
-print(getFriendlyNeighborCount(testBoard,2,2,1))
+print(getFriendlyNeighborCount(testBoard,2,6,7))
 
 #print(getValidPositionsAroundPiece(1,1,testBoard))
 #print(getValidPositionsAroundPiece(0,0,testBoard))
