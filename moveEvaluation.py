@@ -104,3 +104,30 @@ def getFriendlyNeighborCount(Board:ndarray, friendlyTile, rowPos, columnPos):
     # Return count of friendly neighbors
     return friendlyNeighbors
     
+
+# Gets number of winning Conditions fulfilled by placing tile at given position.
+def getWinCounts(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
+    winCounter = 0
+    # Evaluates wheather a horizontal win could be achieved
+    if isHorizontalWin(rowIndex,columnIndex,playerTile,board):
+        winCounter + 1
+    # Evalutates wheather a vertical win could be achieved
+    if isVerticalWin(rowIndex,columnIndex,playerTile, board):
+        winCounter + 1
+    # Evaluates wheather a diagonal win could be achieved
+    if isDiagonalWin(rowIndex,columnIndex,playerTile, board):
+        winCounter + 1    
+
+    return winCounter
+
+# Evaluates if move completes row of sequence of four identical tiles
+def isHorizontalWin(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
+    return False
+
+# Evaluates if move completes column of sequence of four identical tiles
+def isVerticalWin(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
+    return False
+
+# Evaluates if move completes diagonal of sequence of four identical tiles
+def isDiagonalWin(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
+    return False
