@@ -5,7 +5,7 @@ Functions for movement evaluation (currently only for checkers)
 
 from printUtils import printErrorMsg, printYellowMsg
 import numpy
-from arrayUtils import getNonEmptyPositions
+from arrayUtils import checkBoardBounds, getNonEmptyPositions
 from typing import List
 from numpy import *
 
@@ -110,23 +110,90 @@ def getWinCounts(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
     winCounter = 0
     # Evaluates wheather a horizontal win could be achieved
     if isHorizontalWin(rowIndex,columnIndex,playerTile,board):
-        winCounter + 1
+        winCounter += 1
     # Evalutates wheather a vertical win could be achieved
     if isVerticalWin(rowIndex,columnIndex,playerTile, board):
-        winCounter + 1
+        winCounter += 1
     # Evaluates wheather a diagonal win could be achieved
     if isDiagonalWin(rowIndex,columnIndex,playerTile, board):
-        winCounter + 1    
+        winCounter += 1    
 
     return winCounter
 
+
+'''
+    Horizontal win evaluation for a single newly placed tile
+'''
+
 # Evaluates if move completes row of sequence of four identical tiles
 def isHorizontalWin(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
-    return False
+
+    # Count identical tiles left of position
+    leftCount = getLeftCountIdentical(rowIndex, columnIndex, playerTile, board)
+    # Eval identical tiles right of position
+    rightCount = getRightCountIdentical(rowIndex, columnIndex, playerTile, board)
+
+    # Sum up results and add new tile
+    countMaster = leftCount + rightCount + 1
+
+    return countMaster >= 4
+
+# counts identical tiles in sequence left from current position on board
+def getLeftCountIdentical(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
+    # count of identical tiles
+    count = 0
+
+    # Loop through row contents, direction = left
+    for columnCrawler in range(columnIndex, -1, -1):
+        # Check Bounds
+        if not checkBoardBounds(rowIndex,columnCrawler,board):
+            break
+        # Increase Count for identical tile
+        if board[rowIndex][columnCrawler] == playerTile:
+            count += 1
+        else:
+            break
+    # Return count
+    return count
+
+# counts identical tiles in sequence right from current position on board
+def getRightCountIdentical(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
+    # count of identical tiles
+    count = 0
+
+    # Loop through row contents, direction = right
+    for columnCrawler in range(columnIndex, board.shape[1], 1):
+        # Check Bounds
+        if not checkBoardBounds(rowIndex,columnCrawler,board):
+            break
+        # Increase Count for identical tile
+        if board[rowIndex][columnCrawler] == playerTile:
+            count += 1
+        else:
+            break
+    # Return count
+    return count
+
+
+
+'''
+    Vertical win evaluation for a single newly placed tile
+'''
 
 # Evaluates if move completes column of sequence of four identical tiles
 def isVerticalWin(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
     return False
+
+
+
+
+
+
+
+
+'''
+    Diagonal win evaluation for a single newly placed tile
+'''
 
 # Evaluates if move completes diagonal of sequence of four identical tiles
 def isDiagonalWin(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
