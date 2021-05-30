@@ -5,12 +5,16 @@ from PIL import ImageTk, Image
 
 from ticTacToe import *
 
+# Global Variables for TicTacToe
 LukasTicTacToeBoard:ndarray
 LukasTurnCount:int
 LukasRunningState:bool
 
+# Global variable for GameMode
 GameMode:int
 
+
+# Predefined visual button styles
 style_1 = {'fg': 'black', 'bg': 'RoyalBlue3', 'activebackground':
 'gray71', 'activeforeground': 'gray71'}
 
@@ -20,21 +24,26 @@ style_2 = {'fg': 'white', 'bg': 'OliveDrab2', 'activebackground':
 style_3 = {'fg': 'black', 'bg': 'purple1', 'activebackground':
 'gray71', 'activeforeground': 'gray71'}
 
+# Updates the currently running game of tictactoe according to which button is pressed
 def doTicTacToeUpdate(row:int, column:int):
     global LukasRunningState
     global LukasTicTacToeBoard
     global LukasTurnCount
 
+    # skips processing turn if game is not running
     if LukasRunningState == False:
         return LukasTicTacToeBoard[row][column]
 
+    # Processes turn
     TurnResult = doAutoTurn(LukasTicTacToeBoard,LukasTurnCount,LukasRunningState,row,column)
 
+    # Deconstructs Turn results
     LukasTicTacToeBoard = TurnResult[0]
     LukasTurnCount = TurnResult[1]
     LukasRunningState = TurnResult[2]
+    # Debugging printout
     printArrayColors(LukasTicTacToeBoard)
-
+    # Returns button state
     return LukasTicTacToeBoard[row][column]
 
 # changes the style of a button
@@ -46,20 +55,23 @@ def setStyle(style, button:Button):
 
 # Executes the appropriate Button action based on it's position as well as the game mode
 def doAppropriateButtonAction(row:int, column:int, mode:int, button:Button):
+    # Executed commands for Gamemode TicTacToe
     if mode == 1:
         setStyle(doTicTacToeUpdate(row,column),button)
         return
-
+    # Executed commands for Gamemode Pawnchess
     if mode == 2:
         return
-    
+    # Executed commands for Gamemode Checkers
     if mode == 3:
         return
-
+    # Skips button action for undefined modes
     return
 
+# Creates the generic 6x6 playing are out of tkinter buttons.
 def create_board ():
 
+    # Reference to global Gamemode in order to be able to reference it during button calls
     global GameMode
 
     checkersBoard = Frame(mainDisplay, width=690, height=695, bg="white")
@@ -141,25 +153,36 @@ def create_board ():
 
 
 
+# Creates Pawnchess Game
 def create_bauernschachArray_btn ():
     Global_Vars.board = Board.create_board_bauernschach()
 
+    #Change Gamemode
     global GameMode
     GameMode = 2
 
     consoleLog = print(Global_Vars.board)
 
+
+# Creates Checkers Game
 def create_checkersArray_btn ():
     Global_Vars.board = Board.create_board_checkers()
 
+    # Change Gamemode
     global GameMode
     GameMode = 3
 
     consoleLog = print(Global_Vars.board)
 
+# Creates TicTacToe Game
 def create_tictactoeArray_btn ():
     Global_Vars.board = Board.create_board_tictactoe()
     
+    # Change Game Mode
+    global GameMode
+    GameMode = 1
+
+    # Setting up Globals for TicTacToe
     global LukasTicTacToeBoard 
     LukasTicTacToeBoard = createEmptyBoard(6,6)
     
@@ -169,8 +192,6 @@ def create_tictactoeArray_btn ():
     global LukasRunningState
     LukasRunningState = True
 
-    global GameMode
-    GameMode = 1
     consoleLog = print(Global_Vars.board)
 
 
