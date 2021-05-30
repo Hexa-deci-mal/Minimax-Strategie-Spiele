@@ -257,6 +257,12 @@ def isDiagonalWin(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
     # return true if either diagonal exceeds lenght 4
     return countDiagULDR >= 4 or countDiagURDL >= 0
 
+
+'''
+    Note to self: Lots of identical code, extract into seperate functions if possible.
+'''
+
+
 # counts identical tiles in sequence diagonally up and left from current position on board
 def getDiagonalCountIdenticalLEFTUP(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
     count = 0
