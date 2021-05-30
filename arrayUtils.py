@@ -56,6 +56,31 @@ def getNonEmptyPositions(Board:ndarray):
     return positions
 
 '''
+
+# Returns all empty positions from a given Board
+def getEmptyPositions(Board:ndarray):
+    # Get all positions
+    positions = getAllPositionsOnBoard(Board)
+    # Get filled positions
+    filledPositions = getNonEmptyPositions(Board)
+
+    # Filter filled positions from all positions
+    emptyPositions = filterPositions(positions,filledPositions)
+    return emptyPositions
+
+# Get all Positions [indexRow,indexColumn] from a given board
+def getAllPositionsOnBoard(Board:ndarray):
+    allPositions = []
+    # crawl through board and add all positions
+    for rowCrawler in range(Board.shape[0] - 1):
+        for columnCrawler in range(Board.shape[1] - 1):
+            allPositions.append([rowCrawler,columnCrawler])
+    
+    return allPositions
+
+'''
+
+'''
 BB = createEmptyBoard(3,3)
 setIfEmpty(1,0,BB,2)
 setIfEmpty(1,1,BB,3)

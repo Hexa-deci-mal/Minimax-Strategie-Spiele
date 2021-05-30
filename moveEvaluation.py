@@ -85,6 +85,35 @@ def filterPositionsNon(raw:List, filterPool:List):
                 FilteredList.append(entry)
     return FilteredList
 
+
+
+
+
+
+# Returns all empty positions from a given Board
+def getEmptyPositions(Board:ndarray):
+    # Get all positions
+    positions = getAllPositionsOnBoard(Board)
+    # Get filled positions
+    filledPositions = getNonEmptyPositions(Board)
+
+    # Filter filled positions from all positions
+    emptyPositions = filterPositions(positions,filledPositions)
+    return emptyPositions
+
+# Get all Positions [indexRow,indexColumn] from a given board
+def getAllPositionsOnBoard(Board:ndarray):
+    allPositions = []
+    # crawl through board and add all positions
+    for rowCrawler in range(Board.shape[0]):
+        for columnCrawler in range(Board.shape[1]):
+            allPositions.append([rowCrawler,columnCrawler])
+    
+    return allPositions
+
+
+
+
 # Returns number of friendly Neighbors for any coordinate pair
 def getFriendlyNeighborCount(Board:ndarray, friendlyTile, rowPos, columnPos):
 
@@ -111,12 +140,15 @@ def getWinCounts(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
     # Evaluates wheather a horizontal win could be achieved
     if isHorizontalWin(rowIndex,columnIndex,playerTile,board):
         winCounter += 1
+        print("Horwin")
     # Evalutates wheather a vertical win could be achieved
     if isVerticalWin(rowIndex,columnIndex,playerTile, board):
         winCounter += 1
+        print("Vertwin")
     # Evaluates wheather a diagonal win could be achieved
     if isDiagonalWin(rowIndex,columnIndex,playerTile, board):
-        winCounter += 1    
+        winCounter += 1
+        print("DiagWin")    
 
     return winCounter
 
@@ -253,7 +285,7 @@ def isDiagonalWin(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
     countDiagURDL = upRightCount + downLeftCount + 1
 
     # return true if either diagonal exceeds lenght 4
-    return countDiagULDR >= 4 or countDiagURDL >= 0
+    return countDiagULDR >= 4 or countDiagURDL >= 4
 
 
 '''

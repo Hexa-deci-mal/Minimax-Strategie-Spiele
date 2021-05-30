@@ -1,3 +1,4 @@
+from ticTacToeAiEval import getPossibleMovesInklScore
 import Board
 import Global_Vars
 from tkinter import *
@@ -37,23 +38,33 @@ def doTicTacToeUpdate(row:int, column:int):
     # Processes turn
     TurnResult = doAutoTurn(LukasTicTacToeBoard,LukasTurnCount,LukasRunningState,row,column)
 
-
-    '''
-    Start Testing Area for AI preperation DONT TOUCH
-    '''
-
-
-
-    '''
-    End Testing Area for AI preperation DONT TOUCH
-    '''
-
     # Deconstructs Turn results
     LukasTicTacToeBoard = TurnResult[0]
     LukasTurnCount = TurnResult[1]
     LukasRunningState = TurnResult[2]
     # Debugging printout
     printArrayColors(LukasTicTacToeBoard)
+
+
+    '''
+    Start Testing Area for AI preperation DONT TOUCH
+    '''
+    printErrorMsg("START TESTING AREA AI")
+
+    playerFromTurn = LukasTurnCount + 1
+
+    print(f"Player taken from turn: {playerFromTurn}")
+
+    ScoredMoves = getPossibleMovesInklScore(LukasTicTacToeBoard,playerFromTurn)
+
+    printYellowMsg("Inspect Scored Moves")
+    print(ScoredMoves)
+
+    printErrorMsg("END TESTING AREA AI")
+    '''
+    End Testing Area for AI preperation DONT TOUCH
+    '''
+
     # Returns button state
     return LukasTicTacToeBoard[row][column]
 
