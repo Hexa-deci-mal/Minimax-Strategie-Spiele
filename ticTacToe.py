@@ -159,6 +159,9 @@ def getDiagonalCount(brd:ndarray):
 
 # Evaluates the maximum sequence of identical tiles for any diagonal line runnig from top left to bottom right
 def getCountMaxLeftDiag(brd:ndarray):
+
+    # I am sorry for anyone trying to understand this evaluation in it's entirety. It may not be pretty, but it is mine. And it works beautifully. @author:Lukas Eckert
+
     # Max count found
     leftMaxCount = 1
     # Min Values
@@ -229,6 +232,9 @@ def getCountMaxLeftDiag(brd:ndarray):
 
 # Evaluates the maximum sequence of identical tiles for any diagonal line runnig from top right to bottom left
 def getCountMaxRightDiag(brd:ndarray):
+
+    # I am sorry for anyone trying to understand this evaluation in it's entirety. It may not be pretty, but it is mine. And it works beautifully. @author:Lukas Eckert
+
     # Max count found
     rightMaxCount = 1
     # Min Values
