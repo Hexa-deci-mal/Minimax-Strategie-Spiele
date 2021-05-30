@@ -183,9 +183,9 @@ def getRightCountIdentical(rowIndex:int, columnIndex:int, playerTile:int, board:
 # Evaluates if move completes row of sequence of four identical tiles
 def isVerticalWin(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
 
-    # Count identical tiles left up from position
+    # Count identical tiles up from position
     upCount = getUpCountIdentical(rowIndex, columnIndex, playerTile, board)
-    # Eval identical tiles right down from position
+    # Eval identical tiles down from position
     downCount = getDownCountIdentical(rowIndex, columnIndex, playerTile, board)
 
     # Sum up results and add new tile
@@ -210,7 +210,6 @@ def getUpCountIdentical(rowIndex:int, columnIndex:int, playerTile:int, board:nda
             break
     # Return count
     return count
-
 
 # counts identical tiles in sequence down from current position on board
 def getDownCountIdentical(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
@@ -241,4 +240,53 @@ def getDownCountIdentical(rowIndex:int, columnIndex:int, playerTile:int, board:n
 
 # Evaluates if move completes diagonal of sequence of four identical tiles
 def isDiagonalWin(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
-    return False
+
+    # Count identical tiles left up from position
+    upLeftCount = getDiagonalCountIdenticalLEFTUP(rowIndex,columnIndex,playerTile,board)
+    # Count identical tiles right up from position
+    upRightCount = getDiagonalCountIdenticalRIGHTUP(rowIndex,columnIndex,playerTile,board)
+    # Count identical tiles left down from position
+    downLeftCount = getDiagonalCountIdenticalLEFTDOWN(rowIndex,columnIndex,playerTile,board)
+    # Count identical tiles right down from position
+    downRightCount = getDiagonalCountIdenticalRIGHTDOWN(rowIndex,columnIndex,playerTile,board)
+
+    # Sum up identical tiles for each diagonal line
+    countDiagULDR = upLeftCount + downRightCount + 1
+    countDiagURDL = upRightCount + downLeftCount + 1
+
+    # return true if either diagonal exceeds lenght 4
+    return countDiagULDR >= 4 or countDiagURDL >= 0
+
+# counts identical tiles in sequence diagonally up and left from current position on board
+def getDiagonalCountIdenticalLEFTUP(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
+    count = 0
+    maximumStarter = 0
+    
+    if rowIndex >= columnIndex:
+        maximumStarter = rowIndex
+    else:
+        maximumStarter = columnIndex
+
+
+    for diacCrawler in range(0):
+        break
+
+    return count
+
+# counts identical tiles in sequence diagonally up and right from current position on board
+def getDiagonalCountIdenticalRIGHTUP(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
+    count = 0
+
+    return count
+
+# counts identical tiles in sequence diagonally down and left from current position on board
+def getDiagonalCountIdenticalLEFTDOWN(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
+    count = 0
+
+    return count
+
+# counts identical tiles in sequence diagonally down and right from current position on board
+def getDiagonalCountIdenticalRIGHTDOWN(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
+    count = 0
+
+    return count
