@@ -180,11 +180,55 @@ def getRightCountIdentical(rowIndex:int, columnIndex:int, playerTile:int, board:
     Vertical win evaluation for a single newly placed tile
 '''
 
-# Evaluates if move completes column of sequence of four identical tiles
+# Evaluates if move completes row of sequence of four identical tiles
 def isVerticalWin(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
-    return False
+
+    # Count identical tiles left up from position
+    upCount = getUpCountIdentical(rowIndex, columnIndex, playerTile, board)
+    # Eval identical tiles right down from position
+    downCount = getDownCountIdentical(rowIndex, columnIndex, playerTile, board)
+
+    # Sum up results and add new tile
+    countMaster = upCount + downCount + 1
+
+    return countMaster >= 4
+
+# counts identical tiles in sequence up from current position on board
+def getUpCountIdentical(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
+    # count of identical tiles
+    count = 0
+
+    # Loop through column contents, direction = up
+    for rowCrawler in range(rowIndex, -1, -1):
+        # Check Bounds
+        if not checkBoardBounds(rowCrawler,columnIndex,board):
+            break
+        # Increase Count for identical tile
+        if board[rowCrawler][columnIndex] == playerTile:
+            count += 1
+        else:
+            break
+    # Return count
+    return count
 
 
+# counts identical tiles in sequence down from current position on board
+def getDownCountIdentical(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
+    # count of identical tiles
+    count = 0
+
+    # Loop through column contents, direction = up
+    for rowCrawler in range(rowIndex, board.shape[0], 1):
+        # Check Bounds
+        if not checkBoardBounds(rowCrawler,columnIndex,board):
+            break
+        # Increase Count for identical tile
+        if board[rowCrawler][columnIndex] == playerTile:
+            count += 1
+        else:
+            break
+    # Return count
+    return count
 
 
 
