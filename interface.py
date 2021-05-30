@@ -37,6 +37,17 @@ def doTicTacToeUpdate(row:int, column:int):
     # Processes turn
     TurnResult = doAutoTurn(LukasTicTacToeBoard,LukasTurnCount,LukasRunningState,row,column)
 
+
+    '''
+    Start Testing Area for AI preperation DONT TOUCH
+    '''
+
+
+
+    '''
+    End Testing Area for AI preperation DONT TOUCH
+    '''
+
     # Deconstructs Turn results
     LukasTicTacToeBoard = TurnResult[0]
     LukasTurnCount = TurnResult[1]

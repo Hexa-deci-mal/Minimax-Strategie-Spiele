@@ -232,8 +232,6 @@ def getDownCountIdentical(rowIndex:int, columnIndex:int, playerTile:int, board:n
 
 
 
-
-
 '''
     Diagonal win evaluation for a single newly placed tile
 '''
