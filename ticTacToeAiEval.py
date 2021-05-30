@@ -49,7 +49,6 @@ def scoreMove(player, move):
 
 # Evaluates if move can win
 def getScoreWin(move:List, brd:ndarray):
-    score = 0
 
     # deconstructs possible moveset
     rowIndex:int = move[0]
@@ -62,7 +61,7 @@ def getScoreWin(move:List, brd:ndarray):
 
     numberOfWins = getWinCounts(rowIndex, columnIndex, playerTile, brd)
 
-    return score
+    return numberOfWins
 
 # Evaluates if move can avoid defeat
 def getScoreNotLose(move):
