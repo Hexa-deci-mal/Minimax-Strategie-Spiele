@@ -100,18 +100,18 @@ def filterPositionsNon(raw:List, filterPool:List):
 def getEmptyPositions(Board:ndarray):
     # Get all positions
     positions = getAllPositionsOnBoard(Board)
-    printYellowMsg("Should be whole board once")
-    print(positions)
+    #printYellowMsg("Should be whole board once")
+    #print(positions)
     # Get filled positions
     filledPositions = getNonEmptyPositions(Board)
-    printYellowMsg("Should be only filled pos")
-    print(filledPositions)
+    #printYellowMsg("Should be only filled pos")
+    #print(filledPositions)
 
     # Filter filled positions from all positions
     emptyPositions = filterPositions(positions,filledPositions)
 
-    printYellowMsg("Should be empty pos only")
-    print(emptyPositions)
+    #printYellowMsg("Should be empty pos only")
+    #print(emptyPositions)
 
     return emptyPositions
 
@@ -176,13 +176,19 @@ def isHorizontalWin(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray
 
     # Count identical tiles left of position
     leftCount = getLeftCountIdentical(rowIndex, columnIndex, playerTile, board)
+    print(f"Move has leftCount {leftCount}")
     # Eval identical tiles right of position
     rightCount = getRightCountIdentical(rowIndex, columnIndex, playerTile, board)
+    print(f"Move has rightCount {rightCount}")
 
     # Sum up results and add new tile
     countMaster = leftCount + rightCount + 1
 
-    return countMaster >= 4
+    isWin = countMaster >= 4
+    print(f"Move has horizontal count {countMaster}")
+    print(f"Move is {isWin} for horizontal win")
+
+    return isWin
 
 # counts identical tiles in sequence left from current position on board
 def getLeftCountIdentical(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
@@ -190,14 +196,17 @@ def getLeftCountIdentical(rowIndex:int, columnIndex:int, playerTile:int, board:n
     count = 0
 
     # Loop through row contents, direction = left
-    for columnCrawler in range(columnIndex, -1, -1):
+    for columnCrawler in range(columnIndex - 1, -1, -1):
         # Check Bounds
         if not checkBoardBounds(rowIndex,columnCrawler,board):
+            printErrorMsg(f"BOUNDS r:{rowIndex} c:{columnCrawler}")
             break
         # Increase Count for identical tile
         if board[rowIndex][columnCrawler] == playerTile:
             count += 1
+            printYellowMsg(f"Identical, increment count to {count}")
         else:
+            printYellowMsg("Not identical")
             break
     # Return count
     return count
@@ -208,7 +217,7 @@ def getRightCountIdentical(rowIndex:int, columnIndex:int, playerTile:int, board:
     count = 0
 
     # Loop through row contents, direction = right
-    for columnCrawler in range(columnIndex, board.shape[1], 1):
+    for columnCrawler in range(columnIndex + 1, board.shape[1], 1):
         # Check Bounds
         if not checkBoardBounds(rowIndex,columnCrawler,board):
             break
@@ -245,7 +254,7 @@ def getUpCountIdentical(rowIndex:int, columnIndex:int, playerTile:int, board:nda
     count = 0
 
     # Loop through column contents, direction = up
-    for rowCrawler in range(rowIndex, -1, -1):
+    for rowCrawler in range(rowIndex - 1, -1, -1):
         # Check Bounds
         if not checkBoardBounds(rowCrawler,columnIndex,board):
             break
@@ -263,7 +272,7 @@ def getDownCountIdentical(rowIndex:int, columnIndex:int, playerTile:int, board:n
     count = 0
 
     # Loop through column contents, direction = up
-    for rowCrawler in range(rowIndex, board.shape[0], 1):
+    for rowCrawler in range(rowIndex + 1, board.shape[0], 1):
         # Check Bounds
         if not checkBoardBounds(rowCrawler,columnIndex,board):
             break
