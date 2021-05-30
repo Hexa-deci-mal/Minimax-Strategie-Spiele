@@ -3,6 +3,7 @@ Functions for movement evaluation (currently only for checkers)
 @author Lukas Eckert
 '''
 
+from numpy.ma.core import filled
 from printUtils import printErrorMsg, printYellowMsg
 import numpy
 from arrayUtils import checkBoardBounds, getNonEmptyPositions
@@ -63,9 +64,14 @@ def filterPositions(raw:List, filterPool:List):
     # Iterate over list
     for entry in raw:
         # filter an entry from pool
+        entryInFilter = False
+        # look at each element in filter
         for filter in filterPool:
-            if(coordinatesAreEqual(entry,filter)):
-                continue
+            #set flag if coordinates are equal
+            if coordinatesAreEqual(entry,filter):
+                entryInFilter = True
+        # add entry if not in filter
+        if not entryInFilter:
             FilteredList.append(entry)
     # Return list without contents of filterPool
     return FilteredList
@@ -94,11 +100,19 @@ def filterPositionsNon(raw:List, filterPool:List):
 def getEmptyPositions(Board:ndarray):
     # Get all positions
     positions = getAllPositionsOnBoard(Board)
+    printYellowMsg("Should be whole board once")
+    print(positions)
     # Get filled positions
     filledPositions = getNonEmptyPositions(Board)
+    printYellowMsg("Should be only filled pos")
+    print(filledPositions)
 
     # Filter filled positions from all positions
     emptyPositions = filterPositions(positions,filledPositions)
+
+    printYellowMsg("Should be empty pos only")
+    print(emptyPositions)
+
     return emptyPositions
 
 # Get all Positions [indexRow,indexColumn] from a given board
