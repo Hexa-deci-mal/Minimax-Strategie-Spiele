@@ -260,16 +260,18 @@ def isDiagonalWin(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
 # counts identical tiles in sequence diagonally up and left from current position on board
 def getDiagonalCountIdenticalLEFTUP(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
     count = 0
-    maximumStarter = 0
-    
-    if rowIndex >= columnIndex:
-        maximumStarter = rowIndex
-    else:
-        maximumStarter = columnIndex
 
-
-    for diacCrawler in range(0):
-        break
+    # Loop through diagonal line
+    for diagCrawler in range(1,6):
+        # Get current crawler position
+        currentRowIndex = rowIndex - diagCrawler
+        currentColumnIndex = columnIndex - diagCrawler
+        # check bounds
+        if not checkBoardBounds(currentRowIndex,currentColumnIndex,board):
+            break
+        # Increment count if identical tile is found
+        if board[currentRowIndex][currentColumnIndex] == playerTile:
+            count += 1
 
     return count
 
@@ -277,16 +279,52 @@ def getDiagonalCountIdenticalLEFTUP(rowIndex:int, columnIndex:int, playerTile:in
 def getDiagonalCountIdenticalRIGHTUP(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
     count = 0
 
+    # Loop through diagonal line
+    for diagCrawler in range(1,6):
+        # Get current crawler position
+        currentRowIndex = rowIndex - diagCrawler
+        currentColumnIndex = columnIndex + diagCrawler
+        # check bounds
+        if not checkBoardBounds(currentRowIndex,currentColumnIndex,board):
+            break
+        # Increment count if identical tile is found
+        if board[currentRowIndex][currentColumnIndex] == playerTile:
+            count += 1
+
     return count
 
 # counts identical tiles in sequence diagonally down and left from current position on board
 def getDiagonalCountIdenticalLEFTDOWN(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
     count = 0
 
+    # Loop through diagonal line
+    for diagCrawler in range(1,6):
+        # Get current crawler position
+        currentRowIndex = rowIndex + diagCrawler
+        currentColumnIndex = columnIndex - diagCrawler
+        # check bounds
+        if not checkBoardBounds(currentRowIndex,currentColumnIndex,board):
+            break
+        # Increment count if identical tile is found
+        if board[currentRowIndex][currentColumnIndex] == playerTile:
+            count += 1
+
     return count
 
 # counts identical tiles in sequence diagonally down and right from current position on board
 def getDiagonalCountIdenticalRIGHTDOWN(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
     count = 0
+
+    # Loop through diagonal line
+    for diagCrawler in range(1,6):
+        # Get current crawler position
+        currentRowIndex = rowIndex + diagCrawler
+        currentColumnIndex = columnIndex + diagCrawler
+        # check bounds
+        if not checkBoardBounds(currentRowIndex,currentColumnIndex,board):
+            break
+        # Increment count if identical tile is found
+        if board[currentRowIndex][currentColumnIndex] == playerTile:
+            count += 1
 
     return count
