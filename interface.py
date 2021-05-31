@@ -12,6 +12,9 @@ LukasTicTacToeBoard: ndarray
 LukasTurnCount: int
 LukasRunningState: bool
 
+# Global Variables for Current User
+currUsername: str
+
 # Global variable for GameMode
 GameMode: int
 
@@ -46,6 +49,10 @@ def doTicTacToeUpdate(row: int, column: int):
     LukasTicTacToeBoard = TurnResult[0]
     LukasTurnCount = TurnResult[1]
     LukasRunningState = TurnResult[2]
+
+    # save the current Board state in the DB
+    saveCurrentState(LukasTicTacToeBoard, LukasTurnCount)
+
     # Debugging printout
     printArrayColors(LukasTicTacToeBoard)
 
@@ -61,7 +68,8 @@ def doTicTacToeUpdate(row: int, column: int):
     print(f"Player taken from turn: {playerFromTurn}")
 
     if(LukasTurnCount != 1):
-        ScoredMoves = getPossibleMovesInklScore(LukasTicTacToeBoard,playerFromTurn)
+        ScoredMoves = getPossibleMovesInklScore(
+            LukasTicTacToeBoard, playerFromTurn)
 
         printYellowMsg("Inspect Scored Moves")
         print(ScoredMoves)
@@ -74,9 +82,21 @@ def doTicTacToeUpdate(row: int, column: int):
     # Returns button state
     return LukasTicTacToeBoard[row][column]
 
+
+def saveCurrentState(board, turnCount):
+    global currUsername
+    query = main.conn.execute(
+        f"select id from player where username = '{currUsername}'")
+    query_result = query.fetchall()
+    for row in query_result:
+        # KI show as andreas must be fixed when the currentState ist saved!
+        index = row[0]
+    main.conn.execute(
+        f"insert into board_save  (id, player_turn_id, game_id, player_id, board) VALUES (NULL, '{turnCount}', 1, '{currUsername}',  '{board}')")
+    main.conn.commit()
+
+
 # changes the style of a button
-
-
 def setStyle(style, button: Button):
     if(style == 1):
         button.configure(style_2)
@@ -278,13 +298,15 @@ def openLogIn():
     lbl4.grid(row=4, column=0, columnspan=2, pady=5)
 
     def login_entry_fields():
+        global currUsername
         logwin.geometry("200x120")
         print("Username: %s\nPasswort: %s" %
               (userInput.get(), passwortInput.get()))
         username = userInput.get()
         password = passwortInput.get()
 
-        query = main.conn.execute(f"select * from player where username='{username}'")
+        query = main.conn.execute(
+            f"select * from player where username='{username}'")
         query_result = query.fetchall()
         queryReturnCheck = query.fetchone()
         print(query_result)
@@ -295,6 +317,7 @@ def openLogIn():
             for row in query_result:
                 index = row[1]
                 if main.passComparison(username, password):
+                    currUsername = username
                     print("Authorized!")
                     regLogBtn.config(text="Logout")
                     logwinBtnLog.config(state=DISABLED)
@@ -302,10 +325,6 @@ def openLogIn():
                     passwortInput.delete(0, END)
                 else:
                     print("Not Authorized")
-    
-
-        
-        
 
     def registration():
         logwin.title("Registration")
@@ -318,10 +337,11 @@ def openLogIn():
         logwinBtnReg.config(text="SignUp", command=lambda: reg_entry_fields())
         backBtn = Button(logwin, text='Back', command=lambda: goBackBtn())
         backBtn.grid(row=0, column=2, sticky=W, pady=4, padx=10)
-            
+
         def reg_entry_fields():
             username = userInput.get()
-            query = main.conn.execute(f"select * from player where username='{username}'")
+            query = main.conn.execute(
+                f"select * from player where username='{username}'")
             query_result = query.fetchall()
             print(query_result)
             if userInput.get() == "" or eMailInput.get() == "" or passwortInput.get() == "":
@@ -332,13 +352,13 @@ def openLogIn():
                 print("test")
                 if query.rowcount == 0 or not query_result:
                     print("Username: %s\nPasswort: %s\nE-Mail: %s" %
-                        (userInput.get(), passwortInput.get(), eMailInput.get()))
+                          (userInput.get(), passwortInput.get(), eMailInput.get()))
 
                     main.insertNewData(
                         userInput.get(), passwortInput.get(), eMailInput.get())
                     userInput.delete(0, END)
                     passwortInput.delete(0, END)
-                    eMailInput.delete(0, END)   
+                    eMailInput.delete(0, END)
                 else:
                     lbl4.config(text="Username/E-Mail already used")
 
@@ -348,9 +368,10 @@ def openLogIn():
             logwinBtnLog.config(state=NORMAL)
             eMailInput.grid_forget()
             lbl3.grid_forget()
-            logwinBtnReg.config(text="Registrate", command=lambda: registration())
+            logwinBtnReg.config(text="Registrate",
+                                command=lambda: registration())
             backBtn.grid_forget()
-    
+
     lbl1 = Label(logwin, text="Username")
     lbl2 = Label(logwin, text="Password")
 
@@ -363,11 +384,12 @@ def openLogIn():
     userInput.grid(row=0, column=1)
     passwortInput.grid(row=2, column=1)
 
-    logwinBtnLog = Button(logwin, text='LogIn', command=lambda: login_entry_fields())
+    logwinBtnLog = Button(logwin, text='LogIn',
+                          command=lambda: login_entry_fields())
     logwinBtnLog.grid(row=3, column=0, sticky=W, pady=4, padx=5)
-    logwinBtnReg = Button(logwin, text='Registrate', command=lambda: registration())
+    logwinBtnReg = Button(logwin, text='Registrate',
+                          command=lambda: registration())
     logwinBtnReg.grid(row=3, column=1, sticky=W, pady=4, padx=5)
-    
 
 
 root = Tk()
@@ -389,7 +411,7 @@ info.grid(row=1, rowspan=1, column=0, padx=5)
 info.grid_propagate(0)
 
 regLogBtn = Button(root, text="Registration / LogIn", command=lambda: openLogIn(),
-                width=30, height=2, padx=5, pady=5, state=NORMAL)
+                   width=30, height=2, padx=5, pady=5, state=NORMAL)
 regLogBtn.grid(row=2, rowspan=1, column=0, padx=5)
 
 mainDisplay = Frame(root, width=930, height=705, padx=5, pady=5, bg="white")
@@ -403,7 +425,7 @@ rootBtn1 = Button(listGames, text="Bauernschach", command=lambda: [create_board(
 rootBtn2 = Button(listGames, text="Dame", command=lambda: [create_board(
 ), create_checkersArray_btn()], width=50, height=7, padx=0, pady=0)
 rootBtn3 = Button(listGames, text="Tic-Tac-Toe", command=lambda: [
-              create_board(), create_tictactoeArray_btn()], width=50, height=7, padx=0, pady=0)
+    create_board(), create_tictactoeArray_btn()], width=50, height=7, padx=0, pady=0)
 
 rootBtn1.pack(pady=10)
 rootBtn2.pack(pady=10)
