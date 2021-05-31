@@ -33,4 +33,3 @@ def formatForColor(msg:int):
     if msg == TILE_PLAYER_WHITE:
         return f'\033[96m{msg}\033[0m'
     return msgStr
-

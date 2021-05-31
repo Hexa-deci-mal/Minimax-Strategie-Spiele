@@ -40,16 +40,8 @@ def couldSetTile(rowIndex: int, columnIndex: int, Board: ndarray, symbol: int):
             return True
     return False
 
-# Clones the board
-
-
-def cloneBoard(board: ndarray):
-
-    return board.copy()
 
 # Returns the tile stored in the numpy array at the specified position rowIndex = Y, columnIndex = X
-
-
 def getTileFromPosition(rowIndex: int, columnIndex: int, Board: ndarray):
     comp = checkBoardBounds(rowIndex, columnIndex, Board)
     if comp:
