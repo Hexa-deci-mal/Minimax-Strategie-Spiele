@@ -9,74 +9,88 @@ from arrayUtils import *
 from printUtils import *
 
 # Executes Turn with input given
-def doAutoTurn(brd:ndarray, turn, running, rowIn, colIn):
+
+
+def doAutoTurn(brd: ndarray, turn, running, rowIn, colIn):
     if not running:
-        return [brd,turn,running]
+        return [brd, turn, running]
     print("AutoTurn")
     runningCache = running
     brdCache = brd
     turnCache = turn + 1
-    #print(turnCache)
+    # print(turnCache)
     turnCache = turnCache % 2
-    #print(turnCache)
+    # print(turnCache)
     printArrayColors(brd)
-    autoRes = doAutoAction(turnCache,brdCache,runningCache, rowIn,colIn)
+    autoRes = doAutoAction(turnCache, brdCache, runningCache, rowIn, colIn)
     print(f"AutoRes {autoRes}")
     if(not autoRes[1]):
         print("Reset Turn")
         turnCache = turn
-    return [brdCache,turnCache,autoRes[0]]
+    return [brdCache, turnCache, autoRes[0]]
 
 # runs a singular turn
-def doTurn(brd:ndarray, turn, running):
+
+
+def doTurn(brd: ndarray, turn, running):
     runningCache = running
     brdCache = brd
     turnCache = turn + 1
-    #print(turnCache)
+    # print(turnCache)
     turnCache = turnCache % 2
-    #print(turnCache)
+    # print(turnCache)
     printArrayColors(brd)
-    runningCache = promptAction(turnCache,brdCache,runningCache)
-    return [brdCache,turnCache,runningCache]
+    runningCache = promptAction(turnCache, brdCache, runningCache)
+    return [brdCache, turnCache, runningCache]
 
 # prompts user for input
-def promptAction(turnNr, brd:ndarray, running):
+
+
+def promptAction(turnNr, brd: ndarray, running):
 
     column = int(input("Choose Column-Coord"))
     row = int(input("Choose Row-Coord"))
 
     if(turnNr == 0):
-        doPlacementAction(row,column,brd,turnNr, TILE_PLAYER_RED)
+        doPlacementAction(row, column, brd, turnNr, TILE_PLAYER_RED)
     else:
-        doPlacementAction(row,column,brd,turnNr,TILE_PLAYER_WHITE)
-    return not checkIfWin(brd,turnNr,running)
+        doPlacementAction(row, column, brd, turnNr, TILE_PLAYER_WHITE)
+    return not checkIfWin(brd, turnNr, running)
 
 # Executes given TurnAction
-def doAutoAction(turnNr, brd:ndarray, running, rowCall, columnCall):
+
+
+def doAutoAction(turnNr, brd: ndarray, running, rowCall, columnCall):
     print("Auto-Action")
     executed = False
     if(turnNr == 0):
-        executed = doAutoPlacementAction(rowCall,columnCall,brd,turnNr, TILE_PLAYER_RED)
+        executed = doAutoPlacementAction(
+            rowCall, columnCall, brd, turnNr, TILE_PLAYER_RED)
     else:
-        executed = doAutoPlacementAction(rowCall,columnCall,brd,turnNr,TILE_PLAYER_WHITE)
+        executed = doAutoPlacementAction(
+            rowCall, columnCall, brd, turnNr, TILE_PLAYER_WHITE)
 
-    return [not checkIfWin(brd,turnNr,running),executed]
+    return [not checkIfWin(brd, turnNr, running), executed]
 
 
 # Tries to execute turn automatically
-def doAutoPlacementAction(rowIndex,columnIndex,brd:ndarray,trn,Tile):
-    if couldSetTile(rowIndex,columnIndex,brd,Tile):
+def doAutoPlacementAction(rowIndex, columnIndex, brd: ndarray, trn, Tile):
+    if couldSetTile(rowIndex, columnIndex, brd, Tile):
         return True
     return False
 
 # Repeats turn until successful placement of tile
-def doPlacementAction(rowIndex,columnIndex,brd:ndarray,trn,Tile):
-    if couldSetTile(rowIndex,columnIndex,brd,Tile):
+
+
+def doPlacementAction(rowIndex, columnIndex, brd: ndarray, trn, Tile):
+    if couldSetTile(rowIndex, columnIndex, brd, Tile):
         return
-    promptAction(trn,brd,True)
+    promptAction(trn, brd, True)
 
 # Checks if a win state has been reached
-def checkIfWin(brd:ndarray, trn, running):
+
+
+def checkIfWin(brd: ndarray, trn, running):
     AnyWins = []
     AnyWins.append(checkIfWinRows(brd))
     AnyWins.append(checkIfWinColumns(brd))
@@ -89,7 +103,9 @@ def checkIfWin(brd:ndarray, trn, running):
     return False
 
 # ends the program if win has been achieved
-def doWin(brd:ndarray, trn):
+
+
+def doWin(brd: ndarray, trn):
     if trn == 0:
         printYellowMsg("Player Red (2) Won")
     else:
@@ -97,7 +113,9 @@ def doWin(brd:ndarray, trn):
     printArrayColors(brd)
 
 # checks for win conditions in rows
-def checkIfWinRows(brd:ndarray):
+
+
+def checkIfWinRows(brd: ndarray):
     #global Board
     countSame = 0
     for rowIndex in range(brd.shape[0] - 1):
@@ -105,7 +123,7 @@ def checkIfWinRows(brd:ndarray):
         for columnIndex in range(brd.shape[1] - 1):
             current = brd[rowIndex][columnIndex]
             next = brd[rowIndex][columnIndex + 1]
-            print(f"Current Tile: %d, Next Tile: %d" % (current,next))
+            print(f"Current Tile: %d, Next Tile: %d" % (current, next))
             if next == current and next != TILE_EMPTY:
                 newCount += 1
                 print(f"Incrementing newCount to %d" % newCount)
@@ -119,7 +137,9 @@ def checkIfWinRows(brd:ndarray):
     return False
 
 # checks for win conditions in columns
-def checkIfWinColumns(brd:ndarray):
+
+
+def checkIfWinColumns(brd: ndarray):
     #global Board
     countSame = 0
     for columnIndex in range(brd.shape[1] - 1):
@@ -141,7 +161,9 @@ def checkIfWinColumns(brd:ndarray):
     return False
 
 # checks for win conditions in diagonals
-def checkIfWinDiags(brd:ndarray):
+
+
+def checkIfWinDiags(brd: ndarray):
     if isBoardTooSmall(brd):
         return
     if(getDiagonalCount(brd) >= 4):
@@ -149,7 +171,9 @@ def checkIfWinDiags(brd:ndarray):
     return False
 
 # evaluates the total maximum sequence of identical tiles for any diagonal line
-def getDiagonalCount(brd:ndarray):
+
+
+def getDiagonalCount(brd: ndarray):
     maxLeft = getCountMaxLeftDiag(brd)
     maxRight = getCountMaxRightDiag(brd)
     #print(f"maxRight{maxRight} maxLeft{maxLeft}")
@@ -158,7 +182,12 @@ def getDiagonalCount(brd:ndarray):
     return maxRight
 
 # Evaluates the maximum sequence of identical tiles for any diagonal line runnig from top left to bottom right
-def getCountMaxLeftDiag(brd:ndarray):
+
+
+def getCountMaxLeftDiag(brd: ndarray):
+
+    # I am sorry for anyone trying to understand this evaluation in it's entirety. It may not be pretty, but it is mine. And it works beautifully. @author:Lukas Eckert
+
     # Max count found
     leftMaxCount = 1
     # Min Values
@@ -169,7 +198,7 @@ def getCountMaxLeftDiag(brd:ndarray):
     maxRowIndex = brd.shape[0] - 1
 
     # loop over diagonal lines starting on y axis
-    for rowStepper in range(minRowIndex,maxRowIndex):
+    for rowStepper in range(minRowIndex, maxRowIndex):
         #print(f"y axis stepper:{stepper}")
         diagCount = 1
         diagCountMax = 0
@@ -188,7 +217,7 @@ def getCountMaxLeftDiag(brd:ndarray):
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
                 diagCount += 1
-                #print(f"DiagCount:{diagCount}")
+                # print(f"DiagCount:{diagCount}")
                 if diagCount > diagCountMax:
                     diagCountMax = diagCount
         # eval max sequence in diags
@@ -198,7 +227,7 @@ def getCountMaxLeftDiag(brd:ndarray):
     #printErrorMsg("Starting on Y= 0")
 
     # loop over remaining diagonal lines starting on x axis
-    for columnStepper in range(minColumnIndex + 1,maxColumnIndex):
+    for columnStepper in range(minColumnIndex + 1, maxColumnIndex):
         #print(f"x Axis xStepper {xStepper}")
         diagCount = 1
         diagCountMax = 0
@@ -216,7 +245,7 @@ def getCountMaxLeftDiag(brd:ndarray):
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
                 diagCount += 1
-                #print(f"DiagCount:{diagCount}")
+                # print(f"DiagCount:{diagCount}")
                 if diagCount > diagCountMax:
                     diagCountMax = diagCount
         # eval max sequence in diags
@@ -228,7 +257,10 @@ def getCountMaxLeftDiag(brd:ndarray):
 
 
 # Evaluates the maximum sequence of identical tiles for any diagonal line runnig from top right to bottom left
-def getCountMaxRightDiag(brd:ndarray):
+def getCountMaxRightDiag(brd: ndarray):
+
+    # I am sorry for anyone trying to understand this evaluation in it's entirety. It may not be pretty, but it is mine. And it works beautifully. @author:Lukas Eckert
+
     # Max count found
     rightMaxCount = 1
     # Min Values
@@ -239,7 +271,7 @@ def getCountMaxRightDiag(brd:ndarray):
     maxRowIndex = brd.shape[0] - 1
 
     # loop over diagonal lines starting on y axis
-    for rowStepper in range(maxRowIndex,minRowIndex,-1):
+    for rowStepper in range(maxRowIndex, minRowIndex, -1):
         #print(f"y axis stepper:{stepper}")
         diagCount = 1
         diagCountMax = 0
@@ -258,7 +290,7 @@ def getCountMaxRightDiag(brd:ndarray):
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
                 diagCount += 1
-                #print(f"DiagCount:{diagCount}")
+                # print(f"DiagCount:{diagCount}")
                 if diagCount > diagCountMax:
                     diagCountMax = diagCount
         # eval max sequence in diags
@@ -268,7 +300,7 @@ def getCountMaxRightDiag(brd:ndarray):
     #printErrorMsg("Starting on Y= 0")
 
     # loop over remaining diagonal lines starting on x axis
-    for columnStepper in range(minColumnIndex + 1,maxColumnIndex):
+    for columnStepper in range(minColumnIndex + 1, maxColumnIndex):
         #print(f"x Axis xStepper {xStepper}")
         diagCount = 1
         diagCountMax = 0
@@ -286,7 +318,7 @@ def getCountMaxRightDiag(brd:ndarray):
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
                 diagCount += 1
-                #print(f"DiagCount:{diagCount}")
+                # print(f"DiagCount:{diagCount}")
                 if diagCount > diagCountMax:
                     diagCountMax = diagCount
         # eval max sequence in diags
@@ -297,9 +329,9 @@ def getCountMaxRightDiag(brd:ndarray):
     return rightMaxCount
 
 
-# Checks if the Board is too Small for diagonal win 
-def isBoardTooSmall(Board:ndarray):
-    if((Board.shape[0] - 1 )< 4 or (Board.shape[1] - 1)< 4):
+# Checks if the Board is too Small for diagonal win
+def isBoardTooSmall(Board: ndarray):
+    if((Board.shape[0] - 1) < 4 or (Board.shape[1] - 1) < 4):
         return True
     return False
 
@@ -322,7 +354,8 @@ while (MainRunning):
 '''
 
 # does some stats
+
+
 def doStatisticsForTurn(winnerIndex, turn):
     turn + 1
     WinningPlayer = winnerIndex
-
