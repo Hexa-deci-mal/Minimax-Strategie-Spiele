@@ -376,7 +376,7 @@ root.geometry("1250x720")
 root.resizable(width=True, height=True)
 # root.attributes("-transparentcolor", "green")
 
-myImg = ImageTk.PhotoImage(Image.open("code-editoren-t.jpg"))
+myImgBgGame = ImageTk.PhotoImage(Image.open("code-editoren-t.jpg"))
 
 listGames = Frame(root, width=300, height=402, padx=5, pady=5, bg="white")
 listGames.grid(row=0, rowspan=1, column=0, padx=5)
