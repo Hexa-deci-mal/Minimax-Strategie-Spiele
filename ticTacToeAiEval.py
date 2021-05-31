@@ -38,19 +38,27 @@ def scoreMove(player: int, moveRowIndex: int, moveColumnIndex: int, board: ndarr
         f"Inspecting move row:{moveRowIndex} column:{moveColumnIndex}")
 
     # Weight factor to be applied to each evaluation
-    ScoreMultiWin = 10
-    ScoreMultiNotLose = 7
-    ScoreMultiProgress = 3
-    ScoreMultiBlocked = 2
+    ScoreMultiWin = 10000
+    ScoreMultiNotLose = 1000
+    ScoreMultiProgress = 100
+    ScoreMultiFree = 10
+    ScoreMultiBlocked = 1
+
+    enemyTile = player
+    if(player == TILE_PLAYER_RED):
+        enemyTile = TILE_PLAYER_WHITE
+    else:
+        enemyTile = TILE_PLAYER_RED
 
     # Gets simple move Scores
     ScoreWin = getScoreWin(moveRowIndex, moveColumnIndex, board, player)
     ScoreNotLose = getScoreNotLose(
-        moveRowIndex, moveColumnIndex, board, player)
+        moveRowIndex, moveColumnIndex, board, enemyTile)
     ScoreProgress = getScoreProgress(
-        moveRowIndex, moveColumnIndex, board, player)
+        moveRowIndex, moveColumnIndex, board, enemyTile)
+    ScoreFree = getScoreFree(moveRowIndex, moveColumnIndex, board, player)
     ScoreBlocked = getScoreBlocked(
-        moveRowIndex, moveColumnIndex, board, player)
+        moveRowIndex, moveColumnIndex, board, enemyTile)
 
     print(
         f"ScoreWin:{ScoreWin}, ScoreNotLose:{ScoreNotLose}, ScoreProgress:{ScoreProgress}, ScoreBlocked:{ScoreBlocked}")
@@ -59,13 +67,14 @@ def scoreMove(player: int, moveRowIndex: int, moveColumnIndex: int, board: ndarr
     ScoreWinFactored = ScoreWin * ScoreMultiWin
     ScoreNotLoseFactored = ScoreNotLose * ScoreMultiNotLose
     ScoreProgressFactored = ScoreProgress * ScoreMultiProgress
+    ScoreFreeFactored = ScoreFree * ScoreMultiFree
     ScoreBlockedFactored = ScoreBlocked * ScoreMultiBlocked
 
-    print(f"ScoreWinFactored:{ScoreWinFactored}, ScoreNotLoseFactored:{ScoreNotLoseFactored}, ScoreProgressFactored:{ScoreProgressFactored}, ScoreBlockedFactored:{ScoreBlockedFactored}")
+    print(f"ScoreWinFactored:{ScoreWinFactored}, ScoreNotLoseFactored:{ScoreNotLoseFactored}, ScoreProgressFactored:{ScoreProgressFactored}, ScoreBlockedFactored:{ScoreBlockedFactored}, ScoreFreeFactored:{ScoreFreeFactored}")
 
     # Sums up individual scores to create master score
     Score = ScoreWinFactored + ScoreNotLoseFactored + \
-        ScoreProgressFactored + ScoreBlockedFactored
+        ScoreProgressFactored + ScoreFreeFactored + ScoreBlockedFactored
 
     print(f"Score Master:{Score}")
 
@@ -102,6 +111,11 @@ def getScoreProgress(rowIndex: int, columnIndex: int, brd: ndarray, playerTile: 
 # Evaluates if move can block enemy
 
 
-def getScoreBlocked(rowIndex: int, columnIndex: int, brd: ndarray, playerTile: int):
-    score = 0
+def getScoreBlocked(rowIndex: int, columnIndex: int, brd: ndarray, enemyTile: int):
+    score = getBlockedCounts(rowIndex, columnIndex, enemyTile, brd)
+    return score
+
+
+def getScoreFree(rowIndex: int, columnIndex: int, brd: ndarray, tile: int):
+    score = getFreeCounts(rowIndex, columnIndex, tile, brd)
     return score
