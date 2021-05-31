@@ -36,13 +36,8 @@ def couldSetTile(rowIndex:int, columnIndex:int, Board:ndarray, symbol:int):
     
 # Clones the board
 def cloneBoard(board:ndarray):
-    clone = createEmptyBoard(board.shape[0],board.shape[1])
 
-    for rowIndex in range(board.shape[0]):
-        for columnIndex in range(board.shape[1]):
-            setIfEmpty(rowIndex,columnIndex,clone,board[rowIndex][columnIndex])
-
-    return clone
+    return board.copy()
 
 # Returns the tile stored in the numpy array at the specified position rowIndex = Y, columnIndex = X
 def getTileFromPosition(rowIndex:int, columnIndex:int, Board:ndarray):
