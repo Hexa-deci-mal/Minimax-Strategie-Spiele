@@ -3,7 +3,7 @@ Functions for movement evaluation (currently only for checkers)
 @author Lukas Eckert
 '''
 
-from numpy.ma.core import filled
+
 from printUtils import printErrorMsg, printYellowMsg
 import numpy
 from arrayUtils import checkBoardBounds, getNonEmptyPositions
@@ -90,9 +90,6 @@ def filterPositionsNon(raw:List, filterPool:List):
             if(coordinatesAreEqual(entry,filter)):
                 FilteredList.append(entry)
     return FilteredList
-
-
-
 
 
 
@@ -190,6 +187,10 @@ def getBlockedCounts(rowIndex, columnIndex, enemyTile, board:ndarray):
     countBlocked = getFriendlyNeighborCount(board,enemyTile,rowIndex,columnIndex)
     return countBlocked
 
+# Gets number of adjacent friendly tiles
+def getFreeCounts(rowIndex:int, columnIndex:int, tile:int, board:ndarray):
+    return getFriendlyNeighborCount(board,tile,rowIndex,columnIndex)
+
 # Gets number of significant progress opportunities for this location
 def getProgressCounts(rowIndex:int, columnIndex:int, enemyTile:int, board:ndarray):
     # master counter
@@ -282,7 +283,7 @@ def getLeftCountPossible(rowIndex:int, columnIndex:int, enemyTile:int, board:nda
     count = 0
 
     # Loop through row contents, direction = left
-    for columnCrawler in range(columnIndex - 1, -1, -1):
+    for columnCrawler in range(columnIndex - 1, columnIndex-4, -1):
         # Check Bounds
         if not checkBoardBounds(rowIndex,columnCrawler,board):
             printErrorMsg(f"BOUNDS r:{rowIndex} c:{columnCrawler}")
@@ -324,7 +325,7 @@ def getRightCountPossible(rowIndex:int, columnIndex:int, enemyTile:int, board:nd
     printErrorMsg(board)
 
     # Loop through row contents, direction = right
-    for columnCrawler in range(columnIndex + 1, board.shape[1], 1):
+    for columnCrawler in range(columnIndex + 1, columnIndex+4, 1):
         # Check Bounds
         if not checkBoardBounds(rowIndex,columnCrawler,board):
             break
@@ -380,7 +381,7 @@ def getUpCountPossible(rowIndex:int, columnIndex:int, enemyTile:int, board:ndarr
     count = 0
 
     # Loop through column contents, direction = up
-    for rowCrawler in range(rowIndex - 1, -1, -1):
+    for rowCrawler in range(rowIndex - 1, rowIndex-4, -1):
         # Check Bounds
         if not checkBoardBounds(rowCrawler,columnIndex,board):
             break
@@ -416,7 +417,7 @@ def getDownCountPossible(rowIndex:int, columnIndex:int, enemyTile:int, board:nda
     count = 0
 
     # Loop through column contents, direction = up
-    for rowCrawler in range(rowIndex + 1, board.shape[0], 1):
+    for rowCrawler in range(rowIndex + 1, rowIndex + 4, 1):
         # Check Bounds
         if not checkBoardBounds(rowCrawler,columnIndex,board):
             break
@@ -484,7 +485,7 @@ def getDiagonalCountPossibleLEFTUP(rowIndex:int, columnIndex:int, enemyTile:int,
     count = 0
 
     # Loop through diagonal line
-    for diagCrawler in range(1,6):
+    for diagCrawler in range(1,4):
         # Get current crawler position
         currentRowIndex = rowIndex - diagCrawler
         currentColumnIndex = columnIndex - diagCrawler
@@ -520,7 +521,7 @@ def getDiagonalCountPossibleRIGHTUP(rowIndex:int, columnIndex:int, enemyTile:int
     count = 0
 
     # Loop through diagonal line
-    for diagCrawler in range(1,6):
+    for diagCrawler in range(1,4):
         # Get current crawler position
         currentRowIndex = rowIndex - diagCrawler
         currentColumnIndex = columnIndex + diagCrawler
@@ -556,7 +557,7 @@ def getDiagonalCountPossibleLEFTDOWN(rowIndex:int, columnIndex:int, enemyTile:in
     count = 0
 
     # Loop through diagonal line
-    for diagCrawler in range(1,6):
+    for diagCrawler in range(1,4):
         # Get current crawler position
         currentRowIndex = rowIndex + diagCrawler
         currentColumnIndex = columnIndex - diagCrawler
@@ -592,7 +593,7 @@ def getDiagonalCountPossibleRIGHTDOWN(rowIndex:int, columnIndex:int, enemyTile:i
     count = 0
 
     # Loop through diagonal line
-    for diagCrawler in range(1,6):
+    for diagCrawler in range(1,4):
         # Get current crawler position
         currentRowIndex = rowIndex + diagCrawler
         currentColumnIndex = columnIndex + diagCrawler
