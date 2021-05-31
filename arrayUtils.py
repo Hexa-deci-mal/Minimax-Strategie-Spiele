@@ -16,53 +16,48 @@ TILE_PLAYER_WHITE = 1
 TILE_PLAYER_RED = 2
 
 # Creates a new numpy array containing only 0 values. Rows = Y, Columns = X
-
-
-def createEmptyBoard(rows: int, columns: int):
+def createEmptyBoard(rows:int, columns:int):
     Board = numpy.zeros((rows, columns))
     return Board
 
 # Places a tile at a specific coordinate set within the numpy array. rowIndex = Y, columnIndex = X
-
-
-def setIfEmpty(rowIndex: int, columnIndex: int, Board: ndarray, symbol: int):
-    if(checkBoardBounds(rowIndex, columnIndex, Board) and Board[rowIndex, columnIndex] == TILE_EMPTY):
-        Board[rowIndex, columnIndex] = symbol
+def setIfEmpty(rowIndex:int, columnIndex:int, Board:ndarray, symbol:int):
+    if(checkBoardBounds(rowIndex,columnIndex,Board) and Board[rowIndex,columnIndex] == TILE_EMPTY):
+        Board[rowIndex,columnIndex] = symbol
 
 # Tries setting a tile at a specific coordinate set within the numpy array. rowIndex = Y, columnIndex = 16
 # Returns Boolean value indicating success
-
-
-def couldSetTile(rowIndex: int, columnIndex: int, Board: ndarray, symbol: int):
-    if checkBoardBounds(rowIndex, columnIndex, Board):
-        if getTileFromPosition(rowIndex, columnIndex, Board) == TILE_EMPTY:
-            Board[rowIndex, columnIndex] = symbol
+def couldSetTile(rowIndex:int, columnIndex:int, Board:ndarray, symbol:int):
+    if checkBoardBounds(rowIndex,columnIndex,Board):
+        if getTileFromPosition(rowIndex,columnIndex, Board) == TILE_EMPTY:
+            Board[rowIndex,columnIndex] = symbol
             return True
     return False
+    
+# Clones the board
+def cloneBoard(board:ndarray):
 
+    return board.copy()
 
 # Returns the tile stored in the numpy array at the specified position rowIndex = Y, columnIndex = X
-def getTileFromPosition(rowIndex: int, columnIndex: int, Board: ndarray):
-    comp = checkBoardBounds(rowIndex, columnIndex, Board)
+def getTileFromPosition(rowIndex:int, columnIndex:int, Board:ndarray):
+    comp = checkBoardBounds(rowIndex,columnIndex,Board)
     if comp:
         return Board[rowIndex][columnIndex]
 
 # Checks if index is within valid index bounds row = Y, column = X
-
-
-def checkBoardBounds(row: int, column: int, Board: ndarray):
+def checkBoardBounds(row:int, column:int, Board:ndarray):
     return row < Board.shape[0] and column < Board.shape[1] and row >= 0 and column >= 0
 
 
 # Returns all positions that are not empty
-def getNonEmptyPositions(Board: ndarray):
+def getNonEmptyPositions(Board:ndarray):
     positions = []
     columnIndex = nonzero(Board)[1]
     rowIndex = nonzero(Board)[0]
     for cc in range(rowIndex.size):
-        positions.append([rowIndex[cc], columnIndex[cc]])
+        positions.append([rowIndex[cc],columnIndex[cc]])
     return positions
-
 
 '''
 
