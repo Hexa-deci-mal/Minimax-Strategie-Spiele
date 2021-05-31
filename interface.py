@@ -56,13 +56,16 @@ def doTicTacToeUpdate(row: int, column: int):
 
     playerFromTurn = LukasTurnCount + 1
 
+    print(f"Turn Count {LukasTurnCount}")
+
     print(f"Player taken from turn: {playerFromTurn}")
 
-    ScoredMoves = getPossibleMovesInklScore(
-        LukasTicTacToeBoard, playerFromTurn)
+    if(LukasTurnCount != 1):
+        ScoredMoves = getPossibleMovesInklScore(
+            LukasTicTacToeBoard, playerFromTurn)
 
-    printYellowMsg("Inspect Scored Moves")
-    print(ScoredMoves)
+        printYellowMsg("Inspect Scored Moves")
+        print(ScoredMoves)
 
     printErrorMsg("END TESTING AREA AI")
     '''

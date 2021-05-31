@@ -180,6 +180,86 @@ def getWinCounts(rowIndex: int, columnIndex: int, playerTile: int, board: ndarra
 
     return winCounter
 
+# Gets number of loss conditions that could be prevented at this location by placing your tile
+
+
+def getLossCounts(rowIndex: int, columnIndex: int, enemyTile: int, board: ndarray):
+    lossCounter = 0
+
+    # Evaluates wheather a horizontal win could be achieved by oponent
+    if isHorizontalWin(rowIndex, columnIndex, enemyTile, board):
+        lossCounter += 1
+        print("HorLoss")
+    # Evalutates wheather a vertical win could be achieved by oponent
+    if isVerticalWin(rowIndex, columnIndex, enemyTile, board):
+        lossCounter += 1
+        print("VertLoss")
+    # Evaluates wheather a diagonal win could be achieved by oponent
+    if isDiagonalWin(rowIndex, columnIndex, enemyTile, board):
+        lossCounter += 1
+        print("DiagLoss")
+
+    return lossCounter
+
+# Get adjacent enemyTiles
+
+
+def getBlockedCounts(rowIndex, columnIndex, enemyTile, board: ndarray):
+    countBlocked = getFriendlyNeighborCount(
+        board, enemyTile, rowIndex, columnIndex)
+    return countBlocked
+
+# Gets number of significant progress opportunities for this location
+
+
+def getProgressCounts(rowIndex: int, columnIndex: int, enemyTile: int, board: ndarray):
+    # master counter
+
+    printErrorMsg(board)
+
+    progressCounter = 0
+
+    # horizontal eval
+    leftCountPoss = getLeftCountPossible(
+        rowIndex, columnIndex, enemyTile, board)
+    rightCountPoss = getRightCountPossible(
+        rowIndex, columnIndex, enemyTile, board)
+    horizontalCombo = leftCountPoss + rightCountPoss + 1
+
+    if(horizontalCombo >= 4):
+        progressCounter += 1
+
+    # vertical eval
+    upCountPoss = getUpCountPossible(rowIndex, columnIndex, enemyTile, board)
+    downCountPoss = getDownCountPossible(
+        rowIndex, columnIndex, enemyTile, board)
+    verticalCountPoss = upCountPoss + downCountPoss + 1
+
+    if(verticalCountPoss >= 4):
+        progressCounter += 1
+
+    # diag eval lu2rd
+    leftUpDiaPoss = getDiagonalCountPossibleLEFTUP(
+        rowIndex, columnIndex, enemyTile, board)
+    rightDownDiaPoss = getDiagonalCountPossibleRIGHTDOWN(
+        rowIndex, columnIndex, enemyTile, board)
+    vert1CountPoss = leftUpDiaPoss + rightDownDiaPoss + 1
+
+    if(vert1CountPoss >= 4):
+        progressCounter += 1
+
+    # diag eval ru2ld
+    rightUpDiaPoss = getDiagonalCountPossibleRIGHTUP(
+        rowIndex, columnIndex, enemyTile, board)
+    leftDownDiaPoss = getDiagonalCountPossibleLEFTDOWN(
+        rowIndex, columnIndex, enemyTile, board)
+    vert2CountPoss = rightUpDiaPoss + leftDownDiaPoss + 1
+
+    if(vert2CountPoss >= 4):
+        progressCounter += 1
+
+    return progressCounter
+
 
 '''
     Horizontal win evaluation for a single newly placed tile
@@ -230,6 +310,29 @@ def getLeftCountIdentical(rowIndex: int, columnIndex: int, playerTile: int, boar
     # Return count
     return count
 
+# counts possible tiles in sequence left from current position on board
+
+
+def getLeftCountPossible(rowIndex: int, columnIndex: int, enemyTile: int, board: ndarray):
+    # count of possible tiles
+    count = 0
+
+    # Loop through row contents, direction = left
+    for columnCrawler in range(columnIndex - 1, -1, -1):
+        # Check Bounds
+        if not checkBoardBounds(rowIndex, columnCrawler, board):
+            printErrorMsg(f"BOUNDS r:{rowIndex} c:{columnCrawler}")
+            break
+        # Increase Count for possible tile
+        if board[rowIndex][columnCrawler] != enemyTile:
+            count += 1
+            printYellowMsg(f"Possible, increment count to {count}")
+        else:
+            printYellowMsg("Not possible")
+            break
+    # Return count
+    return count
+
 # counts identical tiles in sequence right from current position on board
 
 
@@ -244,6 +347,27 @@ def getRightCountIdentical(rowIndex: int, columnIndex: int, playerTile: int, boa
             break
         # Increase Count for identical tile
         if board[rowIndex][columnCrawler] == playerTile:
+            count += 1
+        else:
+            break
+    # Return count
+    return count
+
+
+# counts possible tiles in sequence right from current position on board
+def getRightCountPossible(rowIndex: int, columnIndex: int, enemyTile: int, board: ndarray):
+    # count of possible tiles
+    count = 0
+
+    printErrorMsg(board)
+
+    # Loop through row contents, direction = right
+    for columnCrawler in range(columnIndex + 1, board.shape[1], 1):
+        # Check Bounds
+        if not checkBoardBounds(rowIndex, columnCrawler, board):
+            break
+        # Increase Count for possible tile
+        if board[rowIndex][columnCrawler] != enemyTile:
             count += 1
         else:
             break
@@ -290,6 +414,25 @@ def getUpCountIdentical(rowIndex: int, columnIndex: int, playerTile: int, board:
     # Return count
     return count
 
+
+# counts possible tiles in sequence up from current position on board
+def getUpCountPossible(rowIndex: int, columnIndex: int, enemyTile: int, board: ndarray):
+    # count of possible tiles
+    count = 0
+
+    # Loop through column contents, direction = up
+    for rowCrawler in range(rowIndex - 1, -1, -1):
+        # Check Bounds
+        if not checkBoardBounds(rowCrawler, columnIndex, board):
+            break
+        # Increase Count for possible tile
+        if board[rowCrawler][columnIndex] != enemyTile:
+            count += 1
+        else:
+            break
+    # Return count
+    return count
+
 # counts identical tiles in sequence down from current position on board
 
 
@@ -304,6 +447,26 @@ def getDownCountIdentical(rowIndex: int, columnIndex: int, playerTile: int, boar
             break
         # Increase Count for identical tile
         if board[rowCrawler][columnIndex] == playerTile:
+            count += 1
+        else:
+            break
+    # Return count
+    return count
+
+# counts possible tiles in sequence down from current position on board
+
+
+def getDownCountPossible(rowIndex: int, columnIndex: int, enemyTile: int, board: ndarray):
+    # count of possible tiles
+    count = 0
+
+    # Loop through column contents, direction = up
+    for rowCrawler in range(rowIndex + 1, board.shape[0], 1):
+        # Check Bounds
+        if not checkBoardBounds(rowCrawler, columnIndex, board):
+            break
+        # Increase Count for possible tile
+        if board[rowCrawler][columnIndex] != enemyTile:
             count += 1
         else:
             break
@@ -364,6 +527,25 @@ def getDiagonalCountIdenticalLEFTUP(rowIndex: int, columnIndex: int, playerTile:
 
     return count
 
+
+# counts possible tiles in sequence diagonally up and left from current position on board
+def getDiagonalCountPossibleLEFTUP(rowIndex: int, columnIndex: int, enemyTile: int, board: ndarray):
+    count = 0
+
+    # Loop through diagonal line
+    for diagCrawler in range(1, 6):
+        # Get current crawler position
+        currentRowIndex = rowIndex - diagCrawler
+        currentColumnIndex = columnIndex - diagCrawler
+        # check bounds
+        if not checkBoardBounds(currentRowIndex, currentColumnIndex, board):
+            break
+        # Increment count if possible tile is found
+        if board[currentRowIndex][currentColumnIndex] != enemyTile:
+            count += 1
+
+    return count
+
 # counts identical tiles in sequence diagonally up and right from current position on board
 
 
@@ -380,6 +562,26 @@ def getDiagonalCountIdenticalRIGHTUP(rowIndex: int, columnIndex: int, playerTile
             break
         # Increment count if identical tile is found
         if board[currentRowIndex][currentColumnIndex] == playerTile:
+            count += 1
+
+    return count
+
+# counts possible tiles in sequence diagonally up and right from current position on board
+
+
+def getDiagonalCountPossibleRIGHTUP(rowIndex: int, columnIndex: int, enemyTile: int, board: ndarray):
+    count = 0
+
+    # Loop through diagonal line
+    for diagCrawler in range(1, 6):
+        # Get current crawler position
+        currentRowIndex = rowIndex - diagCrawler
+        currentColumnIndex = columnIndex + diagCrawler
+        # check bounds
+        if not checkBoardBounds(currentRowIndex, currentColumnIndex, board):
+            break
+        # Increment count if possible tile is found
+        if board[currentRowIndex][currentColumnIndex] != enemyTile:
             count += 1
 
     return count
@@ -404,6 +606,26 @@ def getDiagonalCountIdenticalLEFTDOWN(rowIndex: int, columnIndex: int, playerTil
 
     return count
 
+# counts possible tiles in sequence diagonally down and left from current position on board
+
+
+def getDiagonalCountPossibleLEFTDOWN(rowIndex: int, columnIndex: int, enemyTile: int, board: ndarray):
+    count = 0
+
+    # Loop through diagonal line
+    for diagCrawler in range(1, 6):
+        # Get current crawler position
+        currentRowIndex = rowIndex + diagCrawler
+        currentColumnIndex = columnIndex - diagCrawler
+        # check bounds
+        if not checkBoardBounds(currentRowIndex, currentColumnIndex, board):
+            break
+        # Increment count if possible tile is found
+        if board[currentRowIndex][currentColumnIndex] != enemyTile:
+            count += 1
+
+    return count
+
 # counts identical tiles in sequence diagonally down and right from current position on board
 
 
@@ -420,6 +642,26 @@ def getDiagonalCountIdenticalRIGHTDOWN(rowIndex: int, columnIndex: int, playerTi
             break
         # Increment count if identical tile is found
         if board[currentRowIndex][currentColumnIndex] == playerTile:
+            count += 1
+
+    return count
+
+# counts possible tiles in sequence diagonally down and right from current position on board
+
+
+def getDiagonalCountPossibleRIGHTDOWN(rowIndex: int, columnIndex: int, enemyTile: int, board: ndarray):
+    count = 0
+
+    # Loop through diagonal line
+    for diagCrawler in range(1, 6):
+        # Get current crawler position
+        currentRowIndex = rowIndex + diagCrawler
+        currentColumnIndex = columnIndex + diagCrawler
+        # check bounds
+        if not checkBoardBounds(currentRowIndex, currentColumnIndex, board):
+            break
+        # Increment count if possible tile is found
+        if board[currentRowIndex][currentColumnIndex] != enemyTile:
             count += 1
 
     return count

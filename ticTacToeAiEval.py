@@ -4,7 +4,7 @@ Functions providing MinMaxAi with score data for checkers
 '''
 
 # Returns a list of all possible moves
-from arrayUtils import TILE_EMPTY
+from arrayUtils import *
 from typing import List
 from moveEvaluation import *
 
@@ -28,8 +28,19 @@ def getPossibleMovesInklScore(board: ndarray, player):
 
     return ScoredMoveList
 
+# applies a move to a given board resulting in a new board
+
+
+def applyVirtualMove(board: ndarray, player: int, move: List):
+    virtualBoard = cloneBoard(board)
+
+    setIfEmpty(move[0], move[1], player)
+
+    return virtualBoard
 
 # Evaluates a score for a particular move
+
+
 def scoreMove(player: int, moveRowIndex: int, moveColumnIndex: int, board: ndarray):
     # score initialized as 0. Makes for a good middle ground dontcha think
     Score = 0
@@ -38,19 +49,25 @@ def scoreMove(player: int, moveRowIndex: int, moveColumnIndex: int, board: ndarr
         f"Inspecting move row:{moveRowIndex} column:{moveColumnIndex}")
 
     # Weight factor to be applied to each evaluation
-    ScoreMultiWin = 10
-    ScoreMultiNotLose = 7
-    ScoreMultiProgress = 3
-    ScoreMultiBlocked = 2
+    ScoreMultiWin = 1000
+    ScoreMultiNotLose = 100
+    ScoreMultiProgress = 10
+    ScoreMultiBlocked = 1
+
+    enemyTile = player
+    if(player == TILE_PLAYER_RED):
+        enemyTile = TILE_PLAYER_WHITE
+    else:
+        enemyTile = TILE_PLAYER_RED
 
     # Gets simple move Scores
     ScoreWin = getScoreWin(moveRowIndex, moveColumnIndex, board, player)
     ScoreNotLose = getScoreNotLose(
-        moveRowIndex, moveColumnIndex, board, player)
+        moveRowIndex, moveColumnIndex, board, enemyTile)
     ScoreProgress = getScoreProgress(
-        moveRowIndex, moveColumnIndex, board, player)
+        moveRowIndex, moveColumnIndex, board, enemyTile)
     ScoreBlocked = getScoreBlocked(
-        moveRowIndex, moveColumnIndex, board, player)
+        moveRowIndex, moveColumnIndex, board, enemyTile)
 
     print(
         f"ScoreWin:{ScoreWin}, ScoreNotLose:{ScoreNotLose}, ScoreProgress:{ScoreProgress}, ScoreBlocked:{ScoreBlocked}")
@@ -88,20 +105,33 @@ def getScoreWin(rowIndex: int, columnIndex: int, brd: ndarray, playerTile: int):
 # Evaluates if move can avoid defeat
 
 
-def getScoreNotLose(rowIndex: int, columnIndex: int, brd: ndarray, playerTile: int):
-    score = 0
-    return score
+def getScoreNotLose(rowIndex: int, columnIndex: int, brd: ndarray, enemyTile: int):
+
+    # Skip eval if move is forbidden
+    if brd[rowIndex][columnIndex] != TILE_EMPTY:
+        return -500
+
+    numberOfLosses = getLossCounts(rowIndex, columnIndex, enemyTile, brd)
+
+    return numberOfLosses
 
 # Evaluates if move can create progress
 
 
-def getScoreProgress(rowIndex: int, columnIndex: int, brd: ndarray, playerTile: int):
-    score = 0
-    return score
+def getScoreProgress(rowIndex: int, columnIndex: int, brd: ndarray, enemyTile: int):
+
+    # Skip eval if move is forbidden
+    if brd[rowIndex][columnIndex] != TILE_EMPTY:
+        return -500
+
+    numberOfProgressCounts = getProgressCounts(
+        rowIndex, columnIndex, enemyTile, brd)
+
+    return numberOfProgressCounts
 
 # Evaluates if move can block enemy
 
 
-def getScoreBlocked(rowIndex: int, columnIndex: int, brd: ndarray, playerTile: int):
-    score = 0
+def getScoreBlocked(rowIndex: int, columnIndex: int, brd: ndarray, enemyTile: int):
+    score = getBlockedCounts(rowIndex, columnIndex, enemyTile, brd)
     return score
