@@ -1,71 +1,76 @@
 import sqlite3
-from sqlite3 import Error
+import hashlib
+import binascii
+import os
+
+from numpy import dtype
 
 
-def create_connection(db_file):
-    """ create a database connection to the SQLite database
-        specified by db_file
-    :param db_file: database file
-    :return: Connection object or None
-    """
-    conn = None
-    try:
-        conn = sqlite3.connect(db_file)
-        return conn
-    except Error as e:
-        print(e)
-
-    return conn
-
-
-def create_table(conn, create_table_sql):
-    """ create a table from the create_table_sql statement
-    :param conn: Connection object
-    :param create_table_sql: a CREATE TABLE statement
-    :return:
-    """
-    try:
-        c = conn.cursor()
-        c.execute(create_table_sql)
-    except Error as e:
-        print(e)
+# Establish Database Connection
+conn = sqlite3.connect('database.db')
 
 
 def main():
-    database = r"C:\Schulprojekt\Minimax-Strategie-Spiele\minimax-sss.db" """Should probably become dynamic, so it can find anypath or 
-                                                                             maybe find a better sollution to implement it in the programm files."""
-
-    sql_create_projects_table = """ CREATE TABLE IF NOT EXISTS projects (
-                                        id integer PRIMARY KEY,
-                                        name text NOT NULL,
-                                        begin_date text,
-                                        end_date text
-                                    ); """
-
-    sql_create_tasks_table = """CREATE TABLE IF NOT EXISTS tasks (
-                                    id integer PRIMARY KEY,
-                                    name text NOT NULL,
-                                    priority integer,
-                                    status_id integer NOT NULL,
-                                    project_id integer NOT NULL,
-                                    begin_date text NOT NULL,
-                                    end_date text NOT NULL,
-                                    FOREIGN KEY (project_id) REFERENCES projects (id)
-                                );"""
-
-    # create a database connection
-    conn = create_connection(database)
 
     # create tables
     if conn is not None:
-        # create projects table
-        create_table(conn, sql_create_projects_table)
+        print("Connection established successfully!")
 
-        # create tasks table
-        create_table(conn, sql_create_tasks_table)
     else:
-        print("Error! cannot create the database connection.")
+        print("Error! Cannot create the database connection.")
+
+
+# def outputDataFromDB():
+
+    cursor = conn.execute("select * from player")
+    for row in cursor:
+        print("ID = ", row[0])
+        print("user_name = ", row[1])
+        print("password = ", row[2])
+        print("created_date = ", row[3])
+        print("updated_date = ", row[4])
+        print("email_adress = ", row[5])
+        print("rating = ", row[6]), "\n"
+
+    conn.close()
+
+
+def hash_password(password):
+    """Hash a password for storing."""
+    salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
+    pwdhash = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'),
+                                  salt, 100000)
+    pwdhash = binascii.hexlify(pwdhash)
+    return (salt + pwdhash).decode('ascii')
+
+
+def verify_password(stored_enc_password, userGivenPassword):
+    """Verify a stored_enc_password password against one provided by user"""
+    salt = stored_enc_password[:64]
+    stored_enc_password = stored_enc_password[64:]
+    pwdhash = hashlib.pbkdf2_hmac('sha512',
+                                  userGivenPassword.encode('utf-8'),
+                                  salt.encode('ascii'),
+                                  100000)
+    pwdhash = binascii.hexlify(pwdhash).decode('ascii')
+    return pwdhash == stored_enc_password
+
+
+def insertNewData(username: str, password: str, email: str):
+    #teststr = f"insert into player (ID, username, password, email) VALUES (NULL, '{username}', '{password}', '{email}')"
+    # print(teststr)
+    stored_enc_password = hash_password(password)
+    print("Encrypted password: " + stored_enc_password)
+    #userGivenPassword = {password}
+    #print(verify_password(stored_enc_password, userGivenPassword))
+    conn.execute(
+        f"insert into player (ID, username, password, email) VALUES (NULL, '{username}', '{stored_enc_password}', '{email}')")
+    conn.commit()
+    print("Records created successfully")
+    conn.close()
 
 
 if __name__ == '__main__':
     main()
+    insertNewData()
+    # outputDataFromDB()

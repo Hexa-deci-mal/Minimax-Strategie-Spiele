@@ -1,6 +1,7 @@
 from ticTacToeAiEval import getPossibleMovesInklScore
 import Board
 import Global_Vars
+import main
 from tkinter import *
 from PIL import ImageTk, Image
 
@@ -238,6 +239,8 @@ def create_checkersArray_btn():
     global GameMode
     GameMode = 3
 
+    myInfo.config(text="Checkers anleitung")
+
     consoleLog = print(Global_Vars.board)
 
 # Creates TicTacToe Game
@@ -260,10 +263,74 @@ def create_tictactoeArray_btn():
     global LukasRunningState
     LukasRunningState = True
 
+    myInfo.config(text="Sie setzen abwechselnd mit dem Computer Ihre Farbe (also Grün) in die freien Kästchen des Spielfelds. Ziel ist es, die eigene Farbe vier Mal in einer Zeile, in einer Spalte oder in einer Diagonale zu platzieren. Wem das zuerst gelingt, hat gewonnen.")
+
     consoleLog = print(Global_Vars.board)
 
 
+def openLogIn():
+    logwin = Toplevel(root)
+    logwin.title("LogIn")
+    logwin.geometry("200x80")
+
+    def login_entry_fields():
+        print("Username: %s\nPasswort: %s" %
+              (userInput.get(), passwortInput.get()))
+        username = userInput.get()
+        password: str = passwortInput.get()
+
+        # if username == main.conn.execute(f"select * from player where username='{username}'") and password == main.verify_password(password):
+        #    print("Username exists: " + username)
+        if username == main.conn.execute(f"select * from player where username={username}"):
+            print("Username exists: " + username)
+        else:
+            print("Username doesnt exist!")
+
+        userInput.delete(0, END)
+        passwortInput.delete(0, END)
+        logwin.quit()
+
+    def registration():
+        logwin.geometry("200x100")
+        lbl3 = Label(logwin, text="E-Mail")
+        lbl3.grid(row=1)
+        eMailInput = Entry(logwin)
+        eMailInput.grid(row=1, column=1)
+        btn1.config(state=DISABLED)
+        btn2.config(text="SignUp", command=lambda: reg_entry_fields())
+
+        def reg_entry_fields():
+            print("Username: %s\nPasswort: %s\nE-Mail: %s" %
+                  (userInput.get(), passwortInput.get(), eMailInput.get()))
+
+            main.insertNewData(
+                userInput.get(), passwortInput.get(), eMailInput.get())
+            userInput.delete(0, END)
+            passwortInput.delete(0, END)
+            eMailInput.delete(0, END)
+            logwin.quit()
+
+    lbl1 = Label(logwin, text="Username")
+    lbl2 = Label(logwin, text="Password")
+
+    lbl1.grid(row=0)
+    lbl2.grid(row=2)
+
+    userInput = Entry(logwin)
+    passwortInput = Entry(logwin)
+
+    userInput.grid(row=0, column=1)
+    passwortInput.grid(row=2, column=1)
+
+    btn1 = Button(logwin, text='LogIn', command=login_entry_fields)
+    btn1.grid(row=3, column=0, sticky=W, pady=4)
+    btn2 = Button(logwin, text='Registrate', command=registration)
+    btn2.grid(row=3, column=1, sticky=W, pady=4)
+
+
 root = Tk()
+infoText = StringVar()
+infoText.set('Test')
 root.title("Strategie-Spiele-Sammlung")
 root.geometry("1250x720")
 root.resizable(width=True, height=True)
@@ -275,13 +342,16 @@ listGames = Frame(root, width=300, height=402, padx=5, pady=5, bg="white")
 listGames.grid(row=0, rowspan=1, column=0, padx=5)
 listGames.pack_propagate(0)
 
-info = LabelFrame(root, width=300, height=293, padx=5, pady=5, bg="yellow")
+info = LabelFrame(root, width=300, height=243, padx=5, pady=5, bg="yellow")
 info.grid(row=1, rowspan=1, column=0, padx=5)
-info.pack_propagate(0)
+info.grid_propagate(0)
 
+regLog = Button(root, text="Registration / LogIn", command=lambda: openLogIn(),
+                width=30, height=2, padx=5, pady=5, state=NORMAL)
+regLog.grid(row=2, rowspan=1, column=0, padx=5)
 
 mainDisplay = Frame(root, width=930, height=705, padx=5, pady=5, bg="green")
-mainDisplay.grid(row=0, rowspan=2, column=1, columnspan=2, pady=5, padx=5)
+mainDisplay.grid(row=0, rowspan=3, column=1, columnspan=2, pady=5, padx=5)
 mainDisplay.grid_propagate(0)
 
 
@@ -297,9 +367,9 @@ btn1.pack(pady=10)
 btn2.pack(pady=10)
 btn3.pack(pady=10)
 
-myInfo = Label(info, text="test 1213", wraplength=290, bg="white")
-myInfo.pack()
-# Info Box
-# myInfo = Label(info, text=test2, wraplength=290, bg="white")
 
-root.mainloop()
+myInfo = Label(info, text="In dieser Spielesammlung können Sie sich mental fordern. Hierfür haben Sie die Möglichkeit zwischen TicTacToe und Bauernschach zu wählen. In diesen Spielen treten Sie gegen unsere selbst programmierte KI an", wraplength=290, bg="white")
+myInfo.grid(row=0, column=0)
+
+
+mainloop()
