@@ -274,55 +274,89 @@ def create_tictactoeArray_btn():
 def openLogIn():
     logwin = Toplevel(root)
     logwin.title("LogIn")
-    logwin.geometry("200x80")
+    logwin.geometry("200x120")
+    lbl4 = Label(logwin, text="Please LogIn or Signup")
+    lbl4.grid(row=4, column=0, columnspan=2, pady=5)
 
     def login_entry_fields():
+        logwin.geometry("200x120")
         print("Username: %s\nPasswort: %s" %
               (userInput.get(), passwortInput.get()))
         username = userInput.get()
         password = passwortInput.get()
 
-        query = main.conn.execute(
-            f"select * from player where username='{username}'")
+        query = main.conn.execute(f"select * from player where username='{username}'")
         query_result = query.fetchall()
+        queryReturnCheck = query.fetchone()
         print(query_result)
+        print(queryReturnCheck)
+        if query_result == None:
+            lbl4.config(text="Wrong Username/Password")
+        else:
+            for row in query_result:
+                index = row[1]
+                if main.passComparison(username, password):
+                    print("Authorized!")
+                    regLogBtn.config(text="Logout")
+                    logwinBtnLog.config(state=DISABLED)
+                    userInput.delete(0, END)
+                    passwortInput.delete(0, END)
+                else:
+                    print("Not Authorized")
+    
 
-        for row in query_result:
-            index = row[1]
-            if main.passComparison(username, password):
-                print("Authorized!")
-            else:
-                print("Not Authorized")
-
-        userInput.delete(0, END)
-        passwortInput.delete(0, END)
-        logwin.quit()
+        
+        
 
     def registration():
-        logwin.geometry("200x100")
+        logwin.title("Registration")
+        logwin.geometry("240x150")
         lbl3 = Label(logwin, text="E-Mail")
         lbl3.grid(row=1)
         eMailInput = Entry(logwin)
         eMailInput.grid(row=1, column=1)
-        btn1.config(state=DISABLED)
-        btn2.config(text="SignUp", command=lambda: reg_entry_fields())
-
+        logwinBtnLog.config(state=DISABLED)
+        logwinBtnReg.config(text="SignUp", command=lambda: reg_entry_fields())
+        backBtn = Button(logwin, text='Back', command=lambda: goBackBtn())
+        backBtn.grid(row=0, column=2, sticky=W, pady=4, padx=10)
+            
         def reg_entry_fields():
-            print("Username: %s\nPasswort: %s\nE-Mail: %s" %
-                  (userInput.get(), passwortInput.get(), eMailInput.get()))
+            username = userInput.get()
+            query = main.conn.execute(f"select * from player where username='{username}'")
+            query_result = query.fetchall()
+            print(query_result)
+            if userInput.get() == "" or eMailInput.get() == "" or passwortInput.get() == "":
 
-            main.insertNewData(
-                userInput.get(), passwortInput.get(), eMailInput.get())
-            userInput.delete(0, END)
-            passwortInput.delete(0, END)
-            eMailInput.delete(0, END)
-            logwin.quit()
+                lbl4.config(text="Please fill all Inputs")
 
+            else:
+                print("test")
+                if query.rowcount == 0 or not query_result:
+                    print("Username: %s\nPasswort: %s\nE-Mail: %s" %
+                        (userInput.get(), passwortInput.get(), eMailInput.get()))
+
+                    main.insertNewData(
+                        userInput.get(), passwortInput.get(), eMailInput.get())
+                    userInput.delete(0, END)
+                    passwortInput.delete(0, END)
+                    eMailInput.delete(0, END)   
+                else:
+                    lbl4.config(text="Username/E-Mail already used")
+
+        def goBackBtn():
+            logwin.title("LogIn")
+            logwin.geometry("200x120")
+            logwinBtnLog.config(state=NORMAL)
+            eMailInput.grid_forget()
+            lbl3.grid_forget()
+            logwinBtnReg.config(text="Registrate", command=lambda: registration())
+            backBtn.grid_forget()
+    
     lbl1 = Label(logwin, text="Username")
     lbl2 = Label(logwin, text="Password")
 
     lbl1.grid(row=0)
-    lbl2.grid(row=2)
+    lbl2.grid(row=2, pady=5)
 
     userInput = Entry(logwin)
     passwortInput = Entry(logwin)
@@ -330,10 +364,11 @@ def openLogIn():
     userInput.grid(row=0, column=1)
     passwortInput.grid(row=2, column=1)
 
-    btn1 = Button(logwin, text='LogIn', command=login_entry_fields)
-    btn1.grid(row=3, column=0, sticky=W, pady=4)
-    btn2 = Button(logwin, text='Registrate', command=registration)
-    btn2.grid(row=3, column=1, sticky=W, pady=4)
+    logwinBtnLog = Button(logwin, text='LogIn', command=lambda: login_entry_fields())
+    logwinBtnLog.grid(row=3, column=0, sticky=W, pady=4, padx=5)
+    logwinBtnReg = Button(logwin, text='Registrate', command=lambda: registration())
+    logwinBtnReg.grid(row=3, column=1, sticky=W, pady=4, padx=5)
+    
 
 
 root = Tk()
@@ -350,30 +385,30 @@ listGames = Frame(root, width=300, height=402, padx=5, pady=5, bg="white")
 listGames.grid(row=0, rowspan=1, column=0, padx=5)
 listGames.pack_propagate(0)
 
-info = LabelFrame(root, width=300, height=243, padx=5, pady=5, bg="yellow")
+info = LabelFrame(root, width=300, height=243, padx=5, pady=5, bg="white")
 info.grid(row=1, rowspan=1, column=0, padx=5)
 info.grid_propagate(0)
 
-regLog = Button(root, text="Registration / LogIn", command=lambda: openLogIn(),
+regLogBtn = Button(root, text="Registration / LogIn", command=lambda: openLogIn(),
                 width=30, height=2, padx=5, pady=5, state=NORMAL)
-regLog.grid(row=2, rowspan=1, column=0, padx=5)
+regLogBtn.grid(row=2, rowspan=1, column=0, padx=5)
 
-mainDisplay = Frame(root, width=930, height=705, padx=5, pady=5, bg="green")
+mainDisplay = Frame(root, width=930, height=705, padx=5, pady=5, bg="white")
 mainDisplay.grid(row=0, rowspan=3, column=1, columnspan=2, pady=5, padx=5)
 mainDisplay.grid_propagate(0)
 
 
 # Game listing
-btn1 = Button(listGames, text="Bauernschach", command=lambda: [create_board(
+rootBtn1 = Button(listGames, text="Bauernschach", command=lambda: [create_board(
 ), create_bauernschachArray_btn()], width=50, height=7, padx=0, pady=0)
-btn2 = Button(listGames, text="Dame", command=lambda: [create_board(
+rootBtn2 = Button(listGames, text="Dame", command=lambda: [create_board(
 ), create_checkersArray_btn()], width=50, height=7, padx=0, pady=0)
-btn3 = Button(listGames, text="Tic-Tac-Toe", command=lambda: [
+rootBtn3 = Button(listGames, text="Tic-Tac-Toe", command=lambda: [
               create_board(), create_tictactoeArray_btn()], width=50, height=7, padx=0, pady=0)
 
-btn1.pack(pady=10)
-btn2.pack(pady=10)
-btn3.pack(pady=10)
+rootBtn1.pack(pady=10)
+rootBtn2.pack(pady=10)
+rootBtn3.pack(pady=10)
 
 
 myInfo = Label(info, text="In dieser Spielesammlung können Sie sich mental fordern. Hierfür haben Sie die Möglichkeit zwischen TicTacToe und Bauernschach zu wählen. In diesen Spielen treten Sie gegen unsere selbst programmierte KI an", wraplength=290, bg="white")
