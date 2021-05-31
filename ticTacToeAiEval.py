@@ -4,7 +4,7 @@ Functions providing MinMaxAi with score data for checkers
 '''
 
 # Returns a list of all possible moves
-from arrayUtils import TILE_EMPTY
+from arrayUtils import *
 from typing import List
 from moveEvaluation import *
 
@@ -26,6 +26,13 @@ def getPossibleMovesInklScore(board:ndarray, player):
 
     return ScoredMoveList
 
+# applies a move to a given board resulting in a new board
+def applyVirtualMove(board:ndarray, player:int, move:List):
+    virtualBoard = cloneBoard(board)
+
+    setIfEmpty(move[0],move[1],player)
+    
+    return virtualBoard
 
 # Evaluates a score for a particular move
 def scoreMove(player:int, moveRowIndex:int, moveColumnIndex:int, board:ndarray):
