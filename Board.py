@@ -65,16 +65,16 @@ def create_board_test():
 
 
 ######### TEST AREA ##################################################################################################
-Global_Vars.game_name = 'bauernschach'
-Global_Vars.board = create_board_checkers()
-Global_Vars.possible_moves = Game.get_Possible_Moves(Global_Vars.player, Global_Vars.board, Global_Vars.game_name)
-Global_Vars.pos_list_player = Game.current_Player_Pos_List(2)
+#Global_Vars.game_name = 'bauernschach'
+#Global_Vars.board = create_board_checkers()
+#Global_Vars.possible_moves = Game.get_Possible_Moves(Global_Vars.player, Global_Vars.board, Global_Vars.game_name)
+#Global_Vars.pos_list_player = Game.current_Player_Pos_List(2)
 
-print(Global_Vars.game_name)
-print(Global_Vars.player)
+#print(Global_Vars.game_name)
+#print(Global_Vars.player)
 #print(Global_Vars.pos_list_player)
-print(Global_Vars.board)
-print(Global_Vars.possible_moves)
+#print(Global_Vars.board)
+#print(Global_Vars.possible_moves)
 #print(Global_Vars.board)
 ######################################################################################################################
 
