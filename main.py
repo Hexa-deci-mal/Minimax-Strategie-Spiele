@@ -56,13 +56,21 @@ def verify_password(stored_enc_password, userGivenPassword):
     return pwdhash == stored_enc_password
 
 
+def passComparison(username, password):
+    global conn
+    query = conn.execute(
+        f"select * from player where username='{username}'")
+    query_result = query.fetchall()
+    passHashDB = ''
+    for row in query_result:
+        passHashDB = row[2]
+    return verify_password(passHashDB, password)
+
+
 def insertNewData(username: str, password: str, email: str):
-    #teststr = f"insert into player (ID, username, password, email) VALUES (NULL, '{username}', '{password}', '{email}')"
-    # print(teststr)
+
     stored_enc_password = hash_password(password)
     print("Encrypted password: " + stored_enc_password)
-    #userGivenPassword = {password}
-    #print(verify_password(stored_enc_password, userGivenPassword))
     conn.execute(
         f"insert into player (ID, username, password, email) VALUES (NULL, '{username}', '{stored_enc_password}', '{email}')")
     conn.commit()
@@ -73,4 +81,3 @@ def insertNewData(username: str, password: str, email: str):
 if __name__ == '__main__':
     main()
     insertNewData()
-    # outputDataFromDB()

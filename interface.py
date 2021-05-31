@@ -277,14 +277,19 @@ def openLogIn():
         print("Username: %s\nPasswort: %s" %
               (userInput.get(), passwortInput.get()))
         username = userInput.get()
-        password: str = passwortInput.get()
+        password = passwortInput.get()
 
-        # if username == main.conn.execute(f"select * from player where username='{username}'") and password == main.verify_password(password):
-        #    print("Username exists: " + username)
-        if username == main.conn.execute(f"select * from player where username={username}"):
-            print("Username exists: " + username)
-        else:
-            print("Username doesnt exist!")
+        query = main.conn.execute(
+            f"select * from player where username='{username}'")
+        query_result = query.fetchall()
+        print(query_result)
+
+        for row in query_result:
+            index = row[1]
+            if main.passComparison(username, password):
+                print("Authorized!")
+            else:
+                print("Not Authorized")
 
         userInput.delete(0, END)
         passwortInput.delete(0, END)
