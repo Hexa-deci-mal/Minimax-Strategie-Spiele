@@ -53,4 +53,3 @@ def insertNewData(username: str, password: str, email: str):
         f"insert into player (ID, username, password, email) VALUES (NULL, '{username}', '{stored_enc_password}', '{email}')")
     conn.commit()
     print("Records created successfully")
-    conn.close()

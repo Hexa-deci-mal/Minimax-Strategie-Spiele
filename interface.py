@@ -25,7 +25,7 @@ currUserId: int
 
 # Global variable for GameMode
 GameMode: int
-
+GameMode = 99
 
 # Predefined visual button styles
 style_1 = {'fg': 'black', 'bg': 'RoyalBlue3', 'activebackground':
@@ -54,7 +54,7 @@ def doTicTacToeUpdate(row:int, column:int):
     #printArrayColors(LukasTicTacToeBoard)
 
     # Processes turn
-    print(f"Spieler dran {LukasTurnCount}")
+    #print(f"Spieler dran {LukasTurnCount}")
 
     TurnResult = doAutoTurn(LukasTicTacToeBoard,LukasTurnCount,LukasRunningState,row,column)
 
@@ -70,7 +70,7 @@ def doTicTacToeUpdate(row:int, column:int):
 
     bestMove = run_Algorithm(Global_Vars.game_name, LukasTurnCount, LukasTicTacToeBoard, Global_Vars.depth)
 
-    print(bestMove)
+    #print(bestMove)
 
     move = bestMove[0]
 
@@ -155,14 +155,13 @@ def loadSaveGame():
     for row in query_result:
         temp = row[4]
         tempArray = temp.split(",")
-        print(tempArray)
         outputArray = createEmptyBoard(6,6)
         for p in range(len(outputArray)):
             for n in range(len(outputArray[p])):
                 counter = p*6+n
                 outputArray[p][n] = int(tempArray[counter])
         LukasTicTacToeBoard = outputArray
-        print(LukasTicTacToeBoard)
+        #print(LukasTicTacToeBoard)
 
 
     LukasRunningState = True
@@ -173,8 +172,8 @@ def refreshBoard():
     global LukasTicTacToeBoard
     for i in range(0,6):
         for c in range(0,6):
-            print(LukasTicTacToeBoard[i][c])
-            print(ButtonBoard[i][c])
+            # print(LukasTicTacToeBoard[i][c])
+            # print(ButtonBoard[i][c])
             setStyle(LukasTicTacToeBoard[i][c],ButtonBoard[i][c])
         
 
@@ -333,7 +332,7 @@ def create_board():
     ButtonBoard.append([cell41,cell42,cell43,cell44,cell45,cell46])
     ButtonBoard.append([cell51,cell52,cell53,cell54,cell55,cell56])
     ButtonBoard.append([cell61,cell62,cell63,cell64,cell65,cell66])
-    print(ButtonBoard)
+    # print(ButtonBoard)
 
     if currUsername != None:
         bestList.grid(row=0, column=2, pady=5)
@@ -422,16 +421,16 @@ def openLogIn():
         global currUsername
         global GameMode
         logwin.geometry("240x120")
-        print("Username: %s\nPasswort: %s" %
-              (userInput.get(), passwortInput.get()))
+        # print("Username: %s\nPasswort: %s" %
+        #       (userInput.get(), passwortInput.get()))
         username = userInput.get()
         password = passwortInput.get()
 
         query = main.conn.execute(f"select * from player where username='{username}'")
         query_result = query.fetchall()
         queryReturnCheck = query.fetchone()
-        print(query_result)
-        print(queryReturnCheck)
+        # print(query_result)
+        # print(queryReturnCheck)
         if query.rowcount == 0 or not query_result:
             lbl4.config(text="Wrong Username/Password")
         else:
@@ -440,7 +439,7 @@ def openLogIn():
                 if main.passComparison(username, password):
                     currUserId = row[0]
                     currUsername = username
-                    print("Authorized!")
+                    # print("Authorized!")
                     root.title(f"Strategie-Spiele-Sammlung - {username}")
                     regLogBtn.config(text="Logout", command=lambda: logout())
                     lbl4.config(text="Login successful")
@@ -448,7 +447,7 @@ def openLogIn():
                     userInput.delete(0, END)
                     passwortInput.delete(0, END)
 
-                    if GameMode != None:   
+                    if GameMode != 99:   
                         bestList.grid(row=0, column=2, pady=5)
                         backgroundbestList.pack()
                         saveBtn.grid(row=1, column=2, pady=6)
@@ -457,7 +456,8 @@ def openLogIn():
 
                     logwin.destroy()
                 else:
-                    print("Not Authorized")
+                    pass
+                    # print("Not Authorized")
     
 
         
@@ -479,15 +479,15 @@ def openLogIn():
             username = userInput.get()
             query = main.conn.execute(f"select * from player where username='{username}'")
             query_result = query.fetchall()
-            print(query_result)
+            #print(query_result)
             if userInput.get() == "" or eMailInput.get() == "" or passwortInput.get() == "":
 
                 lbl4.config(text="Please fill all Inputs")
 
             else:
                 if query.rowcount == 0 or not query_result:
-                    print("Username: %s\nPasswort: %s\nE-Mail: %s" %
-                        (userInput.get(), passwortInput.get(), eMailInput.get()))
+                    # print("Username: %s\nPasswort: %s\nE-Mail: %s" %
+                    #     (userInput.get(), passwortInput.get(), eMailInput.get()))
 
                     main.insertNewData(
                         userInput.get(), passwortInput.get(), eMailInput.get())

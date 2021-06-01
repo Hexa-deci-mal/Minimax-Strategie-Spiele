@@ -13,7 +13,7 @@ import Game
 #board = create_board_tictactoe()
 def run_Algorithm(game_name, player, board:ndarray, depth:int):
 
-    printErrorMsg(f"AHHHHHHHHHHHHHHHHHHHHHHH tiefe:{depth} spieler:{player}")
+    # printErrorMsg(f"AHHHHHHHHHHHHHHHHHHHHHHH tiefe:{depth} spieler:{player}")
 
     if Global_Vars.game_name == 'bauernschach':
         pass

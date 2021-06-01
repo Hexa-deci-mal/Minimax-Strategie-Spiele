@@ -28,12 +28,12 @@ def setIfEmpty(rowIndex:int, columnIndex:int, Board:ndarray, symbol:int):
 # Tries setting a tile at a specific coordinate set within the numpy array. rowIndex = Y, columnIndex = 16
 # Returns Boolean value indicating success
 def couldSetTile(rowIndex:int, columnIndex:int, Board:ndarray, symbol:int):
-    print("hi")
+    #print("hi")
     if checkBoardBounds(rowIndex,columnIndex,Board):
         if getTileFromPosition(rowIndex,columnIndex, Board) == TILE_EMPTY:
             Board[rowIndex,columnIndex] = symbol
             return True
-    print("tschau")
+    #print("tschau")
     return False
     
 # Clones the board

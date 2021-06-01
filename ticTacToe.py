@@ -31,7 +31,7 @@ def doAutoTurn(brd: ndarray, turn, running, rowIn, colIn):
     autoRes = doAutoAction(turnCache, brdCache, runningCache, rowIn, colIn)
     #print(f"AutoRes {autoRes}")
     if(not autoRes[1]):
-        print("Reset Turn")
+        #print("Reset Turn")
         turnCache = turn
     return [brdCache, turnCache, autoRes[0]]
 
@@ -45,7 +45,7 @@ def doTurn(brd: ndarray, turn, running):
     # print(turnCache)
     turnCache = turnCache % 2
     # print(turnCache)
-    printArrayColors(brd)
+    #printArrayColors(brd)
     runningCache = promptAction(turnCache, brdCache, runningCache)
     return [brdCache, turnCache, runningCache]
 
@@ -67,7 +67,7 @@ def promptAction(turnNr, brd: ndarray, running):
 
 
 def doAutoAction(turnNr:int, brd: ndarray, running, rowCall:int, columnCall:int):
-    print("Auto-Action")
+    #print("Auto-Action")
     executed = False
     if(turnNr == 0):
         executed = doAutoPlacementAction(
@@ -101,7 +101,7 @@ def checkIfWin(brd: ndarray, trn, running):
     AnyWins.append(checkIfWinRows(brd))
     AnyWins.append(checkIfWinColumns(brd))
     AnyWins.append(checkIfWinDiags(brd))
-    print(AnyWins)
+    #print(AnyWins)
     for entry in AnyWins:
         if entry == True:
             doWin(brd, trn)
@@ -192,8 +192,7 @@ def getDiagonalCount(brd: ndarray):
 
 def getCountMaxLeftDiag(brd: ndarray):
 
-    # I am sorry for anyone trying to understand this evaluation in it's entirety. It may not be pretty, but it is mine. And it works beautifully. @author:Lukas Eckert
-    printErrorMsg("lt2rb")
+    #printErrorMsg("lt2rb")
     # Max count found
     leftMaxCount = 1
     # Min Values
@@ -219,18 +218,18 @@ def getCountMaxLeftDiag(brd: ndarray):
             # Eval if tiles are in sequence
             current = brd[currentRow][currentColumn]
             next = brd[currentRow + 1][currentColumn + 1]
-            print(f"Cur:{current} row:{currentRow} col:{currentColumn}, Nex:{next} row:{currentRow + 1} col:{currentColumn + 1}")
+            #print(f"Cur:{current} row:{currentRow} col:{currentColumn}, Nex:{next} row:{currentRow + 1} col:{currentColumn + 1}")
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
                 diagCount += 1
-                print(f"DiagCount:{diagCount}")
+                #print(f"DiagCount:{diagCount}")
                 if diagCount > diagCountMax:
                     diagCountMax = diagCount
         # eval max sequence in diags
         if diagCountMax > leftMaxCount:
             leftMaxCount = diagCountMax
 
-    printErrorMsg("column loop lt2rb")
+    #printErrorMsg("column loop lt2rb")
 
     # loop over remaining diagonal lines starting on x axis
     for columnStepper in range(minColumnIndex + 1, maxColumnIndex):
@@ -247,11 +246,11 @@ def getCountMaxLeftDiag(brd: ndarray):
             # Eval if tiles are in sequence
             current = brd[currentRow][currentColumn]
             next = brd[currentRow + 1][currentColumn + 1]
-            print(f"C:{current} r{currentRow} c{currentColumn},N:{next} r{currentRow + 1} c{currentColumn + 1}")
+            #print(f"C:{current} r{currentRow} c{currentColumn},N:{next} r{currentRow + 1} c{currentColumn + 1}")
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
                 diagCount += 1
-                print(f"DiagCount:{diagCount}")
+                #print(f"DiagCount:{diagCount}")
                 if diagCount > diagCountMax:
                     diagCountMax = diagCount
         # eval max sequence in diags
@@ -259,16 +258,14 @@ def getCountMaxLeftDiag(brd: ndarray):
             leftMaxCount = diagCountMax
 
     # end function, return max count found
-    print(f"Left Max {leftMaxCount}")
+    #print(f"Left Max {leftMaxCount}")
     return leftMaxCount
 
 
 # Evaluates the maximum sequence of identical tiles for any diagonal line runnig from top right to bottom left
 def getCountMaxRightDiag(brd: ndarray):
 
-    # I am sorry for anyone trying to understand this evaluation in it's entirety. It may not be pretty, but it is mine. And it works beautifully. @author:Lukas Eckert
-
-    printErrorMsg("tr2bl")
+    #printErrorMsg("tr2bl")
 
     # Max count found
     rightMaxCount = 1
@@ -295,7 +292,7 @@ def getCountMaxRightDiag(brd: ndarray):
             # Eval if tiles are in sequence
             current = brd[currentRow][currentColumn]
             next = brd[currentRow + 1][currentColumn - 1]
-            print(f"C:{current} r{currentRow} c{currentColumn},N:{next} r{currentRow + 1} c{currentColumn - 1}")
+            #print(f"C:{current} r{currentRow} c{currentColumn},N:{next} r{currentRow + 1} c{currentColumn - 1}")
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
                 diagCount += 1
@@ -306,7 +303,7 @@ def getCountMaxRightDiag(brd: ndarray):
         if diagCountMax > rightMaxCount:
             rightMaxCount = diagCountMax
 
-    printErrorMsg("Starting on row= 1")
+    #printErrorMsg("Starting on row= 1")
 
     # loop over remaining diagonal lines starting on y axis
     for rwStepper in range(1,maxRowIndex):
@@ -323,7 +320,7 @@ def getCountMaxRightDiag(brd: ndarray):
             # Eval if tiles are in sequence
             current = brd[currentRow][currentColumn]
             next = brd[currentRow + 1][currentColumn - 1]
-            print(f"C:{current} x{currentRow} y{currentColumn},N:{next} x{currentRow + 1}y {currentColumn - 1}")
+            #print(f"C:{current} x{currentRow} y{currentColumn},N:{next} x{currentRow + 1}y {currentColumn - 1}")
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
                 diagCount += 1
@@ -334,7 +331,7 @@ def getCountMaxRightDiag(brd: ndarray):
         if diagCountMax > rightMaxCount:
             rightMaxCount = diagCountMax
 
-    print(f"rightmaxcount {rightMaxCount}")
+    #print(f"rightmaxcount {rightMaxCount}")
     # end function, return max count found
     return rightMaxCount
 
