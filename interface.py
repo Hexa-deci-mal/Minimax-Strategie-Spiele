@@ -1,3 +1,5 @@
+from moveEvaluation import getWinCounts
+from typing import List
 from ticTacToeAiEval import getPossibleMovesInklScore
 import Board
 import Global_Vars
@@ -7,6 +9,9 @@ from PIL import ImageTk, Image
 from Algorithm import *
 
 from ticTacToe import *
+
+# Global button array
+ButtonBoard: List
 
 # Global Variables for TicTacToe
 LukasTicTacToeBoard: ndarray
@@ -36,6 +41,8 @@ def doTicTacToeUpdate(row:int, column:int):
     global LukasRunningState
     global LukasTicTacToeBoard
     global LukasTurnCount
+
+    global ButtonBoard
 
     # skips processing turn if game is not running
     if LukasRunningState == False:
@@ -78,6 +85,10 @@ def doTicTacToeUpdate(row:int, column:int):
     #printYellowMsg("KI HAT GEZOGEN BOARD")
     #printArrayColors(LukasTicTacToeBoard)
 
+    setStyle(LukasTicTacToeBoard[move[0]][move[1]],ButtonBoard[move[0]][move[1]])
+
+    if getWinCounts(move[0],move[1],2,LukasTicTacToeBoard) != 0:
+        LukasRunningState = False
 
     '''
     Start Testing Area for AI preperation DONT TOUCH
@@ -146,6 +157,8 @@ def create_board():
 
     # Reference to global Gamemode in order to be able to reference it during button calls
     global GameMode
+
+    global ButtonBoard
 
     checkersBoard = Frame(mainDisplay, width=690, height=695, bg="white")
     checkersBoard.grid(row=0, rowspan=1, column=1, columnspan=1)
@@ -259,6 +272,14 @@ def create_board():
     cell64.grid(row=5, column=3)
     cell65.grid(row=5, column=4)
     cell66.grid(row=5, column=5)
+
+    ButtonBoard = []
+    ButtonBoard.append([cell11,cell12,cell13,cell14,cell15,cell16])
+    ButtonBoard.append([cell21,cell22,cell23,cell24,cell25,cell26])
+    ButtonBoard.append([cell31,cell32,cell33,cell34,cell35,cell36])
+    ButtonBoard.append([cell41,cell42,cell43,cell44,cell45,cell46])
+    ButtonBoard.append([cell51,cell52,cell53,cell54,cell55,cell56])
+    ButtonBoard.append([cell61,cell62,cell63,cell64,cell65,cell66])
 
 
 # Creates Pawnchess Game

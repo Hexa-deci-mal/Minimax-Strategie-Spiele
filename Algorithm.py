@@ -21,8 +21,7 @@ def run_Algorithm(game_name, player, board:ndarray, depth:int):
     elif Global_Vars.game_name == 'dame':
         pass   
 
-    elif Global_Vars.game_name == 'tictactoe':
-        boardcopy = []       
+    elif Global_Vars.game_name == 'tictactoe':     
         #checkIfWin(board, player, False)
         empty_positions = moveEvaluation.getEmptyPositions(board)
         #print(empty_positions)
@@ -36,7 +35,6 @@ def run_Algorithm(game_name, player, board:ndarray, depth:int):
         for move in empty_positions:
             tempcopy = board.copy()
             setIfEmpty(move[0], move[1], tempcopy, player)
-            boardcopy.append(tempcopy)
             #print(tempcopy)
             
             if depth > 0:
