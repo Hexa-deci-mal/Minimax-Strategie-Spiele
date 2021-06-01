@@ -43,6 +43,7 @@ def getTileFromPosition(rowIndex:int, columnIndex:int, Board:ndarray):
 
 # Checks if index is within valid index bounds row = Y, column = X
 def checkBoardBounds(row:int, column:int, Board:ndarray):
+    #print(row, column, Board)
     return row < Board.shape[0] and column < Board.shape[1] and row >= 0 and column >= 0
 
 

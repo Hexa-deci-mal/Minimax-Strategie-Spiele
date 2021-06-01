@@ -1,3 +1,4 @@
+import Board
 from numpy import array
 
 
