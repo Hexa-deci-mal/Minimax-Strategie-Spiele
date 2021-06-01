@@ -29,10 +29,9 @@ style_2 = {'fg': 'white', 'bg': 'OliveDrab2', 'activebackground':
 style_3 = {'fg': 'black', 'bg': 'purple1', 'activebackground':
            'gray71', 'activeforeground': 'gray71'}
 
+
 # Updates the currently running game of tictactoe according to which button is pressed
-
-
-def doTicTacToeUpdate(row: int, column: int):
+def doTicTacToeUpdate(row:int, column:int):
     global LukasRunningState
     global LukasTicTacToeBoard
     global LukasTurnCount
@@ -42,39 +41,40 @@ def doTicTacToeUpdate(row: int, column: int):
         return LukasTicTacToeBoard[row][column]
 
     # Processes turn
-    TurnResult = doAutoTurn(LukasTicTacToeBoard,
-                            LukasTurnCount, LukasRunningState, row, column)
+    TurnResult = doAutoTurn(LukasTicTacToeBoard,LukasTurnCount,LukasRunningState,row,column)
 
     # Deconstructs Turn results
     LukasTicTacToeBoard = TurnResult[0]
     LukasTurnCount = TurnResult[1]
     LukasRunningState = TurnResult[2]
 
-    # save the current Board state in the DB
-    saveCurrentState(LukasTicTacToeBoard, LukasTurnCount)
+    bestMove = run_Algorithm(Global_Vars.game_name, LukasTurnCount, LukasTicTacToeBoard, Global_Vars.depth)
+    print(bestMove)
+    TurnResult = doAutoTurn(LukasTicTacToeBoard, LukasTurnCount,LukasRunningState,bestMove[0],bestMove[1])
+    print(TurnResult)
 
+    LukasTicTacToeBoard = TurnResult[0]
+    LukasTurnCount = TurnResult[1]
+    LukasRunningState = TurnResult[2]
     # Debugging printout
     printArrayColors(LukasTicTacToeBoard)
+
 
     '''
     Start Testing Area for AI preperation DONT TOUCH
     '''
-    printErrorMsg("START TESTING AREA AI")
+   # printErrorMsg("START TESTING AREA AI")
 
-    playerFromTurn = LukasTurnCount + 1
+    #playerFromTurn = LukasTurnCount + 1
 
-    print(f"Turn Count {LukasTurnCount}")
+    #print(f"Player taken from turn: {playerFromTurn}")
 
-    print(f"Player taken from turn: {playerFromTurn}")
+    #ScoredMoves = getPossibleMovesInklScore(LukasTicTacToeBoard,playerFromTurn)
 
-    if(LukasTurnCount != 1):
-        ScoredMoves = getPossibleMovesInklScore(
-            LukasTicTacToeBoard, playerFromTurn)
+    #printYellowMsg("Inspect Scored Moves")
+   # print(ScoredMoves)
 
-        printYellowMsg("Inspect Scored Moves")
-        print(ScoredMoves)
-
-    printErrorMsg("END TESTING AREA AI")
+    #printErrorMsg("END TESTING AREA AI")
     '''
     End Testing Area for AI preperation DONT TOUCH
     '''
