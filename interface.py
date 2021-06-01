@@ -15,11 +15,13 @@ ButtonBoard: List
 
 # Global Variables for TicTacToe
 LukasTicTacToeBoard: ndarray
+LukasTicTacToeBoardLoaded: ndarray
 LukasTurnCount: int
 LukasRunningState: bool
 
 # Global Variables for Current User
 currUsername: str
+currUserId: int
 
 # Global variable for GameMode
 GameMode: int
@@ -52,7 +54,6 @@ def doTicTacToeUpdate(row:int, column:int):
     #printArrayColors(LukasTicTacToeBoard)
 
     # Processes turn
-
     print(f"Spieler dran {LukasTurnCount}")
 
     TurnResult = doAutoTurn(LukasTicTacToeBoard,LukasTurnCount,LukasRunningState,row,column)
@@ -116,17 +117,66 @@ def doTicTacToeUpdate(row:int, column:int):
     return LukasTicTacToeBoard[row][column]
 
 
+def arrayExlpode():
+    global LukasTicTacToeBoard
+    string = ""
+    for i in range(len(LukasTicTacToeBoard)):
+        for x in range(len(LukasTicTacToeBoard[i])):
+            temp = int(LukasTicTacToeBoard[i][x])
+            string = string+f"{temp}"+","
+    return string
+            
+
 def saveCurrentState(board, turnCount):
     global currUsername
+    global GameMode
     query = main.conn.execute(
         f"select id from player where username = '{currUsername}'")
     query_result = query.fetchall()
     for row in query_result:
         # KI show as andreas must be fixed when the currentState ist saved!
         index = row[0]
+    boardCSV = arrayExlpode()
     main.conn.execute(
-        f"insert into board_save  (id, player_turn_id, game_id, player_id, board) VALUES (NULL, '{turnCount}', 1, '{currUsername}',  '{board}')")
+        f"insert into board_save  (id, player_turn_id, game_id, player_id, board) VALUES (NULL, '{turnCount}', '{GameMode}', '{index}',  '{boardCSV}')")
     main.conn.commit()
+
+
+def loadSaveGame():
+    global LukasTicTacToeBoardLoaded
+    global currUsername
+    global currUserId
+    global LukasTicTacToeBoard
+    global LukasRunningState
+    global GameMode
+    query = main.conn.execute(
+    f"select * FROM board_save WHERE player_id = '{currUserId}' AND game_id = '{GameMode}' ORDER BY id DESC LIMIT 1")
+    query_result = query.fetchall()
+    for row in query_result:
+        temp = row[4]
+        tempArray = temp.split(",")
+        print(tempArray)
+        outputArray = createEmptyBoard(6,6)
+        for p in range(len(outputArray)):
+            for n in range(len(outputArray[p])):
+                counter = p*6+n
+                outputArray[p][n] = int(tempArray[counter])
+        LukasTicTacToeBoard = outputArray
+        print(LukasTicTacToeBoard)
+
+
+    LukasRunningState = True
+    refreshBoard()
+
+def refreshBoard():
+    global ButtonBoard
+    global LukasTicTacToeBoard
+    for i in range(0,6):
+        for c in range(0,6):
+            print(LukasTicTacToeBoard[i][c])
+            print(ButtonBoard[i][c])
+            setStyle(LukasTicTacToeBoard[i][c],ButtonBoard[i][c])
+        
 
 
 # changes the style of a button
@@ -160,7 +210,7 @@ def create_board():
 
     # Reference to global Gamemode in order to be able to reference it during button calls
     global GameMode
-
+    global currUsername
     global ButtonBoard
 
     checkersBoard = Frame(mainDisplay, width=690, height=695, bg="white")
@@ -283,6 +333,13 @@ def create_board():
     ButtonBoard.append([cell41,cell42,cell43,cell44,cell45,cell46])
     ButtonBoard.append([cell51,cell52,cell53,cell54,cell55,cell56])
     ButtonBoard.append([cell61,cell62,cell63,cell64,cell65,cell66])
+    print(ButtonBoard)
+
+    if currUsername != None:
+        bestList.grid(row=0, column=2, pady=5)
+        backgroundbestList.pack()
+        saveBtn.grid(row=1, column=2, pady=6)
+        loadBtn.grid(row=2, column=2, pady=6)
 
 
 # Creates Pawnchess Game
@@ -342,6 +399,16 @@ def openLogIn():
     shPw = Button(logwin, text='Show', command=lambda: toggle_password())
     shPw.grid(row=2, column=2, sticky=W, pady=4, padx=10)
 
+    def logout():
+        global currUsername
+        currUsername = None
+        bestList.grid_forget()
+        loadBtn.grid_forget()
+        saveBtn.grid_forget()
+        root.title("Strategie-Spiele-Sammlung")
+        regLogBtn.config(text="Registration / LogIn", command=lambda: openLogIn())
+        session = 0
+    
     def toggle_password():
         if passwortInput.cget('show') == '':
             passwortInput.config(show='*')
@@ -351,6 +418,9 @@ def openLogIn():
             shPw.config(text='Hide')
 
     def login_entry_fields():
+        global currUserId
+        global currUsername
+        global GameMode
         logwin.geometry("240x120")
         print("Username: %s\nPasswort: %s" %
               (userInput.get(), passwortInput.get()))
@@ -368,6 +438,8 @@ def openLogIn():
             for row in query_result:
                 index = row[1]
                 if main.passComparison(username, password):
+                    currUserId = row[0]
+                    currUsername = username
                     print("Authorized!")
                     root.title(f"Strategie-Spiele-Sammlung - {username}")
                     regLogBtn.config(text="Logout", command=lambda: logout())
@@ -375,6 +447,14 @@ def openLogIn():
                     logwinBtnLog.config(state=DISABLED)
                     userInput.delete(0, END)
                     passwortInput.delete(0, END)
+
+                    if GameMode != None:   
+                        bestList.grid(row=0, column=2, pady=5)
+                        backgroundbestList.pack()
+                        saveBtn.grid(row=1, column=2, pady=6)
+                        loadBtn.grid(row=2, column=2, pady=6)
+                    
+
                     logwin.destroy()
                 else:
                     print("Not Authorized")
@@ -425,6 +505,8 @@ def openLogIn():
             lbl3.grid_forget()
             logwinBtnReg.config(text="Registrate", command=lambda: registration())
             backBtn.grid_forget()
+
+    
     
     lbl1 = Label(logwin, text="Username")
     lbl2 = Label(logwin, text="Password")
@@ -442,11 +524,7 @@ def openLogIn():
     logwinBtnLog.grid(row=3, column=0, sticky=W, pady=4, padx=5)
     logwinBtnReg = Button(logwin, text='Registrate', command=lambda: registration())
     logwinBtnReg.grid(row=3, column=1, sticky=W, pady=4, padx=5)
-    
-def logout():
-    root.title("Strategie-Spiele-Sammlung")
-    regLogBtn.config(text="Registration / LogIn", command=lambda: openLogIn())
-    session = 0
+
 
 root = Tk()
 infoText = StringVar()
@@ -517,25 +595,20 @@ backgroundGame.pack()
 mainDisplay.grid_propagate(0)
 
 bestList = LabelFrame(mainDisplay, width=220, height=490, bg="white")
-bestList.grid(row=0, column=2, pady=5)
 backgroundbestList = Label (bestList, image=bgBestList)
-backgroundbestList.pack()
 
-saveBtn = Button(mainDisplay, text="Save", command=lambda: openLogIn(),
+saveBtn = Button(mainDisplay, text="Save", command=lambda: saveCurrentState(LukasTicTacToeBoard, LukasTurnCount),
                 width=215, height=85, image=bgSave)
-saveBtn.grid(row=1, column=2, pady=6)
 
-loadBtn = Button(mainDisplay, text="Load", command=lambda: openLogIn(),
+loadBtn = Button(mainDisplay, text="Load", command=lambda: loadSaveGame(),
                 width=215, height=85, image=bgLoad)
-loadBtn.grid(row=2, column=2, pady=6)
 
 # Game listing
 rootBtn1 = Button(listGames, text="Bauernschach", command=lambda: [create_board(
 ), create_bauernschachArray_btn()], width=280, height=105, padx=0, pady=0, image=bgCheckers)
 rootBtn2 = Button(listGames, text="Dame", command=lambda: [create_board(
 ), create_checkersArray_btn()], width=280, height=105, padx=0, pady=0, image=bgCheckers)
-rootBtn3 = Button(listGames, text="Tic-Tac-Toe", command=lambda: [
-              create_board(), create_tictactoeArray_btn()], width=280, height=105, padx=0, pady=0, image=bgTTT)
+rootBtn3 = Button(listGames, text="Tic-Tac-Toe", command=lambda: [create_tictactoeArray_btn(), create_board()], width=280, height=105, padx=0, pady=0, image=bgTTT)
 
 rootBtn1.pack(pady=10)
 rootBtn2.pack(pady=10)
