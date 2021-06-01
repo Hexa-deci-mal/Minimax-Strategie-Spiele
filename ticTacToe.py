@@ -90,7 +90,7 @@ def doPlacementAction(rowIndex, columnIndex, brd: ndarray, trn, Tile):
 # Checks if a win state has been reached
 
 
-def checkIfWin(brd: ndarray, trn, running):
+def checkIfWin(brd: ndarray, trn):
     AnyWins = []
     AnyWins.append(checkIfWinRows(brd))
     AnyWins.append(checkIfWinColumns(brd))

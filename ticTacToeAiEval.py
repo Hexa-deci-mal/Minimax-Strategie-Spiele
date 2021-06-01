@@ -121,6 +121,31 @@ def getScoreBlocked(rowIndex:int, columnIndex:int, brd:ndarray, enemyTile:int):
     score = getBlockedCounts(rowIndex,columnIndex,enemyTile,brd)
     return score
 
+# Evaluates if a Move has lots of free spaces around itself
 def getScoreFree(rowIndex:int, columnIndex:int, brd:ndarray, tile:int):
     score = getFreeCounts(rowIndex,columnIndex,tile,brd)
     return score
+
+'''
+
+    Dead dove, don't eat
+
+'''
+
+
+# runs the ai evaluation recursively
+def doShittyAiEval(depth:int, board:ndarray, player:int):
+
+    moves:List = getEmptyPositions()
+    if(moves.size > 1):
+
+        newPlayer = player + 1
+        if player == 3:
+            player = 1
+
+        # recursive loop
+        for move in moves:
+            newBoard = cloneBoard(board)
+            setIfEmpty(move[0],move[1],newBoard,newPlayer)
+            doAiEval(depth -1, newBoard, newPlayer)
+
