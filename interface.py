@@ -161,7 +161,7 @@ def create_board():
     global ButtonBoard
 
     checkersBoard = Frame(mainDisplay, width=690, height=695, bg="white")
-    checkersBoard.grid(row=0, rowspan=1, column=1, columnspan=1)
+    checkersBoard.grid(row=0, rowspan=6, column=1, columnspan=1, pady=6, padx=5)
     checkersBoard.grid_propagate(0)
     #print("Next is Button")
     cell11 = Button(checkersBoard, command=lambda: [
@@ -333,39 +333,53 @@ def create_tictactoeArray_btn():
 def openLogIn():
     logwin = Toplevel(root)
     logwin.title("LogIn")
-    logwin.geometry("200x120")
+    logwin.geometry("240x120")
     lbl4 = Label(logwin, text="Please LogIn or Signup")
     lbl4.grid(row=4, column=0, columnspan=2, pady=5)
+    shPw = Button(logwin, text='Show', command=lambda: toggle_password())
+    shPw.grid(row=2, column=2, sticky=W, pady=4, padx=10)
+
+    def toggle_password():
+        if passwortInput.cget('show') == '':
+            passwortInput.config(show='*')
+            shPw.config(text='Show')
+        else:
+            passwortInput.config(show='')
+            shPw.config(text='Hide')
 
     def login_entry_fields():
-        global currUsername
-        logwin.geometry("200x120")
-        #print("Username: %s\nPasswort: %s" %
-        #      (userInput.get(), passwortInput.get()))
+        logwin.geometry("240x120")
+        print("Username: %s\nPasswort: %s" %
+              (userInput.get(), passwortInput.get()))
         username = userInput.get()
         password = passwortInput.get()
 
-        query = main.conn.execute(
-            f"select * from player where username='{username}'")
+        query = main.conn.execute(f"select * from player where username='{username}'")
         query_result = query.fetchall()
         queryReturnCheck = query.fetchone()
-        #print(query_result)
-        #print(queryReturnCheck)
-        if query_result == None:
+        print(query_result)
+        print(queryReturnCheck)
+        if query.rowcount == 0 or not query_result:
             lbl4.config(text="Wrong Username/Password")
         else:
             for row in query_result:
                 index = row[1]
                 if main.passComparison(username, password):
-                    currUsername = username
-                    #print("Authorized!")
-                    regLogBtn.config(text="Logout")
+                    print("Authorized!")
+                    root.title(f"Strategie-Spiele-Sammlung - {username}")
+                    regLogBtn.config(text="Logout", command=lambda: logout())
+                    lbl4.config(text="Login successful")
                     logwinBtnLog.config(state=DISABLED)
                     userInput.delete(0, END)
                     passwortInput.delete(0, END)
-                #else:
-                    #print("Not Authorized")
+                    session == 1
+                    logwin.destroy()
+                else:
+                    print("Not Authorized")
+    
 
+        
+        
 
     def registration():
         logwin.title("Registration")
@@ -378,28 +392,26 @@ def openLogIn():
         logwinBtnReg.config(text="SignUp", command=lambda: reg_entry_fields())
         backBtn = Button(logwin, text='Back', command=lambda: goBackBtn())
         backBtn.grid(row=0, column=2, sticky=W, pady=4, padx=10)
-
+            
         def reg_entry_fields():
             username = userInput.get()
-            query = main.conn.execute(
-                f"select * from player where username='{username}'")
+            query = main.conn.execute(f"select * from player where username='{username}'")
             query_result = query.fetchall()
-            #print(query_result)
+            print(query_result)
             if userInput.get() == "" or eMailInput.get() == "" or passwortInput.get() == "":
 
                 lbl4.config(text="Please fill all Inputs")
 
             else:
-                #print("test")
                 if query.rowcount == 0 or not query_result:
-                    #print("Username: %s\nPasswort: %s\nE-Mail: %s" %
-                    #      (userInput.get(), passwortInput.get(), eMailInput.get()))
+                    print("Username: %s\nPasswort: %s\nE-Mail: %s" %
+                        (userInput.get(), passwortInput.get(), eMailInput.get()))
 
                     main.insertNewData(
                         userInput.get(), passwortInput.get(), eMailInput.get())
                     userInput.delete(0, END)
                     passwortInput.delete(0, END)
-                    eMailInput.delete(0, END)
+                    eMailInput.delete(0, END)   
                 else:
                     lbl4.config(text="Username/E-Mail already used")
 
@@ -409,10 +421,9 @@ def openLogIn():
             logwinBtnLog.config(state=NORMAL)
             eMailInput.grid_forget()
             lbl3.grid_forget()
-            logwinBtnReg.config(text="Registrate",
-                                command=lambda: registration())
+            logwinBtnReg.config(text="Registrate", command=lambda: registration())
             backBtn.grid_forget()
-
+    
     lbl1 = Label(logwin, text="Username")
     lbl2 = Label(logwin, text="Password")
 
@@ -420,18 +431,20 @@ def openLogIn():
     lbl2.grid(row=2, pady=5)
 
     userInput = Entry(logwin)
-    passwortInput = Entry(logwin)
+    passwortInput = Entry(logwin, show="*")
 
     userInput.grid(row=0, column=1)
     passwortInput.grid(row=2, column=1)
 
-    logwinBtnLog = Button(logwin, text='LogIn',
-                          command=lambda: login_entry_fields())
+    logwinBtnLog = Button(logwin, text='LogIn', command=lambda: login_entry_fields())
     logwinBtnLog.grid(row=3, column=0, sticky=W, pady=4, padx=5)
-    logwinBtnReg = Button(logwin, text='Registrate',
-                          command=lambda: registration())
+    logwinBtnReg = Button(logwin, text='Registrate', command=lambda: registration())
     logwinBtnReg.grid(row=3, column=1, sticky=W, pady=4, padx=5)
-
+    
+def logout():
+    root.title("Strategie-Spiele-Sammlung")
+    regLogBtn.config(text="Registration / LogIn", command=lambda: openLogIn())
+    session = 0
 
 root = Tk()
 infoText = StringVar()
@@ -441,32 +454,86 @@ root.geometry("1250x720")
 root.resizable(width=True, height=True)
 # root.attributes("-transparentcolor", "green")
 
-myImgBgGame = ImageTk.PhotoImage(Image.open("code-editoren-t.jpg"))
+################################################################################################
 
-listGames = Frame(root, width=300, height=402, padx=5, pady=5, bg="white")
+myImgBgGame = Image.open("Images\Bg_maindisplay.png")
+myImgBgGameResized = myImgBgGame.resize((930, 705), Image.ANTIALIAS)
+bgGame = ImageTk.PhotoImage(myImgBgGameResized)
+
+myImgBgRoot = Image.open("Images\Bg_root.png")
+myImgBgRootResized = myImgBgRoot.resize((2000, 2000), Image.ANTIALIAS)
+bgRoot = ImageTk.PhotoImage(myImgBgRootResized)
+
+myImgBgBestList = Image.open("Images\Bg_bestlist.png")
+myImgBgBestListResized = myImgBgBestList.resize((220, 490), Image.ANTIALIAS)
+bgBestList = ImageTk.PhotoImage(myImgBgBestListResized)
+
+################################################################################################
+
+myImgBgChekers = Image.open("Images\Dame.png")
+myImgBgChekersResized = myImgBgChekers.resize((290, 120), Image.ANTIALIAS)
+bgCheckers = ImageTk.PhotoImage(myImgBgChekersResized)
+
+myImgBgTTT = Image.open("Images\TicTacToe.png")
+myImgBgTTTResized = myImgBgTTT.resize((290, 120), Image.ANTIALIAS)
+bgTTT = ImageTk.PhotoImage(myImgBgTTTResized)
+
+myImgBgTTT = Image.open("Images\TicTacToe.png")
+myImgBgTTTResized = myImgBgTTT.resize((290, 120), Image.ANTIALIAS)
+bgTTT = ImageTk.PhotoImage(myImgBgTTTResized)
+
+myImgBgSave = Image.open("Images\Save.png")
+myImgBgSaveResized = myImgBgSave.resize((215, 85), Image.ANTIALIAS)
+bgSave = ImageTk.PhotoImage(myImgBgSaveResized)
+
+myImgBgLoad = Image.open("Images\Load.png")
+myImgBgLoadResized = myImgBgLoad.resize((215, 85), Image.ANTIALIAS)
+bgLoad = ImageTk.PhotoImage(myImgBgLoadResized)
+
+################################################################################################
+
+backgroundRoot = Label(root, image=bgRoot)
+backgroundRoot.grid(row=0, column=0)
+backgroundRoot.place(x=0, y=0)
+
+listGames = Frame(root, width=300, height=402, padx=5, pady=5, bg="black")
 listGames.grid(row=0, rowspan=1, column=0, padx=5)
 listGames.pack_propagate(0)
 
-info = LabelFrame(root, width=300, height=243, padx=5, pady=5, bg="white")
+info = LabelFrame(root, width=300, height=243, bg="white")
 info.grid(row=1, rowspan=1, column=0, padx=5)
 info.grid_propagate(0)
 
 regLogBtn = Button(root, text="Registration / LogIn", command=lambda: openLogIn(),
-                   width=30, height=2, padx=5, pady=5, state=NORMAL)
+                width=30, height=2, padx=5, pady=5, state=NORMAL)
 regLogBtn.grid(row=2, rowspan=1, column=0, padx=5)
 
-mainDisplay = Frame(root, width=930, height=705, padx=5, pady=5, bg="white")
+mainDisplay = Frame(root, width=930, height=705,bg="green")
 mainDisplay.grid(row=0, rowspan=3, column=1, columnspan=2, pady=5, padx=5)
+backgroundGame = Label (mainDisplay, image=bgGame)
+backgroundGame.pack()
 mainDisplay.grid_propagate(0)
 
+bestList = LabelFrame(mainDisplay, width=220, height=490, bg="white")
+bestList.grid(row=0, column=2, pady=5)
+backgroundbestList = Label (bestList, image=bgBestList)
+backgroundbestList.pack()
+
+saveBtn = Button(mainDisplay, text="Save", command=lambda: openLogIn(),
+                width=215, height=85, image=bgSave)
+saveBtn.grid(row=1, column=2, pady=6)
+
+loadBtn = Button(mainDisplay, text="Load", command=lambda: openLogIn(),
+                width=215, height=85, image=bgLoad)
+loadBtn.grid(row=2, column=2, pady=6)
 
 # Game listing
 rootBtn1 = Button(listGames, text="Bauernschach", command=lambda: [create_board(
-), create_bauernschachArray_btn()], width=50, height=7, padx=0, pady=0)
+), create_bauernschachArray_btn()], width=280, height=105, padx=0, pady=0, image=bgCheckers)
 rootBtn2 = Button(listGames, text="Dame", command=lambda: [create_board(
-), create_checkersArray_btn()], width=50, height=7, padx=0, pady=0)
+), create_checkersArray_btn()], width=280, height=105, padx=0, pady=0, image=bgCheckers)
 rootBtn3 = Button(listGames, text="Tic-Tac-Toe", command=lambda: [
-    create_board(), create_tictactoeArray_btn()], width=50, height=7, padx=0, pady=0)
+              create_board(), create_tictactoeArray_btn()], width=280, height=105, padx=0, pady=0, image=bgTTT)
 
 rootBtn1.pack(pady=10)
 rootBtn2.pack(pady=10)
