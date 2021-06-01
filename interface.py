@@ -52,6 +52,9 @@ def doTicTacToeUpdate(row:int, column:int):
     #printArrayColors(LukasTicTacToeBoard)
 
     # Processes turn
+
+    print(f"Spieler dran {LukasTurnCount}")
+
     TurnResult = doAutoTurn(LukasTicTacToeBoard,LukasTurnCount,LukasRunningState,row,column)
 
 
@@ -372,7 +375,6 @@ def openLogIn():
                     logwinBtnLog.config(state=DISABLED)
                     userInput.delete(0, END)
                     passwortInput.delete(0, END)
-                    session == 1
                     logwin.destroy()
                 else:
                     print("Not Authorized")

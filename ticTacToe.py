@@ -4,6 +4,7 @@ Test implementation of TicTacToe played on a 6x6 numpy array
 '''
 
 
+from tkinter.constants import FALSE
 from typing import Counter
 from arrayUtils import *
 from printUtils import *
@@ -170,7 +171,7 @@ def checkIfWinColumns(brd: ndarray):
 
 def checkIfWinDiags(brd: ndarray):
     if isBoardTooSmall(brd):
-        return
+        return False
     if(getDiagonalCount(brd) >= 4):
         return True
     return False
@@ -192,7 +193,7 @@ def getDiagonalCount(brd: ndarray):
 def getCountMaxLeftDiag(brd: ndarray):
 
     # I am sorry for anyone trying to understand this evaluation in it's entirety. It may not be pretty, but it is mine. And it works beautifully. @author:Lukas Eckert
-
+    printErrorMsg("lt2rb")
     # Max count found
     leftMaxCount = 1
     # Min Values
@@ -218,18 +219,18 @@ def getCountMaxLeftDiag(brd: ndarray):
             # Eval if tiles are in sequence
             current = brd[currentRow][currentColumn]
             next = brd[currentRow + 1][currentColumn + 1]
-            #print(f"C:{current}x{currentX}y{currentY},N:{next}x{currentX + 1}y{currentY + 1}")
+            print(f"Cur:{current} row:{currentRow} col:{currentColumn}, Nex:{next} row:{currentRow + 1} col:{currentColumn + 1}")
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
                 diagCount += 1
-                # print(f"DiagCount:{diagCount}")
+                print(f"DiagCount:{diagCount}")
                 if diagCount > diagCountMax:
                     diagCountMax = diagCount
         # eval max sequence in diags
         if diagCountMax > leftMaxCount:
             leftMaxCount = diagCountMax
 
-    #printErrorMsg("Starting on Y= 0")
+    printErrorMsg("column loop lt2rb")
 
     # loop over remaining diagonal lines starting on x axis
     for columnStepper in range(minColumnIndex + 1, maxColumnIndex):
@@ -246,11 +247,11 @@ def getCountMaxLeftDiag(brd: ndarray):
             # Eval if tiles are in sequence
             current = brd[currentRow][currentColumn]
             next = brd[currentRow + 1][currentColumn + 1]
-            #print(f"C:{current}x{currentX}y{currentY},N:{next}x{currentX + 1}y{currentY + 1}")
+            print(f"C:{current} r{currentRow} c{currentColumn},N:{next} r{currentRow + 1} c{currentColumn + 1}")
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
                 diagCount += 1
-                # print(f"DiagCount:{diagCount}")
+                print(f"DiagCount:{diagCount}")
                 if diagCount > diagCountMax:
                     diagCountMax = diagCount
         # eval max sequence in diags
@@ -258,6 +259,7 @@ def getCountMaxLeftDiag(brd: ndarray):
             leftMaxCount = diagCountMax
 
     # end function, return max count found
+    print(f"Left Max {leftMaxCount}")
     return leftMaxCount
 
 
@@ -265,6 +267,8 @@ def getCountMaxLeftDiag(brd: ndarray):
 def getCountMaxRightDiag(brd: ndarray):
 
     # I am sorry for anyone trying to understand this evaluation in it's entirety. It may not be pretty, but it is mine. And it works beautifully. @author:Lukas Eckert
+
+    printErrorMsg("tr2bl")
 
     # Max count found
     rightMaxCount = 1
@@ -275,23 +279,23 @@ def getCountMaxRightDiag(brd: ndarray):
     maxColumnIndex = brd.shape[1] - 1
     maxRowIndex = brd.shape[0] - 1
 
-    # loop over diagonal lines starting on y axis
-    for rowStepper in range(maxRowIndex, minRowIndex, -1):
+    # loop over diagonal lines starting on x axis
+    for colStepper in range(maxColumnIndex, minColumnIndex, -1):
         #print(f"y axis stepper:{stepper}")
         diagCount = 1
         diagCountMax = 0
         # Loop through diagonal line
-        for diagStepper in range(maxColumnIndex):
+        for diagStepper in range(maxRowIndex):
             #print(f"diagStepper {diagStepper}")
             # Eval if coords of tiles in board
-            currentColumn = minColumnIndex + diagStepper
-            currentRow = rowStepper - diagStepper
-            if (currentRow - 1) < minRowIndex or (currentColumn + 1) > maxColumnIndex:
+            currentColumn = colStepper - diagStepper
+            currentRow = minRowIndex + diagStepper
+            if (currentRow + 1) > minRowIndex or (currentColumn - 1) < maxColumnIndex:
                 break
             # Eval if tiles are in sequence
             current = brd[currentRow][currentColumn]
-            next = brd[currentRow - 1][currentColumn + 1]
-            #print(f"C:{current}x{currentX}y{currentY},N:{next}x{currentX + 1}y{currentY - 1}")
+            next = brd[currentRow + 1][currentColumn - 1]
+            print(f"C:{current} r{currentRow} c{currentColumn},N:{next} r{currentRow + 1} c{currentColumn - 1}")
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
                 diagCount += 1
@@ -302,24 +306,24 @@ def getCountMaxRightDiag(brd: ndarray):
         if diagCountMax > rightMaxCount:
             rightMaxCount = diagCountMax
 
-    #printErrorMsg("Starting on Y= 0")
+    printErrorMsg("Starting on row= 1")
 
-    # loop over remaining diagonal lines starting on x axis
-    for columnStepper in range(minColumnIndex + 1, maxColumnIndex):
+    # loop over remaining diagonal lines starting on y axis
+    for rwStepper in range(1,maxRowIndex):
         #print(f"x Axis xStepper {xStepper}")
         diagCount = 1
         diagCountMax = 0
         # Loop through diagonal line
-        for diagStepper in range(maxColumnIndex):
+        for clStepper in range(maxColumnIndex + 1):
             #print(f"diagStepper {diagStepper}")
-            currentColumn = columnStepper + diagStepper
-            currentRow = maxRowIndex - diagStepper
-            if (currentColumn + 1) > maxColumnIndex or (currentRow - 1) < minRowIndex:
+            currentColumn = maxColumnIndex - clStepper
+            currentRow = minRowIndex + clStepper
+            if (currentColumn - 1) < minColumnIndex or (currentRow + 1) > maxRowIndex:
                 break
             # Eval if tiles are in sequence
             current = brd[currentRow][currentColumn]
-            next = brd[currentRow - 1][currentColumn + 1]
-            #print(f"C:{current}x{currentX}y{currentY},N:{next}x{currentX + 1}y{currentY + 1}")
+            next = brd[currentRow + 1][currentColumn - 1]
+            print(f"C:{current} x{currentRow} y{currentColumn},N:{next} x{currentRow + 1}y {currentColumn - 1}")
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
                 diagCount += 1
@@ -330,6 +334,7 @@ def getCountMaxRightDiag(brd: ndarray):
         if diagCountMax > rightMaxCount:
             rightMaxCount = diagCountMax
 
+    print(f"rightmaxcount {rightMaxCount}")
     # end function, return max count found
     return rightMaxCount
 
