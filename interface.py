@@ -4,6 +4,7 @@ import Global_Vars
 import main
 from tkinter import *
 from PIL import ImageTk, Image
+from Algorithm import *
 
 from ticTacToe import *
 
@@ -40,24 +41,42 @@ def doTicTacToeUpdate(row:int, column:int):
     if LukasRunningState == False:
         return LukasTicTacToeBoard[row][column]
 
+    #printYellowMsg("LEERES BOARD")
+    #printArrayColors(LukasTicTacToeBoard)
+
     # Processes turn
     TurnResult = doAutoTurn(LukasTicTacToeBoard,LukasTurnCount,LukasRunningState,row,column)
+
 
     # Deconstructs Turn results
     LukasTicTacToeBoard = TurnResult[0]
     LukasTurnCount = TurnResult[1]
     LukasRunningState = TurnResult[2]
 
+    #printYellowMsg("SPIELER HAT GEZOGEN BOARD")
+    #printArrayColors(LukasTicTacToeBoard)
+
+
     bestMove = run_Algorithm(Global_Vars.game_name, LukasTurnCount, LukasTicTacToeBoard, Global_Vars.depth)
+
     print(bestMove)
-    TurnResult = doAutoTurn(LukasTicTacToeBoard, LukasTurnCount,LukasRunningState,bestMove[0],bestMove[1])
-    print(TurnResult)
+
+    move = bestMove[0]
+
+    #printYellowMsg("SPIELER HAT GEZOGEN BOARD x2")
+    #printArrayColors(LukasTicTacToeBoard)
+
+    #print(bestMove)
+    #print("After best move")
+    TurnResult = doAutoTurn(LukasTicTacToeBoard, LukasTurnCount,LukasRunningState,move[0],move[1])
+    #print(TurnResult)
 
     LukasTicTacToeBoard = TurnResult[0]
     LukasTurnCount = TurnResult[1]
     LukasRunningState = TurnResult[2]
     # Debugging printout
-    printArrayColors(LukasTicTacToeBoard)
+    #printYellowMsg("KI HAT GEZOGEN BOARD")
+    #printArrayColors(LukasTicTacToeBoard)
 
 
     '''
@@ -131,7 +150,7 @@ def create_board():
     checkersBoard = Frame(mainDisplay, width=690, height=695, bg="white")
     checkersBoard.grid(row=0, rowspan=1, column=1, columnspan=1)
     checkersBoard.grid_propagate(0)
-    print("Next is Button")
+    #print("Next is Button")
     cell11 = Button(checkersBoard, command=lambda: [
                     doAppropriateButtonAction(0, 0, GameMode, cell11)], width=15, height=7)
     cell12 = Button(checkersBoard, command=lambda: [
@@ -250,7 +269,7 @@ def create_bauernschachArray_btn():
     global GameMode
     GameMode = 2
 
-    consoleLog = print(Global_Vars.board)
+    #consoleLog = print(Global_Vars.board)
 
 
 # Creates Checkers Game
@@ -263,7 +282,7 @@ def create_checkersArray_btn():
 
     myInfo.config(text="Checkers anleitung")
 
-    consoleLog = print(Global_Vars.board)
+    #consoleLog = print(Global_Vars.board)
 
 # Creates TicTacToe Game
 
@@ -287,7 +306,7 @@ def create_tictactoeArray_btn():
 
     myInfo.config(text="Sie setzen abwechselnd mit dem Computer Ihre Farbe (also Grün) in die freien Kästchen des Spielfelds. Ziel ist es, die eigene Farbe vier Mal in einer Zeile, in einer Spalte oder in einer Diagonale zu platzieren. Wem das zuerst gelingt, hat gewonnen.")
 
-    consoleLog = print(Global_Vars.board)
+    #consoleLog = print(Global_Vars.board)
 
 
 def openLogIn():
@@ -300,8 +319,8 @@ def openLogIn():
     def login_entry_fields():
         global currUsername
         logwin.geometry("200x120")
-        print("Username: %s\nPasswort: %s" %
-              (userInput.get(), passwortInput.get()))
+        #print("Username: %s\nPasswort: %s" %
+        #      (userInput.get(), passwortInput.get()))
         username = userInput.get()
         password = passwortInput.get()
 
@@ -309,8 +328,8 @@ def openLogIn():
             f"select * from player where username='{username}'")
         query_result = query.fetchall()
         queryReturnCheck = query.fetchone()
-        print(query_result)
-        print(queryReturnCheck)
+        #print(query_result)
+        #print(queryReturnCheck)
         if query_result == None:
             lbl4.config(text="Wrong Username/Password")
         else:
@@ -318,13 +337,14 @@ def openLogIn():
                 index = row[1]
                 if main.passComparison(username, password):
                     currUsername = username
-                    print("Authorized!")
+                    #print("Authorized!")
                     regLogBtn.config(text="Logout")
                     logwinBtnLog.config(state=DISABLED)
                     userInput.delete(0, END)
                     passwortInput.delete(0, END)
-                else:
-                    print("Not Authorized")
+                #else:
+                    #print("Not Authorized")
+
 
     def registration():
         logwin.title("Registration")
@@ -343,16 +363,16 @@ def openLogIn():
             query = main.conn.execute(
                 f"select * from player where username='{username}'")
             query_result = query.fetchall()
-            print(query_result)
+            #print(query_result)
             if userInput.get() == "" or eMailInput.get() == "" or passwortInput.get() == "":
 
                 lbl4.config(text="Please fill all Inputs")
 
             else:
-                print("test")
+                #print("test")
                 if query.rowcount == 0 or not query_result:
-                    print("Username: %s\nPasswort: %s\nE-Mail: %s" %
-                          (userInput.get(), passwortInput.get(), eMailInput.get()))
+                    #print("Username: %s\nPasswort: %s\nE-Mail: %s" %
+                    #      (userInput.get(), passwortInput.get(), eMailInput.get()))
 
                     main.insertNewData(
                         userInput.get(), passwortInput.get(), eMailInput.get())

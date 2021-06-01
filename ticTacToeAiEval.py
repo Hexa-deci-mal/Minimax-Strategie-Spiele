@@ -17,8 +17,8 @@ def getPossibleMovesInklScore(board:ndarray, player):
     ScoredMoveList = []
     MoveList = getEmptyPositions(board)
 
-    printYellowMsg("Inspect MoveList non empty pos")
-    print(MoveList)
+    #printYellowMsg("Inspect MoveList non empty pos")
+    #print(MoveList)
 
     for move in MoveList:
         moveScore = scoreMove(player,move[0],move[1],board)
@@ -39,7 +39,7 @@ def scoreMove(player:int, moveRowIndex:int, moveColumnIndex:int, board:ndarray):
     # score initialized as 0. Makes for a good middle ground dontcha think
     Score = 0
 
-    printErrorMsg(f"Inspecting move row:{moveRowIndex} column:{moveColumnIndex}")
+    #printErrorMsg(f"Inspecting move row:{moveRowIndex} column:{moveColumnIndex}")
 
     # Weight factor to be applied to each evaluation
     ScoreMultiWin = 10000
@@ -64,7 +64,7 @@ def scoreMove(player:int, moveRowIndex:int, moveColumnIndex:int, board:ndarray):
     ScoreFree = getScoreFree(moveRowIndex,moveColumnIndex,board,player)
     ScoreBlocked = getScoreBlocked(moveRowIndex,moveColumnIndex,board,enemyTile)
 
-    print(f"ScoreWin:{ScoreWin}, ScoreNotLose:{ScoreNotLose}, ScoreProgress:{ScoreProgress}, ScoreBlocked:{ScoreBlocked}")
+    #print(f"ScoreWin:{ScoreWin}, ScoreNotLose:{ScoreNotLose}, ScoreProgress:{ScoreProgress}, ScoreBlocked:{ScoreBlocked}")
 
     # Factorizes Move Scores with weight values
     ScoreWinFactored = ScoreWin * ScoreMultiWin
@@ -73,12 +73,12 @@ def scoreMove(player:int, moveRowIndex:int, moveColumnIndex:int, board:ndarray):
     ScoreFreeFactored = ScoreFree * ScoreMultiFree
     ScoreBlockedFactored = ScoreBlocked * ScoreMultiBlocked
 
-    print(f"ScoreWinFactored:{ScoreWinFactored}, ScoreNotLoseFactored:{ScoreNotLoseFactored}, ScoreProgressFactored:{ScoreProgressFactored}, ScoreBlockedFactored:{ScoreBlockedFactored}, ScoreFreeFactored:{ScoreFreeFactored}")
+    #print(f"ScoreWinFactored:{ScoreWinFactored}, ScoreNotLoseFactored:{ScoreNotLoseFactored}, ScoreProgressFactored:{ScoreProgressFactored}, ScoreBlockedFactored:{ScoreBlockedFactored}, ScoreFreeFactored:{ScoreFreeFactored}")
 
     # Sums up individual scores to create master score
     Score = ScoreWinFactored + ScoreNotLoseFactored + ScoreProgressFactored + ScoreFreeFactored + ScoreBlockedFactored
 
-    print(f"Score Master:{Score}")
+    #print(f"Score Master:{Score}")
 
     # return master score
     return Score

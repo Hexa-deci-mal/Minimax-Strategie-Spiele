@@ -12,18 +12,23 @@ from printUtils import *
 
 
 def doAutoTurn(brd: ndarray, turn, running, rowIn, colIn):
+
     if not running:
         return [brd, turn, running]
-    print("AutoTurn")
+    #print("AutoTurn")
     runningCache = running
     brdCache = brd
     turnCache = turn + 1
     # print(turnCache)
     turnCache = turnCache % 2
     # print(turnCache)
-    printArrayColors(brd)
+    #printArrayColors(brd)
+    #print(turn)
+    #print(running)
+    #print(rowIn)
+    #print(colIn)
     autoRes = doAutoAction(turnCache, brdCache, runningCache, rowIn, colIn)
-    print(f"AutoRes {autoRes}")
+    #print(f"AutoRes {autoRes}")
     if(not autoRes[1]):
         print("Reset Turn")
         turnCache = turn
@@ -60,7 +65,7 @@ def promptAction(turnNr, brd: ndarray, running):
 # Executes given TurnAction
 
 
-def doAutoAction(turnNr, brd: ndarray, running, rowCall, columnCall):
+def doAutoAction(turnNr:int, brd: ndarray, running, rowCall:int, columnCall:int):
     print("Auto-Action")
     executed = False
     if(turnNr == 0):
@@ -74,7 +79,7 @@ def doAutoAction(turnNr, brd: ndarray, running, rowCall, columnCall):
 
 
 # Tries to execute turn automatically
-def doAutoPlacementAction(rowIndex, columnIndex, brd: ndarray, trn, Tile):
+def doAutoPlacementAction(rowIndex:int, columnIndex:int, brd: ndarray, trn, Tile):
     if couldSetTile(rowIndex, columnIndex, brd, Tile):
         return True
     return False
@@ -123,15 +128,15 @@ def checkIfWinRows(brd: ndarray):
         for columnIndex in range(brd.shape[1] - 1):
             current = brd[rowIndex][columnIndex]
             next = brd[rowIndex][columnIndex + 1]
-            print(f"Current Tile: %d, Next Tile: %d" % (current, next))
+            #print(f"Current Tile: %d, Next Tile: %d" % (current, next))
             if next == current and next != TILE_EMPTY:
                 newCount += 1
-                print(f"Incrementing newCount to %d" % newCount)
+                #print(f"Incrementing newCount to %d" % newCount)
             else:
                 newCount = 1
             if newCount > countSame:
                 countSame = newCount
-            print(f"Count is %d" % countSame)
+            #print(f"Count is %d" % countSame)
         if countSame == 4:
             return True
     return False

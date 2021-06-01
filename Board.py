@@ -65,6 +65,7 @@ def create_board_test():
     Global_Vars.board[2][3] = 2
     return Global_Vars.board
 
+'''
 
 ######### TEST AREA ##################################################################################################
 Global_Vars.game_name = 'bauernschach'
@@ -80,3 +81,5 @@ print(Global_Vars.board)
 print(Global_Vars.possible_moves)
 # print(Global_Vars.board)
 ######################################################################################################################
+
+'''

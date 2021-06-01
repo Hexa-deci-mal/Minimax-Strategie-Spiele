@@ -22,6 +22,7 @@ print(GameBoard)
 print(getTileFromPosition(2,2,GameBoard))
 '''
 
+'''
 
 testBoard = createEmptyBoard(8,16)
 setIfEmpty(1,1,testBoard,2)
@@ -61,3 +62,6 @@ print(getFriendlyNeighborCount(testBoard,2,1,1))
 #printArrayColors(BB)
 #for entry in getNonEmptyPositions(BB):
 #    print(entry)
+
+
+'''

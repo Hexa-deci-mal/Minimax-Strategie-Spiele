@@ -13,7 +13,7 @@ import Game
 #board = create_board_tictactoe()
 def run_Algorithm(game_name, player, board:ndarray, depth:int):
 
-    printErrorMsg(f"AHHHHHHHHHHHHHHHHHHHHHHH {depth}")
+    #printErrorMsg(f"AHHHHHHHHHHHHHHHHHHHHHHH {depth}")
 
     if Global_Vars.game_name == 'bauernschach':
         pass
@@ -25,6 +25,7 @@ def run_Algorithm(game_name, player, board:ndarray, depth:int):
         boardcopy = []       
         #checkIfWin(board, player, False)
         empty_positions = moveEvaluation.getEmptyPositions(board)
+        #print(empty_positions)
 
         nextPlayer = player + 1
         if(nextPlayer == 3):
@@ -36,13 +37,17 @@ def run_Algorithm(game_name, player, board:ndarray, depth:int):
             tempcopy = board.copy()
             setIfEmpty(move[0], move[1], tempcopy, player)
             boardcopy.append(tempcopy)
+            #print(tempcopy)
             
             if depth > 0:
+                #print("Tiefer rein")
                 maxxedMinnedScores.append(run_Algorithm(game_name,nextPlayer,tempcopy,depth -1))
+                #print(maxxedMinnedScores)
             else:
                 # eval for base case results
                 moves = ticTacToeAiEval.getPossibleMovesInklScore(tempcopy,nextPlayer)
-                print(nextPlayer)
+                #printErrorMsg(f"MOVES: {moves}")
+                #print(nextPlayer)
 
                 highestScore = -math.inf
                 highestMove = []
@@ -51,6 +56,8 @@ def run_Algorithm(game_name, player, board:ndarray, depth:int):
                 lowestMove = []
 
                 for entry in moves:
+                    #print(f"entry 0 : {entry[0]}")
+                    #print(f"entry 1 : {entry[1]}")
                     if entry[1] > highestScore:
                         #print (f"Entry:{entry[1]}, high:{highestScore}, comp:{entry[1] > highestScore}")
                         highestScore = entry[1]

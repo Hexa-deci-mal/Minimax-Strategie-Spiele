@@ -151,15 +151,15 @@ def getWinCounts(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray):
     # Evaluates wheather a horizontal win could be achieved
     if isHorizontalWin(rowIndex,columnIndex,playerTile,board):
         winCounter += 1
-        print("Horwin")
+        #print("Horwin")
     # Evalutates wheather a vertical win could be achieved
     if isVerticalWin(rowIndex,columnIndex,playerTile, board):
         winCounter += 1
-        print("Vertwin")
+        #print("Vertwin")
     # Evaluates wheather a diagonal win could be achieved
     if isDiagonalWin(rowIndex,columnIndex,playerTile, board):
         winCounter += 1
-        print("DiagWin")    
+        #print("DiagWin")    
 
     return winCounter
 
@@ -170,15 +170,15 @@ def getLossCounts(rowIndex:int, columnIndex:int, enemyTile:int, board:ndarray):
     # Evaluates wheather a horizontal win could be achieved by oponent
     if isHorizontalWin(rowIndex,columnIndex,enemyTile,board):
         lossCounter += 1
-        print("HorLoss")
+        #("HorLoss")
     # Evalutates wheather a vertical win could be achieved by oponent
     if isVerticalWin(rowIndex,columnIndex,enemyTile, board):
         lossCounter += 1
-        print("VertLoss")
+        #print("VertLoss")
     # Evaluates wheather a diagonal win could be achieved by oponent
     if isDiagonalWin(rowIndex,columnIndex,enemyTile, board):
         lossCounter += 1
-        print("DiagLoss")  
+        #print("DiagLoss")  
 
     return lossCounter
 
@@ -195,7 +195,7 @@ def getFreeCounts(rowIndex:int, columnIndex:int, tile:int, board:ndarray):
 def getProgressCounts(rowIndex:int, columnIndex:int, enemyTile:int, board:ndarray):
     # master counter
 
-    printErrorMsg(board)
+    #printErrorMsg(board)
 
     progressCounter = 0
 
@@ -242,17 +242,17 @@ def isHorizontalWin(rowIndex:int, columnIndex:int, playerTile:int, board:ndarray
 
     # Count identical tiles left of position
     leftCount = getLeftCountIdentical(rowIndex, columnIndex, playerTile, board)
-    print(f"Move has leftCount {leftCount}")
+    #(f"Move has leftCount {leftCount}")
     # Eval identical tiles right of position
     rightCount = getRightCountIdentical(rowIndex, columnIndex, playerTile, board)
-    print(f"Move has rightCount {rightCount}")
+    #print(f"Move has rightCount {rightCount}")
 
     # Sum up results and add new tile
     countMaster = leftCount + rightCount + 1
 
     isWin = countMaster >= 4
-    print(f"Move has horizontal count {countMaster}")
-    print(f"Move is {isWin} for horizontal win")
+    #print(f"Move has horizontal count {countMaster}")
+    #print(f"Move is {isWin} for horizontal win")
 
     return isWin
 
@@ -265,14 +265,14 @@ def getLeftCountIdentical(rowIndex:int, columnIndex:int, playerTile:int, board:n
     for columnCrawler in range(columnIndex - 1, -1, -1):
         # Check Bounds
         if not checkBoardBounds(rowIndex,columnCrawler,board):
-            printErrorMsg(f"BOUNDS r:{rowIndex} c:{columnCrawler}")
+            #printErrorMsg(f"BOUNDS r:{rowIndex} c:{columnCrawler}")
             break
         # Increase Count for identical tile
         if board[rowIndex][columnCrawler] == playerTile:
             count += 1
-            printYellowMsg(f"Identical, increment count to {count}")
+            #printYellowMsg(f"Identical, increment count to {count}")
         else:
-            printYellowMsg("Not identical")
+            #printYellowMsg("Not identical")
             break
     # Return count
     return count
@@ -286,14 +286,14 @@ def getLeftCountPossible(rowIndex:int, columnIndex:int, enemyTile:int, board:nda
     for columnCrawler in range(columnIndex - 1, columnIndex-4, -1):
         # Check Bounds
         if not checkBoardBounds(rowIndex,columnCrawler,board):
-            printErrorMsg(f"BOUNDS r:{rowIndex} c:{columnCrawler}")
+            #printErrorMsg(f"BOUNDS r:{rowIndex} c:{columnCrawler}")
             break
         # Increase Count for possible tile
         if board[rowIndex][columnCrawler] != enemyTile:
             count += 1
-            printYellowMsg(f"Possible, increment count to {count}")
+            #printYellowMsg(f"Possible, increment count to {count}")
         else:
-            printYellowMsg("Not possible")
+            #printYellowMsg("Not possible")
             break
     # Return count
     return count
@@ -322,7 +322,7 @@ def getRightCountPossible(rowIndex:int, columnIndex:int, enemyTile:int, board:nd
     # count of possible tiles
     count = 0
 
-    printErrorMsg(board)
+    #printErrorMsg(board)
 
     # Loop through row contents, direction = right
     for columnCrawler in range(columnIndex + 1, columnIndex+4, 1):
