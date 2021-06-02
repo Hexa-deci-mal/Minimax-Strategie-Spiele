@@ -8,20 +8,28 @@ import math
 import ticTacToeAiEval
 import moveEvaluation
 import Game
+from simpleAlgorithm import *
 
 #Running a Minimax Algorithm depending on which game is currently active
 #board = create_board_tictactoe()
-def run_Algorithm(game_name, player, board:ndarray, depth:int):
+def run_Algorithm(name, player, board:ndarray, depth:int):
 
     # printErrorMsg(f"AHHHHHHHHHHHHHHHHHHHHHHH tiefe:{depth} spieler:{player}")
 
-    if Global_Vars.game_name == 'bauernschach':
+    if name == "bauernschach":
         pass
     
-    elif Global_Vars.game_name == 'dame':
-        pass   
+    elif name == "dame":
 
-    elif Global_Vars.game_name == 'tictactoe':     
+        '''
+        Hijacking the placeholder checkers game to pass on arguments to simple next turn eval for tictactoe 
+        '''
+
+        return run_simple_algorithm(name,player,board)
+
+ 
+
+    elif name == Global_Vars.game_name:     
         #checkIfWin(board, player, False)
         empty_positions = moveEvaluation.getEmptyPositions(board)
         #print(empty_positions)

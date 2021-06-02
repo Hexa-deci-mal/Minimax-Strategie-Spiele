@@ -19,8 +19,15 @@ LukasTicTacToeBoardLoaded: ndarray
 LukasTurnCount: int
 LukasRunningState: bool
 
+# Global Variables for simpleAlgorithm TicTacToe
+SimpleTicTacToeBoard: ndarray
+SimpleTicTacToeBoardLoaded: ndarray
+SimpleTurnCount: int
+SimpleRunningState: bool
+
 # Global Variables for Current User
 currUsername: str
+currUsername = "noUser"
 currUserId: int
 
 # Global variable for GameMode
@@ -37,6 +44,49 @@ style_2 = {'fg': 'white', 'bg': 'OliveDrab2', 'activebackground':
 style_3 = {'fg': 'black', 'bg': 'purple1', 'activebackground':
            'gray71', 'activeforeground': 'gray71'}
 
+
+def doSimpleTicTacToeUpdate(row:int, column:int):
+    global SimpleRunningState
+    global SimpleTicTacToeBoard
+    global SimpleTurnCount
+
+    global ButtonBoard
+
+    print("Hi from update")
+    print(SimpleRunningState)
+    print(SimpleTicTacToeBoard)
+    print(SimpleTurnCount)
+
+    # skips processing turn if game is not running
+    if SimpleRunningState == False:
+        return SimpleTicTacToeBoard[row][column]
+
+    TurnResult = doAutoTurn(SimpleTicTacToeBoard,SimpleTurnCount,SimpleRunningState,row,column)
+
+    # Deconstructs Turn results
+    SimpleTicTacToeBoard = TurnResult[0]
+    SimpleTurnCount = TurnResult[1]
+    SimpleRunningState = TurnResult[2]
+
+    if(SimpleRunningState):
+        bestMove = run_Algorithm("dame", SimpleTurnCount, SimpleTicTacToeBoard, Global_Vars.depth)
+
+        move = bestMove[0]
+
+        TurnResult = doAutoTurn(SimpleTicTacToeBoard, SimpleTurnCount,SimpleRunningState,move[0],move[1])
+
+
+        SimpleTicTacToeBoard = TurnResult[0]
+        SimpleTurnCount = TurnResult[1]
+        SimpleRunningState = TurnResult[2]
+
+        setStyle(SimpleTicTacToeBoard[move[0]][move[1]],ButtonBoard[move[0]][move[1]])
+
+        if getWinCounts(move[0],move[1],2,SimpleTicTacToeBoard) != 0:
+            SimpleRunningState = False
+
+    # Returns button state
+    return SimpleTicTacToeBoard[row][column]
 
 # Updates the currently running game of tictactoe according to which button is pressed
 def doTicTacToeUpdate(row:int, column:int):
@@ -197,6 +247,7 @@ def doAppropriateButtonAction(row: int, column: int, mode: int, button: Button):
         return
     # Executed commands for Gamemode Checkers
     if mode == 3:
+        setStyle(doSimpleTicTacToeUpdate(row,column), button)
         return
     # Skips button action for undefined modes
     return
@@ -333,7 +384,7 @@ def create_board():
     ButtonBoard.append([cell61,cell62,cell63,cell64,cell65,cell66])
     # print(ButtonBoard)
 
-    if currUsername != None:
+    if currUsername != "noUser":
         bestList.grid(row=0, column=2, pady=5)
         backgroundbestList.pack()
         saveBtn.grid(row=1, column=2, pady=6)
@@ -362,6 +413,16 @@ def create_checkersArray_btn():
     myInfo.config(text="Checkers anleitung")
 
     #consoleLog = print(Global_Vars.board)
+
+    # Setting up globals for simple tic tac toe
+    global SimpleTicTacToeBoard
+    SimpleTicTacToeBoard = createEmptyBoard(6,6)
+
+    global SimpleTurnCount
+    SimpleTurnCount = 0
+
+    global SimpleRunningState
+    SimpleRunningState = True
 
 # Creates TicTacToe Game
 
@@ -399,7 +460,7 @@ def openLogIn():
 
     def logout():
         global currUsername
-        currUsername = None
+        currUsername = "noUser"
         bestList.grid_forget()
         loadBtn.grid_forget()
         saveBtn.grid_forget()
