@@ -278,21 +278,23 @@ def getCountMaxRightDiag(brd: ndarray):
 
     # loop over diagonal lines starting on x axis
     for colStepper in range(maxColumnIndex, minColumnIndex, -1):
-        #print(f"y axis stepper:{stepper}")
+        #printYellowMsg(f"col axis stepper:{colStepper}")
         diagCount = 1
         diagCountMax = 0
         # Loop through diagonal line
         for diagStepper in range(maxRowIndex):
-            #print(f"diagStepper {diagStepper}")
+           # print(f"diagStepper {diagStepper}")
             # Eval if coords of tiles in board
             currentColumn = colStepper - diagStepper
             currentRow = minRowIndex + diagStepper
-            if (currentRow + 1) > minRowIndex or (currentColumn - 1) < maxColumnIndex:
+            if (currentRow + 1) > maxRowIndex or (currentColumn - 1) < minColumnIndex:
+                #printErrorMsg("Out of bounds")
                 break
             # Eval if tiles are in sequence
             current = brd[currentRow][currentColumn]
             next = brd[currentRow + 1][currentColumn - 1]
             #print(f"C:{current} r{currentRow} c{currentColumn},N:{next} r{currentRow + 1} c{currentColumn - 1}")
+
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
                 diagCount += 1
@@ -303,19 +305,24 @@ def getCountMaxRightDiag(brd: ndarray):
         if diagCountMax > rightMaxCount:
             rightMaxCount = diagCountMax
 
-    #printErrorMsg("Starting on row= 1")
+    #print()
+    #print()
+   # printErrorMsg("Starting on row= 1")
+   # print()
+    #print()
 
     # loop over remaining diagonal lines starting on y axis
     for rwStepper in range(1,maxRowIndex):
-        #print(f"x Axis xStepper {xStepper}")
+       # printYellowMsg(f"rw Axis Stepper {rwStepper}")
         diagCount = 1
         diagCountMax = 0
         # Loop through diagonal line
-        for clStepper in range(maxColumnIndex + 1):
-            #print(f"diagStepper {diagStepper}")
-            currentColumn = maxColumnIndex - clStepper
-            currentRow = minRowIndex + clStepper
+        for diStepper in range(maxColumnIndex):
+           # printYellowMsg(f"diagStepper {diStepper}")
+            currentColumn = maxColumnIndex - diStepper
+            currentRow = rwStepper + diStepper
             if (currentColumn - 1) < minColumnIndex or (currentRow + 1) > maxRowIndex:
+                #printErrorMsg("Outofbounds")
                 break
             # Eval if tiles are in sequence
             current = brd[currentRow][currentColumn]
@@ -324,7 +331,7 @@ def getCountMaxRightDiag(brd: ndarray):
             if next == current and next != TILE_EMPTY:
                 # increment sequence count and maxSequence
                 diagCount += 1
-                # print(f"DiagCount:{diagCount}")
+                #printYellowMsg(f"INC DiagCount:{diagCount}")
                 if diagCount > diagCountMax:
                     diagCountMax = diagCount
         # eval max sequence in diags
