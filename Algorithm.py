@@ -47,7 +47,7 @@ def run_Algorithm(name, player, board:ndarray, depth:int):
             
             if depth > 0:
                 #print("Tiefer rein")
-                maxxedMinnedScores.append(run_Algorithm(game_name,nextPlayer,tempcopy,depth -1))
+                maxxedMinnedScores.append(run_Algorithm(name,nextPlayer,tempcopy,depth -1))
                 #print(maxxedMinnedScores)
             else:
                 # eval for base case results
