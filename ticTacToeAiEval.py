@@ -3,16 +3,16 @@ Functions providing MinMaxAi with score data for checkers
 @author Lukas Eckert
 '''
 
-# Returns a list of all possible moves
+
 from arrayUtils import *
 from typing import List
 from moveEvaluation import *
 
 from numpy import ndarray
 
-'''
- Feeling useful, might delete later
-'''
+
+
+# Returns a list of all possible moves
 def getPossibleMovesInklScore(board:ndarray, player):
     ScoredMoveList = []
     MoveList = getEmptyPositions(board)
