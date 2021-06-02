@@ -67,32 +67,31 @@ def doTicTacToeUpdate(row:int, column:int):
     #printYellowMsg("SPIELER HAT GEZOGEN BOARD")
     #printArrayColors(LukasTicTacToeBoard)
 
+    if(LukasRunningState):
+        bestMove = run_Algorithm(Global_Vars.game_name, LukasTurnCount, LukasTicTacToeBoard, Global_Vars.depth)
 
-    bestMove = run_Algorithm(Global_Vars.game_name, LukasTurnCount, LukasTicTacToeBoard, Global_Vars.depth)
+        #print(bestMove)
 
-    #print(bestMove)
+        move = bestMove[0]
 
-    move = bestMove[0]
+        #printYellowMsg("SPIELER HAT GEZOGEN BOARD x2")
+        #printArrayColors(LukasTicTacToeBoard)
 
-    #printYellowMsg("SPIELER HAT GEZOGEN BOARD x2")
-    #printArrayColors(LukasTicTacToeBoard)
+           #print(bestMove)
+        #print("After best move")
+        TurnResult = doAutoTurn(LukasTicTacToeBoard, LukasTurnCount,LukasRunningState,move[0],move[1])
+        #print(TurnResult)
 
-    #print(bestMove)
-    #print("After best move")
-    TurnResult = doAutoTurn(LukasTicTacToeBoard, LukasTurnCount,LukasRunningState,move[0],move[1])
-    #print(TurnResult)
+        LukasTicTacToeBoard = TurnResult[0]
+        LukasTurnCount = TurnResult[1]
+        LukasRunningState = TurnResult[2]
+        # Debugging printout
+        #printYellowMsg("KI HAT GEZOGEN BOARD")
+        #printArrayColors(LukasTicTacToeBoard)
+        setStyle(LukasTicTacToeBoard[move[0]][move[1]],ButtonBoard[move[0]][move[1]])
 
-    LukasTicTacToeBoard = TurnResult[0]
-    LukasTurnCount = TurnResult[1]
-    LukasRunningState = TurnResult[2]
-    # Debugging printout
-    #printYellowMsg("KI HAT GEZOGEN BOARD")
-    #printArrayColors(LukasTicTacToeBoard)
-
-    setStyle(LukasTicTacToeBoard[move[0]][move[1]],ButtonBoard[move[0]][move[1]])
-
-    if getWinCounts(move[0],move[1],2,LukasTicTacToeBoard) != 0:
-        LukasRunningState = False
+        if getWinCounts(move[0],move[1],2,LukasTicTacToeBoard) != 0:
+            LukasRunningState = False
 
     '''
     Start Testing Area for AI preperation DONT TOUCH
