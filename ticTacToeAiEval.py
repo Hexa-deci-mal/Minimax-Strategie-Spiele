@@ -1,5 +1,5 @@
 '''
-Functions providing MinMaxAi with score data for checkers
+Functions providing MinMaxAi with score data for tictactoe
 @author Lukas Eckert
 '''
 
